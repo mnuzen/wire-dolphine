@@ -19,7 +19,8 @@
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
   <!-- Custom styles for this page -->
-  <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+  <!-- <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet"> -->
+  <link href="css/network.css" rel="stylesheet">
 
   <style>
 
@@ -344,11 +345,15 @@
         <div class="container-fluid">
 
           <!-- Page Heading -->
-          <h1 class="h3 mb-2 text-gray-800">Network Visualizations</h1>
-          <p class="mb-4">Example Network Visualization with hard-coded data.</p>
-
+          <h1>Network Visualizations Demo</h1>
           <!-- Network Example -->
-          <p>Testing Testing Testing.</p>
+
+          <p class="mb-4">Example network visualization with hard-coded data. Check out <a href="https://visjs.github.io/vis-network/examples/">this</a> library to see the source code. Click one of two buttons below to generate one of two graphs.</p>
+
+          <button onclick="createNetworkOne()">Network One</button><button onclick="createNetworkTwo()">Network Two</button>
+          <br/>
+          <br/>
+          <div id="mynetwork"></div>
 
           <!-- End Network Example-->
           
@@ -409,10 +414,11 @@
   <!-- Page level plugins -->
   <script src="vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-  <script src="js/table.js"></script>
 
   <!-- Page level custom scripts -->
-  <script src="js/demo/datatables-demo.js"></script>
+  <!--<script src="js/demo/datatables-demo.js"></script>-->
+  <script src="js/network.js"></script>
+  <script src="https://visjs.github.io/vis-network/standalone/umd/vis-network.min.js"></script>
 
 </body>
 
