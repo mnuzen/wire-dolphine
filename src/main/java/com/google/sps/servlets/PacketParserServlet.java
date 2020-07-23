@@ -44,7 +44,7 @@ public class PacketParserServlet extends HttpServlet {
     //static final String FILENAME = "portfolio/src/main/webapp/WEB-INF/gmail.pcap";
 
     try {
-        final InputStream stream = new FileInputStream("WEB-INF/traffic.pcap");
+        final InputStream stream = new FileInputStream("WEB-INF/files/traffic.pcap");
         final Pcap pcap = Pcap.openStream(stream);
 
         pcap.loop(new PacketHandler() {

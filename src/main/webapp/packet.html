@@ -20,7 +20,7 @@
 
   <!-- Custom styles for this page -->
   <!-- <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet"> -->
-  <!--<link href="css/packet.css" rel="stylesheet">-->
+  <link href="css/packet.css" rel="stylesheet">
 
   <style>
 
@@ -348,6 +348,11 @@
           <h1>Packet Demo</h1>
           <!-- Packet Example -->
           <p>Testing packet demo page.</p>
+
+          <p>Click the button below to get packet info:</p>
+            <button onclick="getPCAPDestination()">Fetch Destination Addresses</button>
+            <div id="message-container"></div>
+
           <!-- End Packet Example-->
           
 
