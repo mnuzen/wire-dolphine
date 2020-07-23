@@ -79,7 +79,7 @@ public class PacketParserServlet extends HttpServlet {
               TCPPacket tcpPacket = (TCPPacket) packet.getPacket(Protocol.TCP);
               int dstport = tcpPacket.getDestinationPort();
               int srcport = tcpPacket.getSourcePort();
-              ports = "Destination: " + dstport + ", Source: " + srcport;
+              ports = "Destination Port: " + dstport + ", Source Port: " + srcport;
             }
 
             String text = protocol + " Packet from " + dstip + " to " + srcip + " at time " + packetTime;
