@@ -39,12 +39,14 @@ import java.io.*;
 @WebServlet("/PCAP-data")
 public class PacketParserServlet extends HttpServlet {
   private ArrayList<String> packets = new ArrayList<String>();
+  //static final String FILENAME = "WEB-INF/files/traffic.pcap";
+  static final String FILENAME = "WEB-INF/files/chargen-tcp.pcap";
+  //static final String FILENAME = "WEB-INF/chargen-udp.pcap";
 
   public void main() { // what if i can pass in the file name here? 
-    //static final String FILENAME = "portfolio/src/main/webapp/WEB-INF/gmail.pcap";
 
     try {
-        final InputStream stream = new FileInputStream("WEB-INF/files/traffic.pcap");
+        final InputStream stream = new FileInputStream(FILENAME);
         final Pcap pcap = Pcap.openStream(stream);
 
         pcap.loop(new PacketHandler() {
@@ -70,14 +72,14 @@ public class PacketParserServlet extends HttpServlet {
               UDPPacket udpPacket = (UDPPacket) packet.getPacket(Protocol.UDP);
               int dstport = udpPacket.getDestinationPort();
               int srcport = udpPacket.getSourcePort();
-              ports = "Destination Port: " + dstport + " Source Port: " + srcport;
+              ports = "Destination Port: " + dstport + ", Source Port: " + srcport;
             }
             else if (packet.hasProtocol(Protocol.TCP)) {
               protocol = "TCP";
               TCPPacket tcpPacket = (TCPPacket) packet.getPacket(Protocol.TCP);
               int dstport = tcpPacket.getDestinationPort();
               int srcport = tcpPacket.getSourcePort();
-              ports = "Destination: " + dstport + " Source: " + srcport;
+              ports = "Destination: " + dstport + ", Source: " + srcport;
             }
 
             String text = protocol + " Packet from " + dstip + " to " + srcip + " at time " + packetTime;
