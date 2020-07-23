@@ -347,6 +347,35 @@
           <h1 class="h3 mb-2 text-gray-800">Tables</h1>
           <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the <a target="_blank" href="https://datatables.net">official DataTables documentation</a>.</p>
 
+
+          <!-- Temp Data Uploader -->
+          <div id="form">
+            <h1>Upload Data</h1>
+            <form action="/data" method="POST">
+            <p>Data:</p>
+            <label for="source">source:</label>
+            <input type="text" name="source"><br>
+
+            <label for="destination">destination:</label>
+            <input type="text" name="destination"><br>
+
+            <label for="domain">domain:</label>
+            <input type="text" name="domain"><br>
+
+            <label for="location">location:</label>
+            <input type="text" name="location"><br>
+
+            <label for="size">size:</label>
+            <input type="number" name="size"><br>
+
+            <label for="protocal">protocal:</label>
+            <input type="text" name="protocal"><br>
+
+            <br/>
+            <input type="submit" />
+            </form>
+            </div>
+
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
