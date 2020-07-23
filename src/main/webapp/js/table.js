@@ -9,10 +9,10 @@ $(document).ready(function () {
                 var table = document.getElementById("table");
                 var row = document.createElement("tr");
 
-                if (data[i].flagged == true) { //maybe as string "true"
+                if (data[i].flagged == "true") {
                     row.setAttribute("id", "flagged");
                 }
-                if (data[i].protocal == "HTTP") {
+                else if (data[i].protocal == "HTTP") {
                     row.setAttribute("id", "warning");
                 }
 

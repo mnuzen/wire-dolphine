@@ -55,7 +55,7 @@ public class DataServlet extends HttpServlet {
       String location = (String) entity.getProperty("Location");
       String size = (String) entity.getProperty("Size");
       String protocal = (String) entity.getProperty("Protocal");
-      Boolean flagged = (Boolean) entity.getProperty("Flagged");
+      String flagged = (String) entity.getProperty("Flagged");
 
       PCAPdata temp = new PCAPdata(source, destination, domain, 
       location, size, protocal, flagged);
@@ -80,7 +80,7 @@ public class DataServlet extends HttpServlet {
         String location = request.getParameter("location");
         String size = request.getParameter("size");
         String protocal = request.getParameter("protocal");
-        Boolean flagged = false; //flagged IP value handeled by api
+        String flagged = request.getParameter("flagged");
 
         Entity commentEntity = new Entity("data"); //creates entitiy that stores properties similar to a data structure
 

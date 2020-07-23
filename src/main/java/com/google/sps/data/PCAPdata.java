@@ -9,11 +9,11 @@ public final class PCAPdata {
   String location;
   String size;
   String protocal;
-  Boolean flagged;
+  String flagged;
     
 
   public PCAPdata(String source, String destination, String domain, 
-  String location, String size, String protocal, Boolean flagged) 
+  String location, String size, String protocal, String flagged) 
   {
   this.source = source;
   this.destination = destination;
