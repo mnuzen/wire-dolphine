@@ -8,19 +8,21 @@ public final class PCAPdata {
   String domain;
   String location;
   String size;
-  String protocal;
+  String protocol;
+  String time;
   String flagged;
     
 
   public PCAPdata(String source, String destination, String domain, 
-  String location, String size, String protocal, String flagged) 
+  String location, String size, String protocol,String time, String flagged) 
   {
   this.source = source;
   this.destination = destination;
   this.domain = domain;
   this.location = location;
   this.size = size;
-  this.protocal = protocal;
+  this.protocol = protocol;
+  this.time = time;
   this.flagged = flagged;
   }
 
@@ -30,13 +32,14 @@ public final class PCAPdata {
   this.domain = null;
   this.location = null;
   this.size = null;
-  this.protocal = null;
-  this.flagged = null; //false
+  this.protocol = null;
+  this.time = null;
+  this.flagged = null;
   }
 
   public PCAPdata getPCAPdata() {
     PCAPdata temp = new PCAPdata(this.source, this.destination, this.domain, 
-    this.location, this.size, this.protocal, this.flagged);
+    this.location, this.size, this.protocol, this.time, this.flagged);
 
     return temp;
   }

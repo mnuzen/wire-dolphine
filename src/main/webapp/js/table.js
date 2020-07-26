@@ -12,14 +12,14 @@ $(document).ready(function () {
                 if (data[i].flagged == "true") {
                     row.setAttribute("id", "flagged");
                 }
-                else if (data[i].protocal == "HTTP") {
+                else if (data[i].protocol == "HTTP") {
                     row.setAttribute("id", "warning");
                 }
 
                 row.innerHTML = "<td>" + data[i].source + "</td> <td>" + data[i].destination +
                     "</td> <td>" + data[i].domain + "</td> <td>" + data[i].location +
-                    "</td> <td>" + data[i].size + "</td> <td>" + data[i].protocal +
-                    "</td> <td>" + data[i].flagged + "</td>";
+                    "</td> <td>" + data[i].size + "</td> <td>" + data[i].protocol +
+                    "</td> <td>" + data[i].time +"</td> <td>" + data[i].flagged + "</td>";
 
                 table.appendChild(row);
             }

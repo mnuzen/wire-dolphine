@@ -348,7 +348,7 @@
           <p class="mb-4"> Yellow lines show unencypted protocal, Red lines show flagged IP address.</p>
 
           <form action="/load_data" method="post">
-             <label for="mockdata">Load Random Mock Data</label>
+             <label for="mockdata">Load Mock Data from data.csv located in /webapp</label>
             <input type="submit" name="mockdata" value="Click Me!" />
             </form>
 
@@ -373,8 +373,11 @@
             <label for="size">size:</label>
             <input type="number" name="size"><br>
 
-            <label for="protocal">protocal:</label>
-            <input type="text" name="protocal"><br>
+            <label for="protocol">protocol:</label>
+            <input type="text" name="protocol"><br>
+
+            <label for="time">time:</label>
+            <input type="text" name="time"><br>
 
             <label for="flagged">flagged:</label>
               <select id="cars" name="flagged">
@@ -403,6 +406,7 @@
                       <th>Location</th>
                       <th>Size</th>
                       <th>Protocal</th>
+                      <th>Time</th>
                       <th>Flagged</th>
                     </tr>
                   </thead>
@@ -414,6 +418,7 @@
                       <th>Location</th>
                       <th>Size</th>
                       <th>Protocal</th>
+                      <th>Time</th>
                       <th>Flagged</th>
                     </tr>
                   </tfoot>

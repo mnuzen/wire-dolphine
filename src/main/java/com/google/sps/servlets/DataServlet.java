@@ -22,14 +22,14 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-    ArrayList<PCAPdata> data = new ArrayList<PCAPdata>();
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); //creates database
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    ArrayList<PCAPdata> dataTable = new ArrayList<PCAPdata>();
     
       
-    Query query = new Query("data").addSort("Flagged", SortDirection.DESCENDING);
+    Query query = new Query("data").addSort("Time", SortDirection.DESCENDING); //switch to time when database gets new datafield
     PreparedQuery results = datastore.prepare(query);
 
     for (Entity entity : results.asIterable()) {
@@ -39,17 +39,18 @@ public class DataServlet extends HttpServlet {
       String domain = (String) entity.getProperty("Domain");
       String location = (String) entity.getProperty("Location");
       String size = (String) entity.getProperty("Size");
-      String protocal = (String) entity.getProperty("Protocal");
+      String protocol = (String) entity.getProperty("Protocol");
+      String time = (String) entity.getProperty("Time");
       String flagged = (String) entity.getProperty("Flagged");
 
       PCAPdata temp = new PCAPdata(source, destination, domain, 
-      location, size, protocal, flagged);
+      location, size, protocol, time, flagged);
        
-      data.add(temp);
+      dataTable.add(temp);
     }
 
 
-    String json = convertToJsonUsingGson(data);
+    String json = convertToJsonUsingGson(dataTable);
     response.setContentType("application/json;");
     response.getWriter().println(json);
   }
@@ -58,26 +59,28 @@ public class DataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-
+        //gets values from table forms and puts them into datastore
         String source = request.getParameter("source");
         String destination = request.getParameter("destination");
         String domain = request.getParameter("domain");
         String location = request.getParameter("location");
         String size = request.getParameter("size");
-        String protocal = request.getParameter("protocal");
+        String protocol = request.getParameter("protocol");
+        String time = request.getParameter("time");
         String flagged = request.getParameter("flagged");
 
-        Entity commentEntity = new Entity("data"); //creates entitiy that stores properties similar to a data structure
+        Entity pcapEntity = new Entity("data"); //creates entitiy tab in datastore
 
-        commentEntity.setProperty("Source", source);
-        commentEntity.setProperty("Destination", destination);
-        commentEntity.setProperty("Domain", domain);
-        commentEntity.setProperty("Location", location);
-        commentEntity.setProperty("Size", size);
-        commentEntity.setProperty("Protocal", protocal);
-        commentEntity.setProperty("Flagged", flagged);
+        pcapEntity.setProperty("Source", source);
+        pcapEntity.setProperty("Destination", destination);
+        pcapEntity.setProperty("Domain", domain);
+        pcapEntity.setProperty("Location", location);
+        pcapEntity.setProperty("Size", size);
+        pcapEntity.setProperty("Protocol", protocol);
+        pcapEntity.setProperty("Time", time);
+        pcapEntity.setProperty("Flagged", flagged);
 
-        datastore.put(commentEntity); //pushes new comment to datastore
+        datastore.put(pcapEntity); //pushes new pcap entry to datastore
 
         response.sendRedirect("/tables.html");
 
