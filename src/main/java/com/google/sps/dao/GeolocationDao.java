@@ -1,24 +1,40 @@
 package com.google.sps.dao;
 
 import com.google.sps.Mock;
+import com.maxmind.geoip2.DatabaseReader;
+import com.maxmind.geoip2.model.CityResponse;
+import com.maxmind.geoip2.record.Country;
+import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class GeolocationDao {
 
-  public static Map<String, String> ipCountryMap;
+  private static File database;
+  private static DatabaseReader reader;
 
   static {
-    Map<String, String> ipMap = new HashMap<>();
-
-    for (int i = 0; i < 4; i++) {
-      ipMap.put(Mock.IPs[i], Mock.COUNTRIES[i]);
+    database = new File("./data/GeoLite2-City.mmdb");
+    try {
+      reader = new DatabaseReader.Builder(database).build();
+    } catch (IOException e) {
+      e.printStackTrace();
     }
-    ipCountryMap = Collections.unmodifiableMap(ipMap);
   }
 
   public static String getCountryByIP(String ip) {
-    return ipCountryMap.getOrDefault(ip, "unknown");
+    try {
+      InetAddress ipAddress = InetAddress.getByName(ip);
+      CityResponse response = reader.city(ipAddress);
+
+      Country country = response.getCountry();
+      return country.getName();
+    } catch (Exception e) {
+      e.printStackTrace();
+      return "unknown";
+    }
   }
 }
