@@ -345,7 +345,50 @@
 
           <!-- Page Heading -->
           <h1 class="h3 mb-2 text-gray-800">Tables</h1>
-          <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the <a target="_blank" href="https://datatables.net">official DataTables documentation</a>.</p>
+          <p class="mb-4"> Yellow lines show unencypted protocal, Red lines show flagged IP address.</p>
+
+          <form action="/load_data" method="post">
+             <label for="mockdata">Load Mock Data from data.csv located in /webapp</label>
+            <input type="submit" name="mockdata" value="Click Me!" />
+            </form>
+
+
+          <!-- Temp Data Uploader -->
+          <div id="form">
+            <h1>Upload Data</h1>
+            <form action="/data" method="POST">
+            <p>Data:</p>
+            <label for="source">source:</label>
+            <input type="text" name="source"><br>
+
+            <label for="destination">destination:</label>
+            <input type="text" name="destination"><br>
+
+            <label for="domain">domain:</label>
+            <input type="text" name="domain"><br>
+
+            <label for="location">location:</label>
+            <input type="text" name="location"><br>
+
+            <label for="size">size:</label>
+            <input type="number" name="size"><br>
+
+            <label for="protocol">protocol:</label>
+            <input type="text" name="protocol"><br>
+
+            <label for="time">time:</label>
+            <input type="text" name="time"><br>
+
+            <label for="flagged">flagged:</label>
+              <select id="cars" name="flagged">
+                <option value="false">False</option>
+                <option value="true">True</option>
+            </select>
+
+            <br/>
+            <input type="submit" />
+            </form>
+            </div>
 
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
@@ -363,6 +406,7 @@
                       <th>Location</th>
                       <th>Size</th>
                       <th>Protocal</th>
+                      <th>Time</th>
                       <th>Flagged</th>
                     </tr>
                   </thead>
@@ -374,6 +418,7 @@
                       <th>Location</th>
                       <th>Size</th>
                       <th>Protocal</th>
+                      <th>Time</th>
                       <th>Flagged</th>
                     </tr>
                   </tfoot>

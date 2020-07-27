@@ -1,0 +1,16 @@
+Source,Destination,Domain,Location,Size,Protocal,Time,Flagged
+192.168.1.129,198.35.26.112,wikipedia.com,United States,5,TCP,5/10/20,false
+192.168.1.129,198.35.26.112,wikipedia.com,United States,10,TCP,5/10/20,false
+192.168.1.129,198.35.26.112,wikipedia.com,United States,17,TCP,5/10/20,false
+192.168.1.129,133.12.43.56,google.com,United States,10,HTTPS,5/10/20,false
+192.168.1.129,133.12.43.56,google.com,United States,14,HTTPS,5/10/20,false
+192.168.1.129,133.12.43.56,google.com,United States,4,HTTPS,5/10/20,false
+192.168.1.129,12.42.102.1,bitcoinHacks.com,Wakanda,75,HTTPS,5/10/20,true
+192.168.1.129,12.42.102.1,bitcoinHacks.com,Wakanda,42,HTTPS,5/10/20,true
+192.168.1.129,12.42.102.1,bitcoinHacks.com,Wakanda,71,HTTPS,5/10/20,true
+192.168.1.10,41.234.5.2,Amazon.com,United States,12,UDP,5/10/20,false
+192.168.1.10,41.234.5.2,Amazon.com,United States,17,UDP,5/10/20,false
+192.168.1.10,41.234.5.2,Amazon.com,United States,22,UDP,5/10/20,false
+192.168.1.10,98.34.112.39,reddit.com,United States,15,HTTP,5/10/20,false
+192.168.1.10,98.34.112.39,reddit.com,United States,8,HTTP,5/10/20,false
+192.168.1.10,98.34.112.39,reddit.com,United States,23,HTTP,5/10/20,false
