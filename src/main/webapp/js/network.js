@@ -7,15 +7,16 @@ function createNetworkOne(){
     var nodes = new Array();
     var edges = new Array();
 
-    for (i in data) {
-      nodes[i] = { id: i, label: data[i].source, group: i};
-      nodes[i+1] = { id: i+1, label: data[i].destination, group: i};
-      edges[i] = { from: i, to: i+1};
-    }
+    // add source node
+    var i = 0;
+    nodes[0] = {id: 0, label: data[0].source, group: 0};
+    i++;
 
-    //nodes[0] = { id: 0, label: data[1].source, group: 0 };
-    //nodes[1] = { id: 1, label: "Class C", group: 1 };
-    //edges[j] = { from: source, to: dest };
+    // add various destinations
+    for (i in data) {
+      nodes[i] = { id: i, label: data[i].destination, group: i};
+      edges[i] = { from: 0, to: i};
+    }
 
     // create a network
     var container = document.getElementById("mynetwork");
