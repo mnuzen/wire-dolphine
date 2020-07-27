@@ -1,53 +1,48 @@
-/** Fetches tasks from the server and adds them to the DOM. */
-function loadComments() {
-  fetch('/data').then(response => response.json()).then((comments) => {
-    //const commentElement = document.getElementById('Comments');
-    //comments.forEach((comment) => {commentElement.appendChild(createListElement(task)); })
-  });
-}
-
 /** Create network graph one. */
 function createNetworkOne(){
-  fetch('/data').then(response => response.json()).then((data) => {
-    //const commentElement = document.getElementById('Comments');
-    //comments.forEach((comment) => {commentElement.appendChild(createListElement(task)); })
-  });
-  var color = "gray";
-  var len = undefined;
+  fetch('/data')
+  .then(response => response.json())
+  .then((data) => {
+  
+    var nodes = new Array();
+    for (i in data) {
+      nodes[i] = { id: i, label: data[i].destination, group: 0 };
+    }
+    //nodes[0] = { id: 0, label: data[1].source, group: 0 };
+    //nodes[1] = { id: 1, label: "Class C", group: 1 };
 
-  var nodes = new Array();
-  nodes[1] = { id: 0, label: "My Computer", group: 0 };
-  nodes[2] = { id: 1, label: "Class C", group: 1 };
+    var edges = new Array();
+    edges[0] = { from: 1, to: 0 };
 
-  var edges = new Array();
-  edges[1] = { from: 1, to: 0 };
+    // create a network
+    var container = document.getElementById("mynetwork");
 
-  // create a network
-  var container = document.getElementById("mynetwork");
-  var data = {
-    nodes: nodes,
-    edges: edges,
-  };
-  var options = {
-    nodes: {
-      shape: "dot",
-      size: 30,
-      font: {
-        size: 32,
-        color: "#ffffff",
+    var finalData = {
+      nodes: nodes,
+      edges: edges,
+    };
+
+    var options = {
+      nodes: {
+        shape: "dot",
+        size: 30,
+        font: {
+          size: 32,
+          color: "#ffffff",
+        },
+        borderWidth: 2,
       },
-      borderWidth: 2,
-    },
-    edges: {
-      width: 2,
-    },
-  };
+      edges: {
+        width: 2,
+      },
+    };
 
-  network = new vis.Network(container, data, options);
+    network = new vis.Network(container, finalData, options);
+    });
 }
 
 
-/** Create network graph two. 
+/** Create network graph two. */
 function createNetworkTwo(){
   var color = "gray";
   var len = undefined;
@@ -133,4 +128,4 @@ function createNetworkTwo(){
   };
 
   network = new vis.Network(container, data, options);
-}*/
+}
