@@ -29,7 +29,7 @@ public class DataServlet extends HttpServlet {
     ArrayList<PCAPdata> dataTable = new ArrayList<PCAPdata>();
     
       
-    Query query = new Query("data").addSort("Time", SortDirection.DESCENDING); //switch to time when database gets new datafield
+    Query query = new Query("data").addSort("Flagged", SortDirection.DESCENDING); //switch to time when database gets new datafield
     PreparedQuery results = datastore.prepare(query);
 
     for (Entity entity : results.asIterable()) {
@@ -38,13 +38,13 @@ public class DataServlet extends HttpServlet {
       String destination = (String) entity.getProperty("Destination");
       String domain = (String) entity.getProperty("Domain");
       String location = (String) entity.getProperty("Location");
-      String size = (String) entity.getProperty("Size");
       String protocol = (String) entity.getProperty("Protocol");
-      String time = (String) entity.getProperty("Time");
-      String flagged = (String) entity.getProperty("Flagged");
+      int size = (int) (long) entity.getProperty("Size"); //datastore stores ints as long by default 
+      boolean flagged = (Boolean) entity.getProperty("Flagged");
+      int frequency = (int) (long) entity.getProperty("Frequency");
 
       PCAPdata temp = new PCAPdata(source, destination, domain, 
-      location, size, protocol, time, flagged);
+      location,protocol, size, flagged, frequency);
        
       dataTable.add(temp);
     }
@@ -64,10 +64,10 @@ public class DataServlet extends HttpServlet {
         String destination = request.getParameter("destination");
         String domain = request.getParameter("domain");
         String location = request.getParameter("location");
-        String size = request.getParameter("size");
         String protocol = request.getParameter("protocol");
-        String time = request.getParameter("time");
-        String flagged = request.getParameter("flagged");
+        int size = Integer.parseInt(request.getParameter("size")); 
+        boolean flagged = Boolean.parseBoolean(request.getParameter("flagged"));
+        int frequency = Integer.parseInt(request.getParameter("frequency"));
 
         Entity pcapEntity = new Entity("data"); //creates entitiy tab in datastore
 
@@ -77,8 +77,8 @@ public class DataServlet extends HttpServlet {
         pcapEntity.setProperty("Location", location);
         pcapEntity.setProperty("Size", size);
         pcapEntity.setProperty("Protocol", protocol);
-        pcapEntity.setProperty("Time", time);
         pcapEntity.setProperty("Flagged", flagged);
+        pcapEntity.setProperty("Frequency", frequency);
 
         datastore.put(pcapEntity); //pushes new pcap entry to datastore
 

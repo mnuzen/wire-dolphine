@@ -37,7 +37,7 @@ public class LoadMockData extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 
-      //CSV format: Source,Destination,Domain,Location,Size,Protocal,Time,Flagged
+      //CSV format: Source,Destination,Domain,Location,Protocal,Size,Flagged,Frequency
         String csvFile = "data.csv"; //CSV located in project dir /webapp
         String line = "";
         String cvsSplitBy = ",";
@@ -54,10 +54,10 @@ public class LoadMockData extends HttpServlet {
                 pcapEntity.setProperty("Destination", pcapLine[1]);
                 pcapEntity.setProperty("Domain", pcapLine[2]);
                 pcapEntity.setProperty("Location", pcapLine[3]);
-                pcapEntity.setProperty("Size", pcapLine[4]);
-                pcapEntity.setProperty("Protocol", pcapLine[5]);
-                pcapEntity.setProperty("Time", pcapLine[6]);
-                pcapEntity.setProperty("Flagged", pcapLine[7]);
+                pcapEntity.setProperty("Protocol", pcapLine[4]);
+                pcapEntity.setProperty("Size", Integer.parseInt(pcapLine[5]));
+                pcapEntity.setProperty("Flagged", Boolean.parseBoolean(pcapLine[6]));
+                pcapEntity.setProperty("Frequency", Integer.parseInt(pcapLine[7]));
                 datastore.put(pcapEntity); //pushes new entry to datastore
             }
 
