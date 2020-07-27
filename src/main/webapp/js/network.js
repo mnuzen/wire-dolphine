@@ -5,14 +5,17 @@ function createNetworkOne(){
   .then((data) => {
   
     var nodes = new Array();
+    var edges = new Array();
+
     for (i in data) {
-      nodes[i] = { id: i, label: data[i].destination, group: 0 };
+      nodes[i] = { id: i, label: data[i].source, group: i};
+      nodes[i+1] = { id: i+1, label: data[i].destination, group: i};
+      edges[i] = { from: i, to: i+1};
     }
+
     //nodes[0] = { id: 0, label: data[1].source, group: 0 };
     //nodes[1] = { id: 1, label: "Class C", group: 1 };
-
-    var edges = new Array();
-    edges[0] = { from: 1, to: 0 };
+    //edges[j] = { from: source, to: dest };
 
     // create a network
     var container = document.getElementById("mynetwork");
