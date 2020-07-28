@@ -43,8 +43,7 @@ public class PacketParserServlet extends HttpServlet {
   static final String FILENAME = "WEB-INF/files/chargen-tcp.pcap";
   //static final String FILENAME = "WEB-INF/chargen-udp.pcap";
 
-  public void main() { // what if i can pass in the file name here? 
-
+  public void main() {
     try {
         final InputStream stream = new FileInputStream(FILENAME);
         final Pcap pcap = Pcap.openStream(stream);
@@ -92,10 +91,10 @@ public class PacketParserServlet extends HttpServlet {
       pcap.close();
     }
     catch(FileNotFoundException ex) {
-        packets.add("file not found");
+        packets.add("File not found");
     }
     catch(IOException ex) {
-        packets.add("io err");
+        packets.add("IO err");
     }
   }
 
@@ -110,8 +109,6 @@ public class PacketParserServlet extends HttpServlet {
     // Send the JSON as the response
     response.getWriter().println(json);
   }
-
-  // add doPost to figure out which file to look
 
   /**
    * Converts a DataServlet instance into a JSON string using the Gson library.
