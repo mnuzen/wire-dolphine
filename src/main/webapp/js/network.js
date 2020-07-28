@@ -65,17 +65,15 @@ function createNetworkOne(){
 }
 
 
-/** Create network graph two. */
+/** Create network graph two with hard-coded data. */
 function createNetworkTwo(){
   var color = "gray";
   var len = undefined;
 
   var nodes = [
     { id: 0, label: "My Computer", group: 0 },
-    
     { id: 4, label: "Class C", group: 6 },
     { id: 7, label: "Class A", group: 8 },
-   
     { id: 13, label: "Class E", group: 7 },
     { id: 15, label: "Class D", group: 5 },
     { id: 16, label: "224.0.0.0", group: 5 },
@@ -92,6 +90,7 @@ function createNetworkTwo(){
     { id: 28, label: "Class B", group: 9 },
     { id: 29, label: "128.1.0.1", group: 9 },
   ];
+
   var edges = [
     { from: 1, to: 0 },
     { from: 2, to: 0 },
@@ -128,13 +127,14 @@ function createNetworkTwo(){
     { from: 28, to: 0 },
   ];
 
-
   // create a network
   var container = document.getElementById("mynetwork");
+  
   var data = {
     nodes: nodes,
     edges: edges,
   };
+
   var options = {
     nodes: {
       shape: "dot",
