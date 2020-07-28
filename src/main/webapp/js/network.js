@@ -13,8 +13,8 @@ function createNetworkOne(){
     createNetwork();
 
     /* Populate nodes and edges with the following formatting:
-     * NODE: {id: ID, label: LABEL, group: GROUP} 
-     * EDGE: {from: SOURCE, to: DESTINATION}
+     ** NODE: {id: ID, label: LABEL, group: GROUP} 
+     ** EDGE: {from: SOURCE, to: DESTINATION}
     */
     function populateGraph(){
       // add source node
@@ -35,7 +35,7 @@ function createNetworkOne(){
       }
     }
 
-    // create a network
+    /* Initialize network based on nodes and edges. */
     function createNetwork(){
       var container = document.getElementById("mynetwork");
 
@@ -129,7 +129,7 @@ function createNetworkTwo(){
 
   // create a network
   var container = document.getElementById("mynetwork");
-  
+
   var data = {
     nodes: nodes,
     edges: edges,
