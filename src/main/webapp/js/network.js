@@ -34,7 +34,7 @@ function createNetworkOne(){
 
         // add edges based on freqs
         for (var j = 0; j < data[i].frequency; j++) {
-          edges[ed] = { from: SOURCE, to: ed};
+          edges[ed] = {from: SOURCE, to: i};
           ed++;
         }
       }
