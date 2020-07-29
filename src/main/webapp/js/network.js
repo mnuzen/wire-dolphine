@@ -4,6 +4,11 @@ function createNetworkOne(){
   .then(response => response.json())
   .then((data) => {
     const SOURCE = 0;
+    const SHAPE = "dot"
+    const SHAPE_SIZE = 30;
+    const FONT_SIZE = 32;
+    const BORDER_WIDTH = 2;
+    const WHITE_COLOR = "#ffffff";
   
     // initialize nodes and edges arrays
     var nodes = new Array();
@@ -29,7 +34,7 @@ function createNetworkOne(){
 
         // add edges based on freqs
         for (var j = 0; j < data[i].frequency; j++) {
-          edges[ed] = { from: SOURCE, to: ed};
+          edges[ed] = {from: SOURCE, to: i};
           ed++;
         }
       }
@@ -46,16 +51,16 @@ function createNetworkOne(){
 
       var options = {
         nodes: {
-          shape: "dot",
-          size: 30,
+          shape: SHAPE,
+          size: SHAPE_SIZE,
           font: {
-            size: 32,
-            color: "#ffffff",
+            size: FONT_SIZE,
+            color: WHITE_COLOR,
           },
-          borderWidth: 2,
+          borderWidth: BORDER_WIDTH,
         },
         edges: {
-          width: 2,
+          width: BORDER_WIDTH,
         },
       };
 
@@ -67,6 +72,13 @@ function createNetworkOne(){
 
 /** Create network graph two with hard-coded data. */
 function createNetworkTwo(){
+  const SOURCE = 0;
+  const SHAPE = "dot"
+  const SHAPE_SIZE = 30;
+  const FONT_SIZE = 32;
+  const BORDER_WIDTH = 2;
+  const WHITE_COLOR = "#ffffff";
+
   // initialize nodes and edges arrays
   var nodes = new Array();
   var edges = new Array();
@@ -137,23 +149,25 @@ function createNetworkTwo(){
   function createNetwork(){
     var container = document.getElementById("mynetwork");
     var data = {
-     nodes: nodes,
-     edges: edges,
+      nodes: nodes,
+      edges: edges,
     };
+
     var options = {
       nodes: {
-        shape: "dot",
-        size: 30,
+        shape: SHAPE,
+        size: SHAPE_SIZE,
         font: {
-          size: 32,
-          color: "#ffffff",
+          size: FONT_SIZE,
+          color: WHITE_COLOR,
         },
-        borderWidth: 2,
+        borderWidth: BORDER_WIDTH,
       },
       edges: {
-        width: 2,
+        width: BORDER_WIDTH,
       },
     };
+
    network = new vis.Network(container, data, options);
   }
 }
