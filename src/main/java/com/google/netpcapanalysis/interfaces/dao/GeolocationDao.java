@@ -7,7 +7,7 @@ public interface GeolocationDao {
   /**
    * Gets country of IP
    * @param ip
-   * @return Returns country, otherwise "unknown" if country unknown
+   * @return Returns case-sensitive (ie capitalized), otherwise "unknown" if country unknown
    */
   public String getCountry(InetAddress ip);
 }
