@@ -1,4 +1,4 @@
-package com.google.sps.data;
+package com.google.sps.datastore;
 
 //PCAP storage class
 public final class PCAPdata {
