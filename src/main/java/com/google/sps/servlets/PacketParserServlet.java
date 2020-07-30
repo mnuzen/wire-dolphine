@@ -14,6 +14,8 @@
 
 package com.google.sps.servlets;
 
+import com.google.sps.data.PCAPdata;
+
 import io.pkts.PacketHandler;
 import io.pkts.Pcap;
 import io.pkts.buffer.Buffer;
@@ -48,9 +50,16 @@ public class PacketParserServlet extends HttpServlet {
   ArrayList<PCAPdata> mockData = new ArrayList<PCAPdata>();
   DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); //creates database
 
+  private ArrayList<String> packets = new ArrayList<String>();
+
   //static final String FILENAME = "WEB-INF/files/traffic.pcap";
   static final String FILENAME = "WEB-INF/files/chargen-tcp.pcap";
   //static final String FILENAME = "WEB-INF/chargen-udp.pcap";
+
+  String protocol = "";
+  String ports = "";
+  String srcip = "";
+  String dstip = "";
 
   public void main() {
     try {
@@ -62,10 +71,10 @@ public class PacketParserServlet extends HttpServlet {
         public boolean nextPacket(final Packet packet) throws IOException {
           if(packet.hasProtocol(Protocol.IPv4)) {
             // initialize new datastore entry
-            Entity pcapEntity = new Entity("data");
 
             IPPacket ip = (IPPacket) packet.getPacket(Protocol.IPv4);
-            String protocol = "IPv4";
+            protocol = "IPv4";
+            ports = "";
             
             //The IP addresses involved
             String dstip = ip.getDestinationIP();
@@ -82,20 +91,20 @@ public class PacketParserServlet extends HttpServlet {
               UDPPacket udpPacket = (UDPPacket) packet.getPacket(Protocol.UDP);
               int dstport = udpPacket.getDestinationPort();
               int srcport = udpPacket.getSourcePort();
+              ports = "Destination Port: " + dstport + " Source Port: " + srcport;
             }
             else if (packet.hasProtocol(Protocol.TCP)) {
               protocol = "TCP";
               TCPPacket tcpPacket = (TCPPacket) packet.getPacket(Protocol.TCP);
               int dstport = tcpPacket.getDestinationPort();
               int srcport = tcpPacket.getSourcePort();
+              ports = "Destination Port: " + dstport + " Source Port: " + srcport;
             }
 
-            pcapEntity.setProperty("Source", srcip);
-            pcapEntity.setProperty("Destination", dstip);
-            pcapEntity.setProperty("Protocol", protocol);
-            pcapEntity.setProperty("Size", 2;
-            pcapEntity.setProperty("Frequency", 1);
-            datastore.put(pcapEntity); //pushes new entry to datastore
+            String text = protocol + " Packet from " + dstip + " to " + srcip + " at time " + packetTime;
+            text += "; " + ports + "\n";
+            packets.add(text);
+            
         }
         return true;
         }
@@ -103,10 +112,10 @@ public class PacketParserServlet extends HttpServlet {
       pcap.close();
     }
     catch(FileNotFoundException ex) {
-        packets.add("File not found");
+        System.out.println("File not found");
     }
     catch(IOException ex) {
-        packets.add("IO err");
+        System.out.println("IO err");
     }
   }
 
@@ -120,6 +129,67 @@ public class PacketParserServlet extends HttpServlet {
 
     // Send the JSON as the response
     response.getWriter().println(json);
+  }
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      final InputStream stream = new FileInputStream(FILENAME);
+      final Pcap pcap = Pcap.openStream(stream);
+
+      pcap.loop(new PacketHandler() {
+      @Override
+      public boolean nextPacket(final Packet packet) throws IOException {
+        if(packet.hasProtocol(Protocol.IPv4)) {
+          // initialize new datastore entry
+
+          IPPacket ip = (IPPacket) packet.getPacket(Protocol.IPv4);
+          protocol = "IPv4";
+          ports = "";
+          
+          //The IP addresses involved
+          String dstip = ip.getDestinationIP();
+          String srcip = ip.getSourceIP();
+          // The payload data as hex
+          String payload = ip.getPayload().dumpAsHex();
+          // Time packet arrived.
+          long packetTime = ip.getArrivalTime(); 
+          // Is this packet a fragment?
+          boolean isFragment = ip.isFragmented();
+
+          if (packet.hasProtocol(Protocol.UDP)) {
+            protocol = "UDP";
+            UDPPacket udpPacket = (UDPPacket) packet.getPacket(Protocol.UDP);
+            int dstport = udpPacket.getDestinationPort();
+            int srcport = udpPacket.getSourcePort();
+            ports = "Destination Port: " + dstport + " Source Port: " + srcport;
+          }
+          else if (packet.hasProtocol(Protocol.TCP)) {
+            protocol = "TCP";
+            TCPPacket tcpPacket = (TCPPacket) packet.getPacket(Protocol.TCP);
+            int dstport = tcpPacket.getDestinationPort();
+            int srcport = tcpPacket.getSourcePort();
+            ports = "Destination Port: " + dstport + " Source Port: " + srcport;
+          }
+
+          String text = protocol + " Packet from " + dstip + " to " + srcip + " at time " + packetTime;
+          text += "; " + ports + "\n";
+          packets.add(text);
+          Random r = new Random();
+          int freq = r.nextInt(100);
+
+          Entity pcapEntity = new Entity("data");
+
+          pcapEntity.setProperty("Source", srcip);
+          pcapEntity.setProperty("Destination", dstip);
+          pcapEntity.setProperty("Protocol", protocol);
+          pcapEntity.setProperty("Size", 3);
+          pcapEntity.setProperty("Frequency", freq);
+          datastore.put(pcapEntity); //pushes new entry to datastore
+        }
+        return true;
+      }
+      });
+    pcap.close();
   }
 
   /**
