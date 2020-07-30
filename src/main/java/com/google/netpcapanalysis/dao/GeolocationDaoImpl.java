@@ -24,8 +24,7 @@ public class GeolocationDaoImpl implements GeolocationDao {
       System.exit(0);
     }
   }
-
-
+  
   public String getCountry(InetAddress ip) {
     try {
       InetAddress ipAddress = InetAddress.getByName(ip.getHostAddress());
