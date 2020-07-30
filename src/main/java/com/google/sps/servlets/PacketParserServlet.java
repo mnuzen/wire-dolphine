@@ -28,6 +28,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
+
 import java.util.*; 
 import com.google.gson.Gson;
 
@@ -38,7 +45,9 @@ import java.io.*;
 /** Servlet that processes comments.*/
 @WebServlet("/PCAP-data")
 public class PacketParserServlet extends HttpServlet {
-  private ArrayList<String> packets = new ArrayList<String>();
+  ArrayList<PCAPdata> mockData = new ArrayList<PCAPdata>();
+  DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); //creates database
+
   //static final String FILENAME = "WEB-INF/files/traffic.pcap";
   static final String FILENAME = "WEB-INF/files/chargen-tcp.pcap";
   //static final String FILENAME = "WEB-INF/chargen-udp.pcap";
@@ -52,9 +61,11 @@ public class PacketParserServlet extends HttpServlet {
         @Override
         public boolean nextPacket(final Packet packet) throws IOException {
           if(packet.hasProtocol(Protocol.IPv4)) {
+            // initialize new datastore entry
+            Entity pcapEntity = new Entity("data");
+
             IPPacket ip = (IPPacket) packet.getPacket(Protocol.IPv4);
             String protocol = "IPv4";
-            String ports = "";
             
             //The IP addresses involved
             String dstip = ip.getDestinationIP();
@@ -71,19 +82,20 @@ public class PacketParserServlet extends HttpServlet {
               UDPPacket udpPacket = (UDPPacket) packet.getPacket(Protocol.UDP);
               int dstport = udpPacket.getDestinationPort();
               int srcport = udpPacket.getSourcePort();
-              ports = "Destination Port: " + dstport + ", Source Port: " + srcport;
             }
             else if (packet.hasProtocol(Protocol.TCP)) {
               protocol = "TCP";
               TCPPacket tcpPacket = (TCPPacket) packet.getPacket(Protocol.TCP);
               int dstport = tcpPacket.getDestinationPort();
               int srcport = tcpPacket.getSourcePort();
-              ports = "Destination Port: " + dstport + ", Source Port: " + srcport;
             }
 
-            String text = protocol + " Packet from " + dstip + " to " + srcip + " at time " + packetTime;
-            text += "; " + ports + "\n";
-            packets.add(text);
+            pcapEntity.setProperty("Source", srcip);
+            pcapEntity.setProperty("Destination", dstip);
+            pcapEntity.setProperty("Protocol", protocol);
+            pcapEntity.setProperty("Size", 2;
+            pcapEntity.setProperty("Frequency", 1);
+            datastore.put(pcapEntity); //pushes new entry to datastore
         }
         return true;
         }
