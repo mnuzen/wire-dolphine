@@ -11,12 +11,13 @@ import java.net.URL;
 
 public class GeolocationDaoImpl implements GeolocationDao {
 
+  private static final String GEO_DB_LOCATION = "GeoLite2-City.mmdb";
   private File database;
   private DatabaseReader reader;
 
   public GeolocationDaoImpl() {
     try {
-      URL geoDBUrl = GeolocationDaoImpl.class.getClassLoader().getResource("GeoLite2-City.mmdb");
+      URL geoDBUrl = GeolocationDaoImpl.class.getClassLoader().getResource(GEO_DB_LOCATION);
       database = new File(geoDBUrl.toURI());
       reader = new DatabaseReader.Builder(database).build();
     } catch (Exception e) {
