@@ -29,7 +29,7 @@ public class MockPCAP implements PCAP {
     return ips;
   }
 
-  public static InetAddress genIP() {
+  public InetAddress genIP() {
     InetAddress ip = null;
     Random r = new Random();
     while (ip == null || ip.isLoopbackAddress() ||
