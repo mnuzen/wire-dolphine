@@ -51,13 +51,6 @@ public class IPGeolocationServlet extends HttpServlet {
       countryCount.put(country, countryCount.getOrDefault(country, 1));
     }
 
-    // mock
-    countryCount.put("Armenia", 43);
-    countryCount.put("Jordan", 67);
-    countryCount.put("Estonia", 99);
-    countryCount.put("South Korea", 21);
-    countryCount.put("Canada", 66);
-
     response.setContentType("application/json;");
     response.setCharacterEncoding("UTF-8");
     response.getWriter().println(new Gson().toJson(countryCount));
