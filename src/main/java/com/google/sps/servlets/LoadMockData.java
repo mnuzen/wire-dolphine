@@ -1,6 +1,7 @@
 package com.google.sps.servlets;
 
-import com.google.sps.data.PCAPdata;
+import com.google.sps.datastore.PCAPdata;
+import com.google.sps.datastore.SetDatastore;
 
 import com.google.gson.Gson;
 
@@ -40,7 +41,7 @@ public class LoadMockData extends HttpServlet {
       //CSV format: Source,Destination,Domain,Location,Protocal,Size,Flagged,Frequency
         String csvFile = "data.csv"; //CSV located in project dir /webapp
         String line = "";
-        String cvsSplitBy = ",";
+        String cvsSplitBy = ","; 
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 
@@ -49,16 +50,9 @@ public class LoadMockData extends HttpServlet {
                 // use comma as separator
                 String[] pcapLine = line.split(cvsSplitBy);
 
-                Entity pcapEntity = new Entity("data");
-                pcapEntity.setProperty("Source", pcapLine[0]);
-                pcapEntity.setProperty("Destination", pcapLine[1]);
-                pcapEntity.setProperty("Domain", pcapLine[2]);
-                pcapEntity.setProperty("Location", pcapLine[3]);
-                pcapEntity.setProperty("Protocol", pcapLine[4]);
-                pcapEntity.setProperty("Size", Integer.parseInt(pcapLine[5]));
-                pcapEntity.setProperty("Flagged", Boolean.parseBoolean(pcapLine[6]));
-                pcapEntity.setProperty("Frequency", Integer.parseInt(pcapLine[7]));
-                datastore.put(pcapEntity); //pushes new entry to datastore
+                PCAPdata tempPCAP = new PCAPdata(pcapLine[0],pcapLine[1],pcapLine[2],pcapLine[3],pcapLine[4],
+                Integer.parseInt(pcapLine[5]), Boolean.parseBoolean(pcapLine[6]), Integer.parseInt(pcapLine[7]));
+                SetDatastore upload = new SetDatastore(tempPCAP);
             }
 
         } catch (IOException e) {
