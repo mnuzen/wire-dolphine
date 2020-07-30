@@ -1,4 +1,4 @@
-/** Create network graph one. */
+/** Create network graph one with Datastore data. */
 function createNetworkOne(){
   fetch('/data') // retrieve all Datastore data that has "data" label
   .then(response => response.json())
