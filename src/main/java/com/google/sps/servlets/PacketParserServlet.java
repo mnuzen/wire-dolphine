@@ -175,7 +175,7 @@ public class PacketParserServlet extends HttpServlet {
           text += "; " + ports + "\n";
           packets.add(text);
           Random r = new Random();
-          int freq = r.nextInt(100);
+          int freq = r.nextInt(14);
 
           Entity pcapEntity = new Entity("data");
 
@@ -183,6 +183,7 @@ public class PacketParserServlet extends HttpServlet {
           pcapEntity.setProperty("Destination", dstip);
           pcapEntity.setProperty("Protocol", protocol);
           pcapEntity.setProperty("Size", 3);
+          pcapEntity.setProperty("Flagged", false);
           pcapEntity.setProperty("Frequency", freq);
           datastore.put(pcapEntity); //pushes new entry to datastore
         }

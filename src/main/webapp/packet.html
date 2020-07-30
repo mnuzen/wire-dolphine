@@ -349,6 +349,11 @@
           <!-- Packet Example -->
           <p>Testing packet demo page.</p>
 
+          <form action="/PCAP-data" method="post">
+             <label for="parser">Load data from parser.</label>
+            <input type="submit" name="parser" value="Click Me!" />
+            </form>
+
           <p>Click the button below to get packet info:</p>
             <button onclick="getPCAPDestination()">Fetch Destination Addresses</button>
             <div id="message-container"></div>
