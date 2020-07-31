@@ -30,17 +30,21 @@ function createNetworkOne(){
     function populateGraph(){
       // add source node
       nodes[SOURCE] = {id: SOURCE, label: "My Computer", group: SOURCE}; 
+       // initialize edge counter
+       var edge = 0;
 
       // add three base groups
-      nodes[1] = {id: GROUP1, label: "17", group: GROUP1};
-      edges[0] = {from: SOURCE, to: GROUP1};
-      nodes[2] = {id: GROUP2, label: "18", group: GROUP2};
-      edges[1] = {from: SOURCE, to: GROUP2};
-      nodes[3] = {id: GROUP3, label: "19", group: GROUP3};
-      edges[2] = {from: SOURCE, to: GROUP3};
+      nodes[GROUP1] = {id: GROUP1, label: "17", group: GROUP1};
+      edges[edge] = {from: SOURCE, to: GROUP1};
+      edge++;
 
-      // initialize edge counter
-      var edge = 3;
+      nodes[GROUP2] = {id: GROUP2, label: "18", group: GROUP2};
+      edges[edge] = {from: SOURCE, to: GROUP2};
+      edge++;
+
+      nodes[GROUP3] = {id: GROUP3, label: "19", group: GROUP3};
+      edges[edge] = {from: SOURCE, to: GROUP3};
+      edge++;
 
       // add all destinations
       for (var i = 0; i < data.length; i++) {
