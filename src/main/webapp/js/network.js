@@ -25,16 +25,23 @@ function createNetworkOne(){
       // add source node
       nodes[SOURCE] = {id: SOURCE, label: "My Computer", group: SOURCE}; 
 
+       // add three base groups
+      nodes[1] = {id: 1, label: "17", group: 1};
+      nodes[2] = {id: 2, label: "18", group: 2};
+      nodes[3] = {id: 3, label: "19", group: 3};
+      var new_length = data.length+2;
+
       // initialize edge counter
       var ed = 0;
 
       // add all destinations
       for (var i = 1; i < data.length; i++) {
-        nodes[i] = { id: i, label: data[i].destination, group: i};
+        var counter = i+3;
+        nodes[counter] = { id: counter, label: data[i].destination, group: counter};
 
         // add edges based on freqs
         for (var j = 0; j < data[i].frequency; j++) {
-          edges[ed] = {from: SOURCE, to: i};
+          edges[ed] = {from: SOURCE, to: counter};
           ed++;
         }
       }
