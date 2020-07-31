@@ -3,14 +3,15 @@ package com.google.sps.data;
 //PCAP storage class
 public final class PCAPdata {
 
-  String source;
-  String destination;
-  String domain;
-  String location;
-  String protocol;
-  int size;
-  boolean flagged;
-  int frequency;
+  //needs to be public for secondary IP populating, some could be made protected or private
+  public String source;
+  public String destination;
+  public String domain;
+  public String location;
+  public String protocol;
+  public int size;
+  public boolean flagged;
+  public int frequency;
     
 
   public PCAPdata(String source, String destination, String domain, 
