@@ -1,17 +1,26 @@
+const SOURCE = 0;
+const SHAPE = "dot"
+const SHAPE_SIZE = 16;
+
+const GROUP1 = 1;
+const GROUP2 = 2;
+const GROUP3 = 3;
+
+const GRAV_CONSTANT = -26;
+const CENTRAL_GRAV = 0.005;
+const SPRING_LENGTH = 230;
+const SPRING_CONST = 0.18;
+const MAX_VEL = 146;
+const TIMESTEP = 0.35;
+const ITER = 150;
+
+const NUM_GROUPS = 3;
+
 /** Create network graph one. */
 function createNetworkOne(){
   fetch('/data') // retrieve all Datastore data that has "data" label
   .then(response => response.json())
   .then((data) => {
-    const SOURCE = 0;
-    const SHAPE = "dot"
-    const SHAPE_SIZE = 16;
-    
-    const GROUP1 = 1;
-    const GROUP2 = 2;
-    const GROUP3 = 3;
-
-    const NUM_GROUPS = 3;
   
     // initialize nodes and edges arrays
     var nodes = new Array();
@@ -100,15 +109,15 @@ function createNetworkOne(){
         },
         physics: {
           forceAtlas2Based: {
-            gravitationalConstant: -26,
-            centralGravity: 0.005,
-            springLength: 230,
-            springConstant: 0.18,
+            gravitationalConstant: GRAV_CONSTANT,
+            centralGravity: CENTRAL_GRAV,
+            springLength: SPRING_LENGTH,
+            springConstant: SPRING_CONST,
         },
-        maxVelocity: 146,
+        maxVelocity: MAX_VEL,
         solver: "forceAtlas2Based",
-        timestep: 0.35,
-        stabilization: { iterations: 150 },
+        timestep: TIMESTEP,
+        stabilization: { iterations: ITER },
         },
       };
       network = new vis.Network(container, finalData, options);
