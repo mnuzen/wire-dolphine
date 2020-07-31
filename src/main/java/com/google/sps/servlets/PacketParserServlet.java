@@ -14,7 +14,8 @@
 
 package com.google.sps.servlets;
 
-import com.google.sps.data.PCAPdata;
+import com.google.sps.datastore.PCAPdata;
+import com.google.sps.datastore.GenericPCAPDao;
 
 import io.pkts.PacketHandler;
 import io.pkts.Pcap;
@@ -50,86 +51,14 @@ public class PacketParserServlet extends HttpServlet {
   ArrayList<PCAPdata> mockData = new ArrayList<PCAPdata>();
   DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); //creates database
 
-  private ArrayList<String> packets = new ArrayList<String>();
-
   //static final String FILENAME = "WEB-INF/files/traffic.pcap";
-  static final String FILENAME = "WEB-INF/files/chargen-tcp.pcap";
   //static final String FILENAME = "WEB-INF/chargen-udp.pcap";
+  static final String FILENAME = "WEB-INF/files/chargen-tcp.pcap";
 
   String protocol = "";
   String ports = "";
   String srcip = "";
   String dstip = "";
-
-  public void main() {
-    try {
-        final InputStream stream = new FileInputStream(FILENAME);
-        final Pcap pcap = Pcap.openStream(stream);
-
-        pcap.loop(new PacketHandler() {
-        @Override
-        public boolean nextPacket(final Packet packet) throws IOException {
-          if(packet.hasProtocol(Protocol.IPv4)) {
-            // initialize new datastore entry
-
-            IPPacket ip = (IPPacket) packet.getPacket(Protocol.IPv4);
-            protocol = "IPv4";
-            ports = "";
-            
-            //The IP addresses involved
-            String dstip = ip.getDestinationIP();
-            String srcip = ip.getSourceIP();
-            // The payload data as hex
-            String payload = ip.getPayload().dumpAsHex();
-            // Time packet arrived.
-            long packetTime = ip.getArrivalTime(); 
-            // Is this packet a fragment?
-            boolean isFragment = ip.isFragmented();
-
-            if (packet.hasProtocol(Protocol.UDP)) {
-              protocol = "UDP";
-              UDPPacket udpPacket = (UDPPacket) packet.getPacket(Protocol.UDP);
-              int dstport = udpPacket.getDestinationPort();
-              int srcport = udpPacket.getSourcePort();
-              ports = "Destination Port: " + dstport + " Source Port: " + srcport;
-            }
-            else if (packet.hasProtocol(Protocol.TCP)) {
-              protocol = "TCP";
-              TCPPacket tcpPacket = (TCPPacket) packet.getPacket(Protocol.TCP);
-              int dstport = tcpPacket.getDestinationPort();
-              int srcport = tcpPacket.getSourcePort();
-              ports = "Destination Port: " + dstport + " Source Port: " + srcport;
-            }
-
-            String text = protocol + " Packet from " + dstip + " to " + srcip + " at time " + packetTime;
-            text += "; " + ports + "\n";
-            packets.add(text);
-            
-        }
-        return true;
-        }
-      });
-      pcap.close();
-    }
-    catch(FileNotFoundException ex) {
-        System.out.println("File not found");
-    }
-    catch(IOException ex) {
-        System.out.println("IO err");
-    }
-  }
-
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException { 
-    main(); 
-    response.setContentType("application/json;");
-
-    // Convert the ArrayList to JSON
-    String json = convertToJsonUsingGson(packets);
-
-    // Send the JSON as the response
-    response.getWriter().println(json);
-  }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -171,34 +100,18 @@ public class PacketParserServlet extends HttpServlet {
             ports = "Destination Port: " + dstport + " Source Port: " + srcport;
           }
 
-          String text = protocol + " Packet from " + dstip + " to " + srcip + " at time " + packetTime;
-          text += "; " + ports + "\n";
-          packets.add(text);
           Random r = new Random();
           int freq = r.nextInt(14)+1;
 
-          Entity pcapEntity = new Entity("data");
+          // PCAPdata tempPCAP = new PCAPdata(source, destination, domain, location, protocol, size, flagged, frequency);
+          PCAPdata tempPCAP = new PCAPdata(srcip, dstip, "wiki", "loc", protocol, 2, false, freq);
 
-          pcapEntity.setProperty("Source", srcip);
-          pcapEntity.setProperty("Destination", dstip);
-          pcapEntity.setProperty("Protocol", protocol);
-          pcapEntity.setProperty("Size", 3);
-          pcapEntity.setProperty("Flagged", false);
-          pcapEntity.setProperty("Frequency", freq);
-          datastore.put(pcapEntity); //pushes new entry to datastore
+          GenericPCAPDao data = new GenericPCAPDao();
+          data.setPCAPObjects(tempPCAP, "file_1");
         }
         return true;
       }
-      });
+    });
     pcap.close();
-  }
-
-  /**
-   * Converts a DataServlet instance into a JSON string using the Gson library.
-   */
-  private String convertToJsonUsingGson(ArrayList<String> data) {
-    Gson gson = new Gson();
-    String json = gson.toJson(data);
-    return json;
   }
 }
