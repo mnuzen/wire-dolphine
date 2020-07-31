@@ -9,6 +9,10 @@ function createNetworkOne(){
     const FONT_SIZE = 32;
     const BORDER_WIDTH = 2;
     const WHITE_COLOR = "#ffffff";
+
+    const GROUP1 = 1;
+    const GROUP2 = 2;
+    const GROUP3 = 3;
   
     // initialize nodes and edges arrays
     var nodes = new Array();
@@ -25,24 +29,48 @@ function createNetworkOne(){
       // add source node
       nodes[SOURCE] = {id: SOURCE, label: "My Computer", group: SOURCE}; 
 
-       // add three base groups
-      nodes[1] = {id: 1, label: "17", group: 1};
-      nodes[2] = {id: 2, label: "18", group: 2};
-      nodes[3] = {id: 3, label: "19", group: 3};
-      var new_length = data.length+2;
+      // add three base groups
+      nodes[1] = {id: GROUP1, label: "17", group: GROUP1};
+      edges[0] = {from: SOURCE, to: GROUP1};
+      nodes[2] = {id: GROUP2, label: "18", group: GROUP2};
+      edges[1] = {from: SOURCE, to: GROUP2};
+      nodes[3] = {id: GROUP3, label: "19", group: GROUP3};
+      edges[2] = {from: SOURCE, to: GROUP3};
 
       // initialize edge counter
-      var ed = 0;
+      var ed = 3;
 
       // add all destinations
       for (var i = 1; i < data.length; i++) {
         var counter = i+3;
+        var ip = parseInt(data[i].destination.substring(0,2));
         nodes[counter] = { id: counter, label: data[i].destination, group: counter};
 
-        // add edges based on freqs
-        for (var j = 0; j < data[i].frequency; j++) {
-          edges[ed] = {from: SOURCE, to: counter};
-          ed++;
+        
+        if (ip == 17){ 
+          nodes[counter] = { id: counter, label: data[i].destination, group: GROUP1};
+
+          // add edges based on freqs
+          for (var j = 0; j < data[i].frequency; j++) {
+            edges[ed] = {from: counter, to: GROUP1};
+            ed++;
+          } 
+        }
+        else if (ip == 18) { 
+          nodes[counter] = { id: counter, label: data[i].destination, group: GROUP2};
+
+          // add edges based on freqs
+          for (var j = 0; j < data[i].frequency; j++) {
+            edges[ed] = {from: counter, to: GROUP2};
+            ed++;
+          }
+        } 
+        else {
+            // add edges based on freqs
+          for (var j = 0; j < data[i].frequency; j++) {
+            edges[ed] = {from: SOURCE, to: counter};
+            ed++;
+          }
         }
       }
     }
