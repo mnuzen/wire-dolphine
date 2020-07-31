@@ -175,7 +175,7 @@ public class PacketParserServlet extends HttpServlet {
           text += "; " + ports + "\n";
           packets.add(text);
           Random r = new Random();
-          int freq = r.nextInt(14);
+          int freq = r.nextInt(14)+1;
 
           Entity pcapEntity = new Entity("data");
 
