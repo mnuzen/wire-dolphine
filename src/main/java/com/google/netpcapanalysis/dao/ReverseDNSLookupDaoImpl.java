@@ -57,10 +57,10 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
       ReverseDNS rdns = new ReverseDNS();
       if (res.Answer != null) {
         data = res.Answer[res.Answer.length - 1].data;
-        rdns.server = true;
+        rdns.setServer(true);
       } else if (res.Authority != null) {
         data = res.Authority[res.Authority.length - 1].data;
-        rdns.authority = true;
+        rdns.setAuthority(true);
       } else {
         throw new Error("invalid dns request");
       }
@@ -77,7 +77,7 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
         data = data.substring(0, data.length() - 1);
       }
 
-      rdns.record = data;
+      rdns.setRecord(data);
       return rdns;
     } catch (Exception e) {
       return null;
@@ -90,11 +90,11 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
     String reverseIPString = String.join(".", reverseIP);
 
     StringBuilder sb = new StringBuilder();
-    URL yahoo = new URL(String.format("https://dns.google.com/resolve?name=%s.in-addr.arpa&type=PTR", reverseIPString));
-    URLConnection yc = yahoo.openConnection();
+    URL url = new URL(String.format("https://dns.google.com/resolve?name=%s.in-addr.arpa&type=PTR", reverseIPString));
+    URLConnection uc = url.openConnection();
     BufferedReader in = new BufferedReader(
-        new InputStreamReader(
-            yc.getInputStream()));
+        new InputStreamReader(a
+            uc.getInputStream()));
     String inputLine;
 
     while ((inputLine = in.readLine()) != null) {
