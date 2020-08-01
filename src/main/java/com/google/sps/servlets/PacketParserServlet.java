@@ -54,7 +54,8 @@ public class PacketParserServlet extends HttpServlet {
 
   //static final String FILENAME = "WEB-INF/files/traffic.pcap";
   //static final String FILENAME = "WEB-INF/chargen-udp.pcap";
-  static final String FILENAME = "WEB-INF/files/chargen-tcp.pcap";
+  //static final String FILENAME = "WEB-INF/files/chargen-tcp.pcap";
+  static final String FILENAME = "WEB-INF/files/smallFlows.pcap";
   static final String MYIP = "185.47.63.113";
 
   @Override
@@ -76,8 +77,8 @@ public class PacketParserServlet extends HttpServlet {
         String protocol = "IPv4";
             
         //The IP addresses involved
-        String dstip = ip.getDestinationIP();
         String srcip = ip.getSourceIP();
+        String dstip = ip.getDestinationIP();
 
         if (packet.hasProtocol(Protocol.UDP)) {
           protocol = "UDP";
@@ -87,9 +88,14 @@ public class PacketParserServlet extends HttpServlet {
         }
 
         // PCAPdata tempPCAP = new PCAPdata(source, destination, domain, location, protocol, size, flagged, frequency);
-        PCAPdata tempPCAP = new PCAPdata(srcip, dstip, "wiki", "loc", protocol, 2, false, 1);
-        tempPCAP.incrementFrequency();
-        allPCAP.put(dstip, tempPCAP);
+        if (allPCAP.containsKey(dstip)){
+            PCAPdata tempPCAP = new PCAPdata(srcip, dstip, "", "", protocol, 2, false, allPCAP.get(dstip).getFrequency()+1); // how to use increment frequency method instead of getting freq++?
+            allPCAP.put(dstip, tempPCAP);
+        }
+        else {
+            PCAPdata tempPCAP = new PCAPdata(srcip, dstip, "", "", protocol, 2, false, 1);
+            allPCAP.put(dstip, tempPCAP);
+        }
       }
       return true;
     }
