@@ -48,70 +48,72 @@ import java.io.*;
 /** Servlet that processes comments.*/
 @WebServlet("/PCAP-data")
 public class PacketParserServlet extends HttpServlet {
-  ArrayList<PCAPdata> mockData = new ArrayList<PCAPdata>();
+  ArrayList<PCAPdata> allData = new ArrayList<PCAPdata>();
+  HashMap<String, PCAPdata> allPCAP = new HashMap<String, PCAPdata>();
   DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); //creates database
 
   //static final String FILENAME = "WEB-INF/files/traffic.pcap";
   //static final String FILENAME = "WEB-INF/chargen-udp.pcap";
   static final String FILENAME = "WEB-INF/files/chargen-tcp.pcap";
-
-  String protocol = "";
-  String ports = "";
-  String srcip = "";
-  String dstip = "";
+  static final String MYIP = "185.47.63.113";
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      final InputStream stream = new FileInputStream(FILENAME);
-      final Pcap pcap = Pcap.openStream(stream);
+    parseRaw();
+    addToPCAPDao();
+  }
 
-      pcap.loop(new PacketHandler() {
+  /* Reads PCAP file (from filename) as a stream and puts into datastore. */
+  public void parseRaw() throws IOException {
+    final InputStream stream = new FileInputStream(FILENAME);
+    final Pcap pcap = Pcap.openStream(stream);
+
+    pcap.loop(new PacketHandler() {
       @Override
       public boolean nextPacket(final Packet packet) throws IOException {
-        if(packet.hasProtocol(Protocol.IPv4)) {
-          // initialize new datastore entry
+      if(packet.hasProtocol(Protocol.IPv4)) {
+        IPPacket ip = (IPPacket) packet.getPacket(Protocol.IPv4);
+        String protocol = "IPv4";
+            
+        //The IP addresses involved
+        String dstip = ip.getDestinationIP();
+        String srcip = ip.getSourceIP();
 
-          IPPacket ip = (IPPacket) packet.getPacket(Protocol.IPv4);
-          protocol = "IPv4";
-          ports = "";
-          
-          //The IP addresses involved
-          String dstip = ip.getDestinationIP();
-          String srcip = ip.getSourceIP();
-          // The payload data as hex
-          String payload = ip.getPayload().dumpAsHex();
-          // Time packet arrived.
-          long packetTime = ip.getArrivalTime(); 
-          // Is this packet a fragment?
-          boolean isFragment = ip.isFragmented();
+        if (packet.hasProtocol(Protocol.UDP)) {
+          protocol = "UDP";
+        }
+        else if (packet.hasProtocol(Protocol.TCP)) {
+          protocol = "TCP";
+        }
 
-          if (packet.hasProtocol(Protocol.UDP)) {
-            protocol = "UDP";
+        // PCAPdata tempPCAP = new PCAPdata(source, destination, domain, location, protocol, size, flagged, frequency);
+        PCAPdata tempPCAP = new PCAPdata(srcip, dstip, "wiki", "loc", protocol, 2, false, 1);
+        tempPCAP.incrementFrequency();
+        allPCAP.put(dstip, tempPCAP);
+      }
+      return true;
+    }
+   });
+   pcap.close();
+  } // end of parseRaw function
+
+  public void addToPCAPDao(){
+    for (PCAPdata temp : allPCAP.values()) {
+      GenericPCAPDao data = new GenericPCAPDao();
+      data.setPCAPObjects(temp, "file_1");
+    }
+  } // end of addToPCAPDao function
+
+
+} // end of PacketParserServlet class
+
+/**    if (packet.hasProtocol(Protocol.UDP)) {
             UDPPacket udpPacket = (UDPPacket) packet.getPacket(Protocol.UDP);
             int dstport = udpPacket.getDestinationPort();
             int srcport = udpPacket.getSourcePort();
-            ports = "Destination Port: " + dstport + " Source Port: " + srcport;
           }
           else if (packet.hasProtocol(Protocol.TCP)) {
-            protocol = "TCP";
             TCPPacket tcpPacket = (TCPPacket) packet.getPacket(Protocol.TCP);
             int dstport = tcpPacket.getDestinationPort();
             int srcport = tcpPacket.getSourcePort();
-            ports = "Destination Port: " + dstport + " Source Port: " + srcport;
-          }
-
-          Random r = new Random();
-          int freq = r.nextInt(14)+1;
-
-          // PCAPdata tempPCAP = new PCAPdata(source, destination, domain, location, protocol, size, flagged, frequency);
-          PCAPdata tempPCAP = new PCAPdata(srcip, dstip, "wiki", "loc", protocol, 2, false, freq);
-
-          GenericPCAPDao data = new GenericPCAPDao();
-          data.setPCAPObjects(tempPCAP, "file_1");
-        }
-        return true;
-      }
-    });
-    pcap.close();
-  }
-}
+          }*/
