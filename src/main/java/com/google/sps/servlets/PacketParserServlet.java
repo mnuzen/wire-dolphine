@@ -56,7 +56,7 @@ public class PacketParserServlet extends HttpServlet {
   //static final String FILENAME = "WEB-INF/chargen-udp.pcap";
   //static final String FILENAME = "WEB-INF/files/chargen-tcp.pcap";
   static final String FILENAME = "WEB-INF/files/smallFlows.pcap";
-  static final String MYIP = "185.47.63.113";
+  static final String MYIP = "192.168.3.131";
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -74,11 +74,19 @@ public class PacketParserServlet extends HttpServlet {
       public boolean nextPacket(final Packet packet) throws IOException {
       if(packet.hasProtocol(Protocol.IPv4)) {
         IPPacket ip = (IPPacket) packet.getPacket(Protocol.IPv4);
-        String protocol = "IPv4";
+        String protocol = "IPv4"; // is the first packet always (MYIP, OUTIP)?
+        String OUTIP = "";
             
         //The IP addresses involved
         String srcip = ip.getSourceIP();
         String dstip = ip.getDestinationIP();
+
+        if (srcip == MYIP) {
+            OUTIP = dstip;
+        }
+        else {
+            OUTIP = srcip;
+        }
 
         if (packet.hasProtocol(Protocol.UDP)) {
           protocol = "UDP";
@@ -88,13 +96,13 @@ public class PacketParserServlet extends HttpServlet {
         }
 
         // PCAPdata tempPCAP = new PCAPdata(source, destination, domain, location, protocol, size, flagged, frequency);
-        if (allPCAP.containsKey(dstip)){
-            PCAPdata tempPCAP = new PCAPdata(srcip, dstip, "", "", protocol, 2, false, allPCAP.get(dstip).getFrequency()+1); // how to use increment frequency method instead of getting freq++?
-            allPCAP.put(dstip, tempPCAP);
+        if (allPCAP.containsKey(OUTIP)){
+            PCAPdata tempPCAP = new PCAPdata(MYIP, OUTIP, "", "", protocol, 2, false, allPCAP.get(OUTIP).getFrequency()+1); // how to use increment frequency method instead of getting freq++?
+            allPCAP.put(OUTIP, tempPCAP);
         }
         else {
-            PCAPdata tempPCAP = new PCAPdata(srcip, dstip, "", "", protocol, 2, false, 1);
-            allPCAP.put(dstip, tempPCAP);
+            PCAPdata tempPCAP = new PCAPdata(MYIP, OUTIP, "", "", protocol, 2, false, 1);
+            allPCAP.put(OUTIP, tempPCAP);
         }
       }
       return true;
