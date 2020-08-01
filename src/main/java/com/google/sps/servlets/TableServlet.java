@@ -20,11 +20,13 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class TableServlet extends HttpServlet {
 
+  public static final String FILE_NAME = "file_1";
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     GenericPCAPDao data = new GenericPCAPDao();
 
-    String json = convertToJsonUsingGson(data.getPCAPObjects("file_1"));
+    String json = convertToJsonUsingGson(data.getPCAPObjects(FILE_NAME));
     response.setContentType("application/json;");
     response.getWriter().println(json);
   }
@@ -46,7 +48,7 @@ public class TableServlet extends HttpServlet {
          size, flagged, frequency);
 
     GenericPCAPDao data = new GenericPCAPDao();
-    data.setPCAPObjects(tempPCAP, "file_1");
+    data.setPCAPObjects(tempPCAP, FILE_NAME);
 
     response.sendRedirect("/tables.html");
 

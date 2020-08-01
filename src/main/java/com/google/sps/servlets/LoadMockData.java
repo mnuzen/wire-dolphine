@@ -21,8 +21,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/load_data")
+@WebServlet("/load_mock_data")
 public class LoadMockData extends HttpServlet {
+  public static final String FILE_NAME = "file_1";
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
@@ -44,7 +45,7 @@ public class LoadMockData extends HttpServlet {
              Integer.parseInt(pcapLine[7]));
 
         GenericPCAPDao data = new GenericPCAPDao();
-        data.setPCAPObjects(tempPCAP, "file_1");
+        data.setPCAPObjects(tempPCAP, FILE_NAME);
       }
 
     } catch (IOException e) {
