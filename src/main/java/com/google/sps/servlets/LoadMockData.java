@@ -1,6 +1,7 @@
 package com.google.sps.servlets;
 
 import com.google.sps.datastore.PCAPdata;
+import com.google.sps.datastore.GenericPCAPDaoImpl;
 import com.google.sps.datastore.GenericPCAPDao;
 
 import com.google.gson.Gson;
@@ -23,7 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/load_mock_data")
 public class LoadMockData extends HttpServlet {
-  public static final String FILE_NAME = "file_1";
+  private GenericPCAPDao data = new GenericPCAPDaoImpl();
+  private static final String FILE_NAME = "file_1";
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
@@ -44,7 +46,6 @@ public class LoadMockData extends HttpServlet {
              pcapLine[4], Integer.parseInt(pcapLine[5]), Boolean.parseBoolean(pcapLine[6]), 
              Integer.parseInt(pcapLine[7]));
 
-        GenericPCAPDao data = new GenericPCAPDao();
         data.setPCAPObjects(tempPCAP, FILE_NAME);
       }
 

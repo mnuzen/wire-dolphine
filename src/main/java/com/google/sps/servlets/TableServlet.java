@@ -1,7 +1,9 @@
 package com.google.sps.servlets;
 
 import com.google.sps.datastore.PCAPdata;
+import com.google.sps.datastore.GenericPCAPDaoImpl;
 import com.google.sps.datastore.GenericPCAPDao;
+
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -20,11 +22,11 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class TableServlet extends HttpServlet {
 
-  public static final String FILE_NAME = "file_1";
+  private static final String FILE_NAME = "file_1";
+  private GenericPCAPDao data = new GenericPCAPDaoImpl();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    GenericPCAPDao data = new GenericPCAPDao();
 
     String json = convertToJsonUsingGson(data.getPCAPObjects(FILE_NAME));
     response.setContentType("application/json;");
@@ -47,11 +49,9 @@ public class TableServlet extends HttpServlet {
     PCAPdata tempPCAP = new PCAPdata(source, destination, domain, location, protocol,
          size, flagged, frequency);
 
-    GenericPCAPDao data = new GenericPCAPDao();
     data.setPCAPObjects(tempPCAP, FILE_NAME);
 
     response.sendRedirect("/tables.html");
-
   }
 
   private String convertToJsonUsingGson(ArrayList<PCAPdata> data) {
