@@ -1,6 +1,7 @@
 const SOURCE = 0;
 const SHAPE = "dot"
 const SHAPE_SIZE = 16;
+const EDGE_LIMIT = 50; // limit the number of edges on visualization 
 
 const GROUP1 = 1;
 const GROUP2 = 2;
@@ -12,11 +13,15 @@ const SPRING_LENGTH = 230;
 const SPRING_CONST = 0.18;
 const MAX_VEL = 146;
 const TIMESTEP = 0.35;
-const ITER = 150; // consider looking into iter to test if that'll stabilize
+const ITER = 150; 
 
 const NUM_GROUPS = 3;
 
-/** Create network graph one. */
+/** Create network graph based on data in datastore. 
+  ** Graph consists of three harded groups for visuals based on first two bits of IP addresses: 
+  ** Group 17, Group 18, and Group 19 for IP addresses with those two bits as their first two bits. 
+  ** All other IP addresses that don't have 17, 18, or 19 as their first two bits are connected to the source node.
+ */
 function createNetworkOne(){
   fetch('/data') // retrieve all Datastore data that has "data" label
   .then(response => response.json())
@@ -37,18 +42,18 @@ function createNetworkOne(){
       // add source node
       nodes[SOURCE] = {id: SOURCE, label: "My Computer", group: SOURCE}; 
        // initialize edge counter
-       var edge = 0;
+      var edge = 0;
 
       // add three base groups
-      nodes[GROUP1] = {id: GROUP1, label: "17", group: GROUP1};
+      nodes[GROUP1] = {id: GROUP1, label: "Group 17", group: GROUP1};
       edges[edge] = {from: SOURCE, to: GROUP1};
       edge++;
 
-      nodes[GROUP2] = {id: GROUP2, label: "18", group: GROUP2};
+      nodes[GROUP2] = {id: GROUP2, label: "Group 18", group: GROUP2};
       edges[edge] = {from: SOURCE, to: GROUP2};
       edge++;
 
-      nodes[GROUP3] = {id: GROUP3, label: "19", group: GROUP3};
+      nodes[GROUP3] = {id: GROUP3, label: "Group 19", group: GROUP3};
       edges[edge] = {from: SOURCE, to: GROUP3};
       edge++;
 
@@ -57,8 +62,7 @@ function createNetworkOne(){
         var node = i+NUM_GROUPS+1;
         var ip = parseInt(data[i].destination.substring(0,2));
         nodes[node] = {id: node, label: data[i].destination, group: node};
-
-        
+   
         if (ip == 17){ 
           nodes[node] = {id: node, label: data[i].destination, group: GROUP1};
           // add edges based on freqs
@@ -83,10 +87,10 @@ function createNetworkOne(){
             edge++;
           }
         } 
-        else {
-            // add edges based on freqs
+        else { // all other IP addresses that do not start with 17, 18, or 19
+          // add edges based on freqs
           var j = 0;
-          while (j < 50 && j < data[i].frequency){
+          while (j < EDGE_LIMIT && j < data[i].frequency){
             edges[edge] = {from: node, to: SOURCE};
             edge++;
             j++;
