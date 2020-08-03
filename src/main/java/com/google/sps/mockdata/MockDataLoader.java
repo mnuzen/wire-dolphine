@@ -21,7 +21,7 @@ public class MockDataLoader {
 
   }
 
-  public void loadData(ArrayList<PCAPdata> dataTable) { // uploads to datastore
+  public void LoadData(ArrayList<PCAPdata> dataTable) { // uploads to datastore
     GenericPCAPDao dataBase = new GenericPCAPDaoImpl();
 
    for(PCAPdata PCAP : dataTable)
@@ -31,7 +31,7 @@ public class MockDataLoader {
   }
 
   // Source,Destination,Domain,Location,Protocal,Size,Flagged,Frequency
-  public void CSVDataLoader() {
+  public ArrayList<PCAPdata> CSVDataLoader() {
     ArrayList<PCAPdata> data = new ArrayList<PCAPdata>();
     String line = "";
     String cvsSplitBy = ",";
@@ -48,12 +48,16 @@ public class MockDataLoader {
 
         data.add(tempPCAP);
       }
-      loadData(data);
 
     } catch (IOException e) {
       System.out.println("CVS file failed to load");
       e.printStackTrace();
     }
+    return data;
+  }
+
+  public void CSVDataUpload() {
+    LoadData(CSVDataLoader());
   }
 
 }
