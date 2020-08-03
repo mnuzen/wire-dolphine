@@ -17,7 +17,7 @@ $(document).ready(async function() {
   await loadMapVisualization();
 });
 
-async function loadMapVisualization(url = '/ipgeolocation?PCAPId=sampleId') {
+async function loadMapVisualization(url = '/ipgeolocation?PCAPId=file_1') {
   const res = await fetch(url);
   const countryData = await res.json();
   const datatableHeader = [['Country', 'Requests Sent']];

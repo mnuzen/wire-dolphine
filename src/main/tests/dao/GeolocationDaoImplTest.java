@@ -29,5 +29,4 @@ public class GeolocationDaoImplTest {
     InetAddress test = InetAddress.getByName("54.70.247.191");
     assertEquals(geo.getCountry(test), "United States");
   }
-
 }

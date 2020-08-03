@@ -1,13 +1,13 @@
+
+
 package com.google.netpcapanalysis.interfaces.dao;
 
-import com.google.netpcapanalysis.interfaces.models.PCAP;
+import com.google.netpcapanalysis.models.PCAPdata;
+import java.util.ArrayList;
 
 public interface PCAPDao {
 
-  /**
-   * Gets a raw PCAP file
-   * @param id
-   * @return PCAP
-   */
-  public PCAP getPCAP(String id);
+    public ArrayList<PCAPdata> getPCAPObjects(String searchEntity);
+    public void setPCAPObjects(PCAPdata data, String searchEntity);
+    
 }
