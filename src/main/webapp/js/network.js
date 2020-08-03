@@ -1,6 +1,7 @@
 const SOURCE = 0;
 const SHAPE = "dot"
 const SHAPE_SIZE = 16;
+const EDGE_LIMIT = 50; // limit the number of edges on visualization 
 
 const GROUP1 = 1;
 const GROUP2 = 2;
@@ -12,7 +13,7 @@ const SPRING_LENGTH = 230;
 const SPRING_CONST = 0.18;
 const MAX_VEL = 146;
 const TIMESTEP = 0.35;
-const ITER = 150;
+const ITER = 150; // consider looking into iter to test if that'll stabilize
 
 const NUM_GROUPS = 3;
 
@@ -85,9 +86,11 @@ function createNetworkOne(){
         } 
         else {
             // add edges based on freqs
-          for (var j = 0; j < data[i].frequency; j++) {
+          var j = 0;
+          while (j < EDGE_LIMIT && j < data[i].frequency){
             edges[edge] = {from: node, to: SOURCE};
             edge++;
+            j++;
           }
         }
       }
