@@ -4,12 +4,12 @@ package com.google.sps.datastore;
 public final class PCAPdata {
 
   String source;
-  String destination;
+  public String destination;
   String domain;
   String location;
   String protocol;
   int size;
-  boolean flagged;
+  public boolean flagged;
   int frequency;
 
   public PCAPdata(String source, String destination, String domain, String location, String protocol, 
