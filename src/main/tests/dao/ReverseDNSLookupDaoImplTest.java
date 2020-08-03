@@ -67,4 +67,9 @@ public class ReverseDNSLookupDaoImplTest {
   public void testYCombinator() {
     checkDns("13.224.29.89", "server-13-224-29-89.sea19.r.cloudfront.net");
   }
+
+  @Test
+  public void ipv6Google() {
+    checkDns("2607:f8b0:4005:80a::200e", "nstld.verisign-grs.com");
+  }
 }
