@@ -1,9 +1,9 @@
-package com.google.sps.servlets;
+package com.google.netpcapanalysis.servlets;
 
 import java.util.ArrayList;
-import com.google.sps.datastore.PCAPdata;
-import com.google.sps.datastore.GenericPCAPDaoImpl;
-import com.google.sps.datastore.GenericPCAPDao;
+import com.google.netpcapanalysis.models.PCAPdata;
+import com.google.netpcapanalysis.dao.PCAPDaoImpl;
+import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.gson.Gson;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 public class TableServlet extends HttpServlet {
 
   private static final String FILE_NAME = "file_1";
-  private GenericPCAPDao data = new GenericPCAPDaoImpl();
+  private PCAPDao data = new PCAPDaoImpl();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

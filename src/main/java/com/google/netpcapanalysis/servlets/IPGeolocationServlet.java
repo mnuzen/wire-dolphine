@@ -2,16 +2,16 @@ package com.google.netpcapanalysis.servlets;
 
 import com.google.netpcapanalysis.interfaces.dao.GeolocationDao;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
-import com.google.netpcapanalysis.interfaces.models.PCAP;
 import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.dao.GeolocationDaoImpl;
 import com.google.gson.Gson;
+import com.google.netpcapanalysis.models.PCAPdata;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +37,7 @@ public class IPGeolocationServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String id = getParameter(request, "PCAPId", "");
-    PCAP analysis = this.pcapDao.getPCAP(id);
+    List<PCAPdata> analysis = this.pcapDao.getPCAPObjects(id);
 
     if (analysis == null) {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -46,8 +46,8 @@ public class IPGeolocationServlet extends HttpServlet {
 
     Map<String, Integer> countryCount = new HashMap<>();
 
-    for (InetAddress ip : analysis.getIPs()) {
-      String country = this.geolocationDao.getCountry(ip);
+    for (PCAPdata pcap: analysis) {
+      String country = this.geolocationDao.getCountry(InetAddress.getByName(pcap.destination));
       countryCount.put(country, countryCount.getOrDefault(country, 1));
     }
 
