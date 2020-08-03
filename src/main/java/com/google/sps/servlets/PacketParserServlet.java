@@ -15,7 +15,7 @@
 package com.google.sps.servlets;
 
 import com.google.sps.datastore.PCAPdata;
-import com.google.sps.datastore.GenericPCAPDao;
+import com.google.sps.datastore.GenericPCAPDaoImpl;
 
 import io.pkts.PacketHandler;
 import io.pkts.Pcap;
@@ -119,11 +119,18 @@ public class PacketParserServlet extends HttpServlet {
     * which are the only protocols supported by pkts library. */
   public String getProtocol(IPPacket packet) throws IOException {
     String protocol = "IPv4";
+    /* If packet has UDP or TCP protocol, fetch the port numbers (source/destination).*/
     if (packet.hasProtocol(Protocol.UDP)) {
       protocol = "UDP";
+      UDPPacket udpPacket = (UDPPacket) packet.getPacket(Protocol.UDP);
+      int dstport = udpPacket.getDestinationPort();
+      int srcport = udpPacket.getSourcePort();
     }
     else if (packet.hasProtocol(Protocol.TCP)) {
       protocol = "TCP";
+      TCPPacket tcpPacket = (TCPPacket) packet.getPacket(Protocol.TCP);
+      int dstport = tcpPacket.getDestinationPort();
+      int srcport = tcpPacket.getSourcePort();
     } 
     else if (packet.hasProtocol(Protocol.ICMP)) {
       protocol = "ICMP";
@@ -152,25 +159,10 @@ public class PacketParserServlet extends HttpServlet {
   /* Adds all processed packets to datastore through GenericPCAPDao*/
   public void putDatastore(String tag){
     for (PCAPdata temp : allPCAP.values()) {
-      GenericPCAPDao data = new GenericPCAPDao();
+      GenericPCAPDaoImpl data = new GenericPCAPDaoImpl();
       data.setPCAPObjects(temp, tag);
     }
   } 
 
 
 } // end of PacketParserServlet class
-
-
-
-
-/* If packet has UDP or TCP protocol, fetch the port numbers (source/destination).*/
-/**    if (packet.hasProtocol(Protocol.UDP)) {
-            UDPPacket udpPacket = (UDPPacket) packet.getPacket(Protocol.UDP);
-            int dstport = udpPacket.getDestinationPort();
-            int srcport = udpPacket.getSourcePort();
-          }
-          else if (packet.hasProtocol(Protocol.TCP)) {
-            TCPPacket tcpPacket = (Tmvn cCPPacket) packet.getPacket(Protocol.TCP);
-            int dstport = tcpPacket.getDestinationPort();
-            int srcport = tcpPacket.getSourcePort();
-          }*/
