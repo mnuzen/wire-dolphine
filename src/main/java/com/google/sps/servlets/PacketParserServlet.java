@@ -44,13 +44,13 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.*;
 
-
 /** Servlet that processes raw PCAP files within the repo. 
    * We define MYIP to be the IP address of the local machine that was used to create the PCAP file, 
      and OUTIP to be all of the IP addresses that machine connected with.
    * allPCAP HashMap indexes all unique OUTIPs in a PCAP file to a PCAPdata object that stores needed attributes, 
      including the number of connections between MYIP and OUTIP 
    * We load datastore with all of the unique PCAPdata objects from our HashMap with a given entity tag.
+   * Hard-coded the source IP address (MYIP) -- need to find a way to retrieve MYIP (look at first packet, ask user, use WhatsMyIP?)
 */
 @WebServlet("/PCAP-data")
 public class PacketParserServlet extends HttpServlet {
@@ -163,6 +163,5 @@ public class PacketParserServlet extends HttpServlet {
       data.setPCAPObjects(temp, tag);
     }
   } 
-
 
 } // end of PacketParserServlet class
