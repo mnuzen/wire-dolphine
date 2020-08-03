@@ -13,11 +13,15 @@ const SPRING_LENGTH = 230;
 const SPRING_CONST = 0.18;
 const MAX_VEL = 146;
 const TIMESTEP = 0.35;
-const ITER = 150; // consider looking into iter to test if that'll stabilize
+const ITER = 150; 
 
 const NUM_GROUPS = 3;
 
-/** Create network graph one. */
+/** Create network graph based on data in datastore. 
+  ** Graph consists of three harded groups for visuals based on first two bits of IP addresses: 
+  ** Group 17, Group 18, and Group 19 for IP addresses with those two bits as their first two bits. 
+  ** All other IP addresses that don't have 17, 18, or 19 as their first two bits are connected to the source node.
+ */
 function createNetworkOne(){
   fetch('/data') // retrieve all Datastore data that has "data" label
   .then(response => response.json())
@@ -58,8 +62,7 @@ function createNetworkOne(){
         var node = i+NUM_GROUPS+1;
         var ip = parseInt(data[i].destination.substring(0,2));
         nodes[node] = {id: node, label: data[i].destination, group: node};
-
-        
+   
         if (ip == 17){ 
           nodes[node] = {id: node, label: data[i].destination, group: GROUP1};
           // add edges based on freqs
@@ -84,8 +87,8 @@ function createNetworkOne(){
             edge++;
           }
         } 
-        else {
-            // add edges based on freqs
+        else { // all other IP addresses that do not start with 17, 18, or 19
+          // add edges based on freqs
           var j = 0;
           while (j < EDGE_LIMIT && j < data[i].frequency){
             edges[edge] = {from: node, to: SOURCE};
