@@ -136,12 +136,9 @@ public class PCAPParserDaoImpl implements PCAPParserDao {
       
       // PCAPdata takes in (source, destination, domain, location, protocol, size, flagged, frequency) 
       if (finalPCAP.containsKey(OUTIP)){
-        // retrieve current value with OUTIP
+        // retrieve current value with OUTIP and increments frequency
         PCAPdata currPCAP = finalPCAP.get(OUTIP);
-        PCAPdata tempPCAP = new PCAPdata(MYIP, OUTIP, "", "", currPCAP.protocol, currPCAP.size, currPCAP.flagged, currPCAP.frequency+1);
-        
-        // replace with new OUTIP
-        finalPCAP.put(OUTIP, tempPCAP);
+        currPCAP.incrementFrequency();
       }
       else {
         PCAPdata tempPCAP = new PCAPdata(MYIP, OUTIP, "", "", packet.protocol, packet.size, packet.flagged, packet.frequency); 

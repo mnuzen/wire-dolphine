@@ -35,8 +35,12 @@ public final class PCAPdata {
     this.frequency = frequency;
   }
 
-  public int getFrequency(){
+  public int getFrequency() {
     return this.frequency;
+  }
+
+  public void incrementFrequency() {
+    this.frequency++;
   }
 
 }
