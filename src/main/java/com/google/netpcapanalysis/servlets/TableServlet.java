@@ -10,40 +10,47 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 
 @WebServlet("/data")
 public class TableServlet extends HttpServlet {
-
-  private static final String FILE_NAME = "file_1";
+  UserService userService = UserServiceFactory.getUserService();
   private PCAPDao data = new PCAPDaoImpl();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-    String json = convertToJsonUsingGson(data.getPCAPObjects(FILE_NAME));
+    if (userService.isUserLoggedIn()) {
+    String json = convertToJsonUsingGson(data.getPCAPObjects(userService.getCurrentUser().getEmail()));
     response.setContentType("application/json;");
     response.getWriter().println(json);
+
+    } else {
+      response.sendRedirect("/login");
+    }
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    if (userService.isUserLoggedIn()) {
+      // gets values from table forms and puts them into datastore
+      String source = request.getParameter("source");
+      String destination = request.getParameter("destination");
+      String domain = request.getParameter("domain");
+      String location = request.getParameter("location");
+      String protocol = request.getParameter("protocol");
+      int size = Integer.parseInt(request.getParameter("size"));
+      boolean flagged = Boolean.parseBoolean(request.getParameter("flagged"));
+      int frequency = Integer.parseInt(request.getParameter("frequency"));
 
-    // gets values from table forms and puts them into datastore
-    String source = request.getParameter("source");
-    String destination = request.getParameter("destination");
-    String domain = request.getParameter("domain");
-    String location = request.getParameter("location");
-    String protocol = request.getParameter("protocol");
-    int size = Integer.parseInt(request.getParameter("size"));
-    boolean flagged = Boolean.parseBoolean(request.getParameter("flagged"));
-    int frequency = Integer.parseInt(request.getParameter("frequency"));
+      PCAPdata tempPCAP = new PCAPdata(source, destination, domain, location, protocol, size, flagged, frequency);
+      data.setPCAPObjects(tempPCAP, userService.getCurrentUser().getEmail());
 
-    PCAPdata tempPCAP = new PCAPdata(source, destination, domain, location, protocol,
-         size, flagged, frequency);
+      response.sendRedirect("/tables.html");
 
-    data.setPCAPObjects(tempPCAP, FILE_NAME);
-
-    response.sendRedirect("/tables.html");
+    } else {
+      response.sendRedirect("/login");
+    }
   }
 
   private String convertToJsonUsingGson(ArrayList<PCAPdata> data) {
