@@ -1,11 +1,11 @@
 
 
-package com.google.sps.datastore;
+package com.google.netpcapanalysis.interfaces.dao;
 
+import com.google.netpcapanalysis.models.PCAPdata;
 import java.util.ArrayList;
-import com.google.sps.datastore.GenericPCAPDao;
 
-public interface GenericPCAPDao {
+public interface PCAPDao {
 
     public ArrayList<PCAPdata> getPCAPObjects(String searchEntity);
     public void setPCAPObjects(PCAPdata data, String searchEntity);

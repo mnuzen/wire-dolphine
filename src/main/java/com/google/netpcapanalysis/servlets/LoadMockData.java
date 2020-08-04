@@ -1,6 +1,6 @@
-package com.google.sps.servlets;
+package com.google.netpcapanalysis.servlets;
 
-import com.google.sps.mockdata.MockDataLoader;
+import com.google.netpcapanalysis.mockdata.MockDataLoader;
 
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -16,7 +16,6 @@ public class LoadMockData extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     MockDataLoader mockData = new MockDataLoader();
     mockData.CSVDataUpload();
-
 
     response.sendRedirect("/tables.html");
   }

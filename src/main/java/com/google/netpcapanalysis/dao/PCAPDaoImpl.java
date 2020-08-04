@@ -6,8 +6,9 @@
 * get/set data.
 */
 
-package com.google.sps.datastore;
+package com.google.netpcapanalysis.dao;
 
+import com.google.netpcapanalysis.models.PCAPdata;
 import java.util.ArrayList;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -15,24 +16,23 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
-import com.google.sps.datastore.GenericPCAPDao;
+import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 
 
-public class GenericPCAPDaoImpl implements GenericPCAPDao {
-  private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+public class PCAPDaoImpl implements PCAPDao {
+  private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-  public GenericPCAPDaoImpl() {
+  public PCAPDaoImpl() {
 
   }
 
   public ArrayList<PCAPdata> getPCAPObjects(String searchEntity) {
-    ArrayList<PCAPdata> dataTable = new ArrayList<PCAPdata>();
+    ArrayList<PCAPdata> dataTable = new ArrayList<>();
 
     Query query = new Query(searchEntity).addSort("Flagged", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
     for (Entity entity : results.asIterable()) {
-
       String source = (String) entity.getProperty("Source");
       String destination = (String) entity.getProperty("Destination");
       String domain = (String) entity.getProperty("Domain");
