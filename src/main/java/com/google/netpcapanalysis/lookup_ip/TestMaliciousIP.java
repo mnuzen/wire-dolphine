@@ -1,11 +1,14 @@
-package com.google.sps.lookup_ip;
+package com.google.netpcapanalysis.lookup_ip;
 
+import com.google.netpcapanalysis.dao.MaliciousIPDaoImpl;
 import java.util.ArrayList;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.BufferedReader;
-import com.google.sps.mockdata.MockDataLoader;
-import com.google.sps.datastore.PCAPdata;
+import com.google.netpcapanalysis.mockdata.MockDataLoader;
+import com.google.netpcapanalysis.models.PCAPdata;
+import com.google.netpcapanalysis.interfaces.dao.MaliciousIPDao;
+
 
 public class TestMaliciousIP {
   private String CSV_FILE = "maliciousIPTest.csv"; //first 1-30 valid IP's, 31-60 malicious IP's
@@ -26,7 +29,7 @@ public class TestMaliciousIP {
 
    public void test(){
         Long start, end;
-        MaliciousIPDao ipTest = new MaliciousIPDao();
+        MaliciousIPDao ipTest = new MaliciousIPDaoImpl();
 
         for(PCAPdata packet : IPlist)
         {

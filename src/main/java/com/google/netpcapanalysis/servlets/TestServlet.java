@@ -1,6 +1,6 @@
-package com.google.sps.servlets;
+package com.google.netpcapanalysis.servlets;
 
-import com.google.sps.lookup_ip.TestMaliciousIP;
+import com.google.netpcapanalysis.lookup_ip.TestMaliciousIP;
 
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;

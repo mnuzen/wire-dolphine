@@ -93,8 +93,7 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
     URL url = new URL(String.format("https://dns.google.com/resolve?name=%s.in-addr.arpa&type=PTR", reverseIPString));
     URLConnection uc = url.openConnection();
     BufferedReader in = new BufferedReader(
-        new InputStreamReader(a
-            uc.getInputStream()));
+        new InputStreamReader(uc.getInputStream()));
     String inputLine;
 
     while ((inputLine = in.readLine()) != null) {
