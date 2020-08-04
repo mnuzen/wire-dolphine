@@ -103,5 +103,8 @@
         <directory>${project.basedir}/resources</directory>
       </testResource>
     </testResources>
+    <testSourceDirectory>
+      src/main/tests
+    </testSourceDirectory>
   </build>
 </project>
