@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License. 
 
-package com.google.sps.servlets;
+package com.google.netpcapanalysis.servlets;
 
-import com.google.sps.datastore.PCAPdata;
-import com.google.sps.datastore.GenericPCAPDaoImpl;
+import com.google.netpcapanalysis.models.PCAPdata;
+import com.google.netpcapanalysis.dao.PCAPDaoImpl;
+import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 
 import io.pkts.PacketHandler;
 import io.pkts.Pcap;
@@ -57,22 +58,21 @@ public class PacketParserServlet extends HttpServlet {
   HashMap<String, PCAPdata> allPCAP = new HashMap<String, PCAPdata>();
   DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); //creates database
 
-  //static final String FILENAME = "WEB-INF/files/traffic.pcap";
-  //static final String FILENAME = "WEB-INF/chargen-udp.pcap";
-  //static final String FILENAME = "WEB-INF/files/chargen-tcp.pcap";
-  static final String FILENAME = "WEB-INF/files/smallFlows.pcap";
-
-  static final String MYIP = "192.168.3.131"; // for smallFlows.pcap 
-  static final String ENTITY_TAG = "file_1";
+  //static final String FILENAME = "WEB-INF/files/smallFlows.pcap";
+  //static final String MYIP = "192.168.3.131"; // for smallFlows.pcap 
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    parseRaw(FILENAME);
-    putDatastore(ENTITY_TAG);
+    String file = getParameter(request, "file-input", "");
+    String myip = getParameter(request, "ip-input", "");
+    parseRaw(file, myip);
+    putDatastore(file);
+    // Respond with the result.
+    response.sendRedirect("/packet.html");
   }
 
   /* Reads PCAP file (from file name) as a stream and puts unique connections into allPCAP HashMap. */
-  public void parseRaw(String file) throws IOException {
+  public void parseRaw(String file, String MYIP) throws IOException {
     final InputStream stream = new FileInputStream(file);
     final Pcap pcap = Pcap.openStream(stream);
 
@@ -157,11 +157,23 @@ public class PacketParserServlet extends HttpServlet {
   }
 
   /* Adds all processed packets to datastore through GenericPCAPDao*/
-  public void putDatastore(String tag){
+  public void putDatastore(String FILENAME){
     for (PCAPdata temp : allPCAP.values()) {
-      GenericPCAPDaoImpl data = new GenericPCAPDaoImpl();
-      data.setPCAPObjects(temp, tag);
+      PCAPDao data = new PCAPDaoImpl();
+      data.setPCAPObjects(temp, FILENAME);
     }
   } 
+
+  /**
+   * @return the request parameter, or the default value if the parameter
+   *         was not specified by the client
+   */
+  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
+    String value = request.getParameter(name);
+    if (value == null) {
+      return defaultValue;
+    }
+    return value;
+  }
 
 } // end of PacketParserServlet class

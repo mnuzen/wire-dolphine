@@ -34,4 +34,9 @@ public final class PCAPdata {
     this.flagged = flagged;
     this.frequency = frequency;
   }
+
+  public int getFrequency(){
+    return this.frequency;
+  }
+
 }
