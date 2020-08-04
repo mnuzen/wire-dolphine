@@ -1,0 +1,13 @@
+steps:
+  - name: "gcr.io/cloud-builders/gsutil"
+    entrypoint: gsutil
+    args: ["cp", "gs://erik-jevin-melba-step-2020/GeoLite2-City.mmdb", "resources/Geolite2-City.mmdb"]
+  - name: "bash"
+    args: ["ls", "-al", "resources"]
+  - name: "maven:3-jdk-8"
+    entrypoint: mvn
+    args: ["test"]
+  - name: "maven:3-jdk-8"
+    entrypoint: mvn
+    args: ["package", "-Dmaven.test.skip=true"]
+
