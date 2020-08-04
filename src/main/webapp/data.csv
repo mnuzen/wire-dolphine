@@ -1,10 +1,1 @@
-192.168.1.42,198.35.26.98,ncredir-lb.ulsfo.wikimedia.org,United States,TCP,5,FALSE,10
-192.168.1.42,66.135.195.175,ru.ebay.com,United States,HTTP,7,FALSE,12
-192.168.1.42,216.58.217.46,sea15s08-in-f14.1e100.net,UNited States,HTTPS,3,FALSE,5
-192.168.1.42,157.52.193.85,a85.designerforumail.com,United States,UDP,12,TRUE,3
-192.168.1.42,17.178.96.59,darwincode.com,United States,TCP,3,FALSE,7
-192.168.1.42,157.240.3.35,edge-star-mini-shv-01-sea1.facebook.com,United States,TCP,4,FALSE,1
-192.168.1.42,52.24.197.182,ec2-52-24-197-182.us-west-2.compute.amazonaws.com,United States,UDP,1,FALSE,3
-192.168.1.42,172.217.14.206,sea30s01-in-f14.1e100.net,United States,UDP,6,FALSE,9
-192.168.1.42,151.101.192.81,151.101.192.81,United States,HTTPS,3,FALSE,12
-192.168.1.42,151.101.65.67,151.101.65.67,United States,UDP,2,FALSE,3
+sourceIP,destIP,domain,location,protocal,5,FALSE,10

@@ -12,6 +12,8 @@ import java.io.IOException;
 import javax.lang.model.util.ElementScanner6;
 
 public class  MaliciousIPDaoImpl implements MaliciousIPDao{
+    private static final String AUTH0_API_KEY = "replace_api_key";
+
     private static final String FLAGGED_FALSE = "Resource not found";
     private static final String FLAGGED_TRUE = "200: OK";
     private static final String REQUEST_LIMIT = "Rate limit exceeded.Please reduce your hits per minute.";
@@ -24,7 +26,7 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
         HttpResponse<String> result;
         try {
             result = Unirest.get("https://signals.api.auth0.com/badip/" + data.destination)
-                    .header("X-Auth-Token", "API_KEY")
+                    .header("X-Auth-Token", AUTH0_API_KEY)
                     .asString();
        
             if(result.getBody().equals(FLAGGED_FALSE))
