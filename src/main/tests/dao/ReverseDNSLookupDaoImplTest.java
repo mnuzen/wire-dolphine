@@ -72,4 +72,9 @@ public class ReverseDNSLookupDaoImplTest {
   public void ipv6Google() {
     checkDns("2607:f8b0:4005:80a::200e", "nstld.verisign-grs.com");
   }
+
+  @Test
+  public void f() {
+    assertEquals(true, false);
+  }
 }
