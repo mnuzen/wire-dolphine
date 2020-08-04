@@ -55,17 +55,14 @@ public class PacketParserServlet extends HttpServlet {
   HashMap<String, PCAPdata> allPCAP = new HashMap<String, PCAPdata>();
   DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); //creates database
 
-  //static final String FILENAME = "WEB-INF/files/smallFlows.pcap";
-  //static final String MYIP = "192.168.3.131"; // for smallFlows.pcap 
-
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Retrieve user input to determine file name and local IP address.
     String file = getParameter(request, "file-input", "");
-    String myip = getParameter(request, "ip-input", "");
    
-    PCAPParserDao parser = new PCAPParserDaoImpl(file, myip);
+    PCAPParserDao parser = new PCAPParserDaoImpl(file);
     parser.parseRaw();
+    parser.processData();
     parser.putDatastore();
 
     // Respond with the result.
