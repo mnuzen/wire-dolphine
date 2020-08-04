@@ -9,7 +9,7 @@ Reviewers: arunkaly@, promanov@
 ## To use geolocation: 
 
 1. Download `GeoLite2-City.mmdb` from GDrive
-2. Put in repo under `data/GeoLite2-City.mmdb`
+2. Put in repo under `resources/GeoLite2-City.mmdb`
 
 ## MaxmindDB perf: 
 Averaged 14572 ms for 1000000 requests, 68623.19 rps on i7-9750H single core.
