@@ -95,8 +95,13 @@
     </plugins>
     <resources>
       <resource>
-        <directory>resources</directory>
+        <directory>${project.basedir}/resources</directory>
       </resource>
     </resources>
+     <testResources>
+      <testResource>
+        <directory>${project.basedir}/resources</directory>
+      </testResource>
+    </testResources>
   </build>
 </project>
