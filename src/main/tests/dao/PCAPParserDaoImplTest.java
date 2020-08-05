@@ -21,9 +21,8 @@ public class PCAPParserDaoImplTest {
   public String PCAPNAME = "files/file2.pcap";
   private String FILENAME = "files/file2.txt";
 
-  private String IP1;
-  private String IP2;
-
+  private String IP1 = "176.126.243.198";
+  private String IP2 = "185.47.63.113";
   private String UDP = "UDP";
   private int FREQ = 2;
 
@@ -35,11 +34,11 @@ public class PCAPParserDaoImplTest {
     parser.processData();
 
     // Parse set IP addresses from hidden text file
-    InputStream stream = PCAPParserDaoImplTest.class.getClassLoader().getResourceAsStream(FILENAME);
+    /*InputStream stream = PCAPParserDaoImplTest.class.getClassLoader().getResourceAsStream(FILENAME);
     String text = IOUtils.toString(stream, StandardCharsets.UTF_8);
     String[] values = text.split(",");
     IP1 = values[0];
-    IP2 = values[1];
+    IP2 = values[1];*/
 
     //parser.putDatastore();
   }
