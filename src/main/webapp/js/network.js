@@ -13,7 +13,7 @@ const SPRING_LENGTH = 230;
 const SPRING_CONST = 0.18;
 const MAX_VEL = 146;
 const TIMESTEP = 0.35;
-const ITER = 150; 
+const ITER = 100; 
 
 const NUM_GROUPS = 3;
 
