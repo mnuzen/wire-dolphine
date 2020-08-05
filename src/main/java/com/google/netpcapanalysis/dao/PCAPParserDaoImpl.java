@@ -33,8 +33,8 @@ import com.google.netpcapanalysis.interfaces.dao.PCAPParserDao;
 */
 public class PCAPParserDaoImpl implements PCAPParserDao {
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-  ArrayList<PCAPdata> allPCAP = new ArrayList<PCAPdata>(); 
-  HashMap<String, PCAPdata> finalPCAP = new HashMap<String, PCAPdata>();
+  private ArrayList<PCAPdata> allPCAP = new ArrayList<PCAPdata>(); 
+  private HashMap<String, PCAPdata> finalPCAP = new HashMap<String, PCAPdata>();
 
   private String FILENAME;
   private String MYIP = "";
@@ -120,7 +120,7 @@ public class PCAPParserDaoImpl implements PCAPParserDao {
     return protocol;
   }
  
-  /* Process raw data*/
+  /* Removes duplicated data and increments corresponding frequencies */
   public void processData(){
     for (PCAPdata packet : allPCAP) {
       String OUTIP = "";
@@ -154,4 +154,13 @@ public class PCAPParserDaoImpl implements PCAPParserDao {
       data.setPCAPObjects(packet, FILENAME);
     }
   } 
+
+  /* Access elements for testing. */
+  public ArrayList<PCAPdata> getAllPCAP() {
+    return allPCAP;
+  }
+
+  public HashMap<String, PCAPdata> getFinalPCAP() {
+    return finalPCAP;
+  }
 }

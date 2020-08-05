@@ -8,13 +8,13 @@ Reviewers: arunkaly@, promanov@
 
 ## To add sample PCAP files: 
 
-1. Download `file1.pcap` from GDrive
-2. Put in repo under `resources/files/file1.pcap`
+1. Download `file1.pcap` and `file1.pcap` from GDrive.
+2. Put in repo under `resources/files/file1.pcap` and `resources/files/file2.pcap`, respectively.
 
 ## To use geolocation: 
 
-1. Download `GeoLite2-City.mmdb` from GDrive
-2. Put in repo under `resources/GeoLite2-City.mmdb`
+1. Download `GeoLite2-City.mmdb` from GDrive.
+2. Put in repo under `resources/GeoLite2-City.mmdb`.
 
 ## MaxmindDB perf: 
 Averaged 14572 ms for 1000000 requests, 68623.19 rps on i7-9750H single core.
