@@ -1,12 +1,12 @@
 package com.google.netpcapanalysis.servlets;
 
+import com.google.gson.Gson;
+import com.google.netpcapanalysis.dao.GeolocationDaoImpl;
 import com.google.netpcapanalysis.dao.KeystoreDaoImpl;
+import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.GeolocationDao;
 import com.google.netpcapanalysis.interfaces.dao.KeystoreDao;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
-import com.google.netpcapanalysis.dao.PCAPDaoImpl;
-import com.google.netpcapanalysis.dao.GeolocationDaoImpl;
-import com.google.gson.Gson;
 import com.google.netpcapanalysis.models.PCAPdata;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -19,43 +19,36 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/ipgeolocation")
-public class IPGeolocationServlet extends HttpServlet {
+@WebServlet("/keystore")
+public class KeystoreServlet extends HttpServlet {
 
-  private GeolocationDao geolocationDao;
-  private PCAPDao pcapDao;
+  private KeystoreDao keystoreDao;
 
   public void init(ServletConfig conf) {
-    this.geolocationDao = new GeolocationDaoImpl();
-    this.pcapDao = new PCAPDaoImpl();
+    this.keystoreDao = new KeystoreDaoImpl();
   }
 
   /**
-   * Requires query string with param `PCAPId`
+   * Requires query string with requested key
+   *
    * @param request
-   * @param response response is a {[country: string]: integer} JSON relating country to packet #
-   * @throws IOException
+   * @param response response is a string
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String id = getParameter(request, "PCAPId", "");
-    List<PCAPdata> analysis = this.pcapDao.getPCAPObjects(id);
+    String id = getParameter(request, "key", "");
+    String key = "";
 
-    if (analysis == null) {
+    if (id.equals("mapsAPIKey")) {
+      key = keystoreDao.getKeystore().getMapsAPIKey();
+    } else {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
 
-    Map<String, Integer> countryCount = new HashMap<>();
-
-    for (PCAPdata pcap: analysis) {
-      String country = this.geolocationDao.getCountry(InetAddress.getByName(pcap.destination));
-      countryCount.put(country, countryCount.getOrDefault(country, 1));
-    }
-
-    response.setContentType("application/json;");
+    response.setContentType("text/html;");
     response.setCharacterEncoding("UTF-8");
-    response.getWriter().println(new Gson().toJson(countryCount));
+    response.getWriter().println(key);
   }
 
 
