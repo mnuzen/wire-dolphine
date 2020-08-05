@@ -12,14 +12,16 @@ import org.junit.Test;
 
 import java.util.*; 
 import java.io.*;
+import java.lang.*;
+
 import org.apache.commons.io.IOUtils;
 import java.nio.charset.StandardCharsets;
 
 /* Compares file2.pcap's parsed results to hard-coded results. IP1 and IP2 addresses are located in hidden text file and retrieved as a stream. */
 public class PCAPParserDaoImplTest {
   public PCAPParserDao parser;
-  public String PCAPNAME = "files/file2.pcap";
-  private String FILENAME = "files/file2.txt";
+  public String PCAPNAME = "resources/files/file2.pcap";
+  private String FILENAME = "resources/files/file2.txt";
 
   private String IP1 = "176.126.243.198";
   private String IP2 = "185.47.63.113";
