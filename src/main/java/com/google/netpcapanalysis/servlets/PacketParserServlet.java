@@ -63,7 +63,7 @@ public class PacketParserServlet extends HttpServlet {
     PCAPParserDao parser = new PCAPParserDaoImpl(file);
     parser.parseRaw();
     parser.processData();
-    parser.putDatastore();
+    parser.putDatastore(); 
 
     // Respond with the result.
     response.sendRedirect("/packet.html");
