@@ -20,27 +20,27 @@ import java.nio.charset.StandardCharsets;
 /* Compares file2.pcap's parsed results to hard-coded results. IP1 and IP2 addresses are located in hidden text file and retrieved as a stream. */
 public class PCAPParserDaoImplTest {
   public PCAPParserDao parser;
-  public String PCAPNAME = "resources/files/file2.pcap";
-  private String FILENAME = "resources/files/file2.txt";
+  public String PCAPNAME = "files/file2.pcap";
+  private String FILENAME = "files/file2.txt";
 
-  private String IP1 = "176.126.243.198";
-  private String IP2 = "185.47.63.113";
+  private String IP1;
+  private String IP2;
   private String UDP = "UDP";
   private int FREQ = 2;
 
   @Before
   public void setup() throws IOException {
+    // Parse set IP addresses from hidden text file
+    InputStream stream = PCAPParserDaoImplTest.class.getClassLoader().getResourceAsStream(FILENAME);
+    String text = IOUtils.toString(stream, StandardCharsets.UTF_8);
+    String[] values = text.split(",");
+    IP1 = values[0];
+    IP2 = values[1];
+
     // Retrieve PCAPParser information
     parser = new PCAPParserDaoImpl(PCAPNAME);
     parser.parseRaw();
     parser.processData();
-
-    // Parse set IP addresses from hidden text file
-    /*InputStream stream = PCAPParserDaoImplTest.class.getClassLoader().getResourceAsStream(FILENAME);
-    String text = IOUtils.toString(stream, StandardCharsets.UTF_8);
-    String[] values = text.split(",");
-    IP1 = values[0];
-    IP2 = values[1];*/
 
     //parser.putDatastore();
   }
