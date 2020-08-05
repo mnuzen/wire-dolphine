@@ -23,7 +23,7 @@ const NUM_GROUPS = 3;
   ** All other IP addresses that don't have 17, 18, or 19 as their first two bits are connected to the source node.
  */
 function createNetworkOne(){
-  fetch('/data') // retrieve all Datastore data that has "data" label
+  fetch('/PCAP-loader') // retrieve all Datastore data that has "data" label
   .then(response => response.json())
   .then((data) => {
   
