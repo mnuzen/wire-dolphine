@@ -6,6 +6,11 @@ Authors: handeland@google.com, jevingu@google.com, mnuzen@google.com
 Reviewers: arunkaly@, promanov@
 
 
+## To add sample PCAP files: 
+
+1. Download `file1.pcap` from GDrive
+2. Put in repo under `resources/files/file1.pcap`
+
 ## To use geolocation: 
 
 1. Download `GeoLite2-City.mmdb` from GDrive
