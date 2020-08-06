@@ -6,11 +6,7 @@ Authors: handeland@google.com, jevingu@google.com, mnuzen@google.com
 Reviewers: arunkaly@, promanov@
 
 ## Setup: 
-<<<<<<< HEAD
 1. `gsutil cp -r gs://erik-jevin-melba-step-2020 resources/`
-=======
-1. `gsutil cp gs://erik-jevin-melba-step-2020/ resources/`
->>>>>>> edb15272b8cc33be9881c29e52ceb98ec2a062ef
 
 ## To use geolocation: 
 
