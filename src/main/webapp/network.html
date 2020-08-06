@@ -13,11 +13,13 @@
 
   <!-- Custom fonts for this template-->
   <link href="js/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+  <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet">
 
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
-  <link href="css/network.css" rel"stylesheet">
+  <link href="css/network.css" rel="stylesheet">
 
 </head>
 
@@ -97,14 +99,18 @@
 
         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
         <li class="nav-item dropdown no-arrow d-sm-none">
-          <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-search fa-fw"></i>
           </a>
           <!-- Dropdown - Messages -->
-          <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
+          <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+               aria-labelledby="searchDropdown">
             <form class="form-inline mr-auto w-100 navbar-search">
               <div class="input-group">
-                <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                <input type="text" class="form-control bg-light border-0 small"
+                       placeholder="Search for..." aria-label="Search"
+                       aria-describedby="basic-addon2">
                 <div class="input-group-append">
                   <button class="btn btn-primary" type="button">
                     <i class="fas fa-search fa-sm"></i>
@@ -117,18 +123,17 @@
 
         <!-- Nav Item - User Information -->
         <li class="nav-item dropdown no-arrow">
-          <a href="mapviz.html" class="btn btn-primary btn-icon-split mr-2">
-                    <span class="icon text-white-50">
-                      <i class="fas fa-arrow-left"></i>
-                    </span>
+          <a href="/mapviz.html" class="btn btn-primary btn-icon-split mr-2">
+            <span class="icon text-white-50">
+              <i class="fas fa-arrow-left"></i>
+            </span>
             <span class="text">Previous</span>
           </a>
-          <a href="tables.html" class="btn btn-success btn-icon-split">
+          <a href="/tables.html" class="btn btn-success btn-icon-split">
             <span class="text">Next</span>
-
             <span class="icon text-white-50">
-                      <i class="fas fa-arrow-right"></i>
-                    </span>
+              <i class="fas fa-arrow-right"></i>
+            </span>
           </a>
         </li>
       </ul>
@@ -139,55 +144,58 @@
     <!-- Main Content -->
     <div class="container-fluid">
 
-    <!-- Page Heading -->
-    <h1>Network Visualizations Demo</h1>
-    <!-- Network Example -->
+      <!-- Page Heading -->
+      <h1>Network Visualizations Demo</h1>
+      <!-- Network Example -->
 
-    <p class="mb-4">Example network visualization with data from data.csv (loaded from the <a href="tables.html">tables</a> page). Check out <a href="https://visjs.github.io/vis-network/examples/">this</a> library to see the source code. Click one of two buttons below to generate one of two graphs.</p>
+      <p class="mb-4">Example network visualization with data from data.csv (loaded from the <a
+          href="tables.html">tables</a> page). Check out <a
+          href="https://visjs.github.io/vis-network/examples/">this</a> library to see the source
+        code. Click one of two buttons below to generate one of two graphs.</p>
 
-    <button onclick="createNetworkOne()">View My Network</button>
-    <br/>
-    <br/>
-    <div id="mynetwork"></div>
+      <button onclick="createNetworkOne()">View My Network</button>
+      <br/>
+      <br/>
+      <div id="mynetwork"></div>
 
-    <!-- End of Main Content -->
+      <!-- End of Main Content -->
 
-    <!-- Footer -->
-    <footer class="sticky-footer bg-white">
-      <div class="container my-auto">
-        <div class="copyright text-center my-auto">
-          <span>Made with <i class="fa fa-heart" aria-hidden="true"></i> in America</span>
+      <!-- Footer -->
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Made with <i class="fa fa-heart" aria-hidden="true"></i> by Google Interns</span>
+          </div>
         </div>
-      </div>
-    </footer>
-    <!-- End of Footer -->
+      </footer>
+      <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
 
   </div>
-  <!-- End of Content Wrapper -->
+  <!-- End of Page Wrapper -->
 
-</div>
-<!-- End of Page Wrapper -->
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
 
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-  <i class="fas fa-angle-up"></i>
-</a>
+  <!-- Bootstrap core JavaScript-->
+  <script src="js/vendor/jquery/jquery.min.js"></script>
+  <script src="js/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-<!-- Bootstrap core JavaScript-->
-<script src="js/vendor/jquery/jquery.min.js"></script>
-<script src="js/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Core plugin JavaScript-->
+  <script src="js/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-<!-- Core plugin JavaScript-->
-<script src="js/vendor/jquery-easing/jquery.easing.min.js"></script>
+  <!-- Custom scripts for all pages-->
+  <script src="js/sb-admin-2.min.js"></script>
 
-<!-- Custom scripts for all pages-->
-<script src="js/sb-admin-2.min.js"></script>
-
-<!-- PAGE LEVEL CUSTOM SCRIPTS -->
-<script src="vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-<script src="js/network.js"></script>
-<script src="https://visjs.github.io/vis-network/standalone/umd/vis-network.min.js"></script>
+  <!-- PAGE LEVEL CUSTOM SCRIPTS -->
+  <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+  <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+  <script src="js/network.js"></script>
+  <script src="https://visjs.github.io/vis-network/standalone/umd/vis-network.min.js"></script>
 
 </body>
 
