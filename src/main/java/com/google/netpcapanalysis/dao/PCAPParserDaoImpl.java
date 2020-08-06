@@ -23,6 +23,9 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.interfaces.dao.PCAPParserDao;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 /*
 * Given a filename and local IP address, parses out individual packets as PCAPdata objects and puts in Datastore.
 * We define MYIP to be the IP address of the local machine that was used to create the PCAP file, 
@@ -47,7 +50,8 @@ public class PCAPParserDaoImpl implements PCAPParserDao {
 
    /* Reads PCAP file (from file name) as a stream and puts unique connections into allPCAP HashMap. */
   public void parseRaw() throws IOException {
-    final InputStream stream = PCAPParserDaoImpl.class.getClassLoader().getResourceAsStream(FILENAME);
+    Path path = Paths.get(FILENAME);
+    InputStream stream = PCAPParserDaoImpl.class.getClassLoader().getResourceAsStream(path.toString());
     //final InputStream stream = this.getClass().getResourceAsStream(FILENAME);
     final Pcap pcap = Pcap.openStream(stream);
 

@@ -7,6 +7,9 @@ import com.google.netpcapanalysis.models.PCAPdata;
 import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,7 +34,8 @@ public class PCAPParserDaoImplTest {
   @Before
   public void setup() throws IOException {
     // Parse set IP addresses from hidden text file
-    InputStream stream = PCAPParserDaoImplTest.class.getClassLoader().getResourceAsStream(FILENAME);
+    Path path = Paths.get(FILENAME);
+    InputStream stream = PCAPParserDaoImplTest.class.getClassLoader().getResourceAsStream(path.toString());
     //InputStream stream = this.getClass().getResourceAsStream(FILENAME);
     String text = IOUtils.toString(stream, StandardCharsets.UTF_8);
     String[] values = text.split(",");
