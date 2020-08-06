@@ -4,22 +4,16 @@ import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.interfaces.dao.MaliciousIPDao;
 import com.google.netpcapanalysis.models.PCAPdata;
 import com.google.netpcapanalysis.models.MaliciousPacket;
-
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import java.util.ArrayList;
-
-import java.io.IOException;
-
-import javax.lang.model.util.ElementScanner6;
+import com.google.netpcapanalysis.models.Flagged;
 
 public class  MaliciousIPDaoImpl implements MaliciousIPDao{
     private static final String AUTH0_API_KEY = "replace_api_key";
 
     private static final String FLAGGED_FALSE = "Resource not found";
     private static final String FLAGGED_TRUE = "200: OK";
-    private static final String REQUEST_LIMIT = "Rate limit exceeded";
 
     private PCAPDao ipCache = new PCAPDaoImpl();
 
@@ -31,7 +25,7 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
 
         if(ipCache.searchMaliciousDB(data.destination) == true)
         {
-            data.flagged = true;
+            data.flagged = Flagged.TRUE;
         }
         else{
             try {
@@ -41,16 +35,16 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
            
                 if(result.getBody().equals(FLAGGED_FALSE))
                 {
-                    data.flagged = false;
+                    data.flagged = Flagged.FALSE;
                 }
                 else if(result.getBody().equals(FLAGGED_TRUE))
                 {
-                    data.flagged = true; 
+                    data.flagged = Flagged.TRUE; 
                     MaliciousPacket tempPacket = new MaliciousPacket(data.destination,data.flagged);
                     ipCache.setMaliciousIPObjects(tempPacket);
                 }
                 else{
-                    System.out.println("Error request limit reached");
+                    data.flagged = Flagged.UNKNOWN; 
                 }
     
             } catch (UnirestException e) {
@@ -59,7 +53,6 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
                 e.printStackTrace();
             }
         }
-
         return data;
     }
     

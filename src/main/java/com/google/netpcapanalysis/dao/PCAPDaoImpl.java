@@ -9,6 +9,7 @@
 package com.google.netpcapanalysis.dao;
 
 import com.google.netpcapanalysis.models.PCAPdata;
+import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.models.MaliciousPacket;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,6 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.FilterOperator;
-import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 
 
 public class PCAPDaoImpl implements PCAPDao {
@@ -49,7 +49,7 @@ public class PCAPDaoImpl implements PCAPDao {
       String location = (String) entity.getProperty("Location");
       String protocol = (String) entity.getProperty("Protocol");
       int size = (int) (long) entity.getProperty("Size");
-      boolean flagged = (Boolean) entity.getProperty("Flagged");
+      String flagged = (String) entity.getProperty("Flagged");
       int frequency = (int) (long) entity.getProperty("Frequency");
 
       PCAPdata temp = new PCAPdata(source, destination, domain, location, 
@@ -93,10 +93,10 @@ public class PCAPDaoImpl implements PCAPDao {
 
   public void setMaliciousIPObjects(MaliciousPacket data) {
     Entity Entity = new Entity(cacheEntity);
-
+   
     Entity.setProperty("IP", data.ip);
     Entity.setProperty("Flagged", data.flagged);
-
+    System.out.println("in set object");
     datastore.put(Entity);
   }
 

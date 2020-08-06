@@ -3,13 +3,13 @@ package com.google.netpcapanalysis.models;
 public final class MaliciousPacket{
 
   public String ip;
-  public boolean flagged;
+  public String flagged;
 
   public MaliciousPacket() {
-    this(null,false);
+    this(null,null);
   }
 
-  public MaliciousPacket(String ip, boolean flagged) {
+  public MaliciousPacket(String ip, String flagged) {
     this.ip = ip;
     this.flagged = flagged;
   }
