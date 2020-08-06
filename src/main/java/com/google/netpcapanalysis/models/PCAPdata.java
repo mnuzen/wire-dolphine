@@ -8,11 +8,11 @@ public final class PCAPdata {
   public String location;
   public String protocol;
   public int size;
-  public boolean flagged;
+  public String flagged;
   public int frequency;
 
   public PCAPdata() {
-    this(null, null, null, null, null, 0, false, 0);
+    this(null, null, null, null, null, 0, null, 0);
   }
 
   public PCAPdata(
@@ -22,7 +22,7 @@ public final class PCAPdata {
       String location,
       String protocol,
       int size,
-      boolean flagged,
+      String flagged,
       int frequency
   ) {
     this.source = source;
