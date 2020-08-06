@@ -17,7 +17,7 @@ const ITER = 200;
 const OVERLAP_CONST = 1;
 const CLUSTER_SIZE = 5;
 
-/** Create network graph based on data in datastore.*/
+/** Create basic visualization network graph based on data in datastore without descriptive labels.*/
 function createNetwork(){
   fetch('/PCAP-loader') // retrieve all Datastore data that has "data" label
   .then(response => response.json())
