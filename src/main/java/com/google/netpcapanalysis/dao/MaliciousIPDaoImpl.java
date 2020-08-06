@@ -9,8 +9,13 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.google.netpcapanalysis.models.Flagged;
 
+import com.google.netpcapanalysis.dao.KeystoreDaoImpl;
+import com.google.netpcapanalysis.interfaces.dao.KeystoreDao;
+
 public class  MaliciousIPDaoImpl implements MaliciousIPDao{
-    private static final String AUTH0_API_KEY = "replace_api_key";
+
+      private KeystoreDao keystoreDao = new KeystoreDaoImpl();
+    private final String AUTH0_API_KEY = keystoreDao.getKeystore().getAuth0APIKey();
 
     private static final String FLAGGED_FALSE = "Resource not found";
     private static final String FLAGGED_TRUE = "200: OK";
