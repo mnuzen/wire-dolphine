@@ -48,6 +48,7 @@ public class PCAPParserDaoImpl implements PCAPParserDao {
    /* Reads PCAP file (from file name) as a stream and puts unique connections into allPCAP HashMap. */
   public void parseRaw() throws IOException {
     final InputStream stream = PCAPParserDaoImpl.class.getClassLoader().getResourceAsStream(FILENAME);
+    //final InputStream stream = this.getClass().getResourceAsStream(FILENAME);
     final Pcap pcap = Pcap.openStream(stream);
 
     pcap.loop(new PacketHandler() {

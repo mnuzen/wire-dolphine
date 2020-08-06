@@ -32,6 +32,7 @@ public class PCAPParserDaoImplTest {
   public void setup() throws IOException {
     // Parse set IP addresses from hidden text file
     InputStream stream = PCAPParserDaoImplTest.class.getClassLoader().getResourceAsStream(FILENAME);
+    //InputStream stream = this.getClass().getResourceAsStream(FILENAME);
     String text = IOUtils.toString(stream, StandardCharsets.UTF_8);
     String[] values = text.split(",");
     IP1 = values[0];
