@@ -19,6 +19,7 @@ import java.lang.*;
 
 import org.apache.commons.io.IOUtils;
 import java.nio.charset.StandardCharsets;
+import java.net.URL; 
 
 /* Compares file2.pcap's parsed results to hard-coded results. IP1 and IP2 addresses are located in hidden text file and retrieved as a stream. */
 public class PCAPParserDaoImplTest {
@@ -30,13 +31,16 @@ public class PCAPParserDaoImplTest {
   private String IP2;
   private String UDP = "UDP";
   private int FREQ = 2;
+  private int SIZE = 1;
 
   @Before
   public void setup() throws IOException {
     // Parse set IP addresses from hidden text file
     Path path = Paths.get(FILENAME);
     InputStream stream = PCAPParserDaoImplTest.class.getClassLoader().getResourceAsStream(path.toString());
+    System.out.println("Path: " + path.toString());  //InputStream stream = PCAPParserDaoImplTest.class.getResourceAsStream(path.toString());
     //InputStream stream = this.getClass().getResourceAsStream(FILENAME);
+    
     String text = IOUtils.toString(stream, StandardCharsets.UTF_8);
     String[] values = text.split(",");
     IP1 = values[0];
@@ -46,8 +50,6 @@ public class PCAPParserDaoImplTest {
     parser = new PCAPParserDaoImpl(PCAPNAME);
     parser.parseRaw();
     parser.processData();
-
-    //parser.putDatastore();
   }
 
   @Test
@@ -111,6 +113,15 @@ public class PCAPParserDaoImplTest {
     int frequency = finalPCAP.get(IP2).getFrequency();
     int comparison = FREQ;
     assertEquals(frequency, comparison);
+  }
+
+  /* Checks number of unique packets. */
+  @Test
+  public void testDuplicates() {
+    HashMap<String, PCAPdata> finalPCAP = parser.getFinalPCAP();
+    int size = finalPCAP.size();
+    int comparison = SIZE;
+    assertEquals(size, comparison);
   }
 
 }
