@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.google.netpcapanalysis</groupId>
-  <artifactId>app</artifactId>
+  <artifactId>netpcapanalysis</artifactId>
   <version>1</version>
   <packaging>war</packaging>
 
