@@ -17,6 +17,11 @@ $(document).ready(async function() {
   await loadMapVisualization();
 });
 
+async function getKey(key) {
+  const res = await fetch('/keystore?key=' + key);
+  return await res.text();
+}
+
 async function loadMapVisualization(url = '/ipgeolocation?PCAPId=file_1') {
   const res = await fetch(url);
   const countryData = await res.json();
@@ -28,7 +33,7 @@ async function loadMapVisualization(url = '/ipgeolocation?PCAPId=file_1') {
   const datatable = datatableHeader.concat(datatableFormat);
   google.charts.load('current', {
     'packages':['geochart'],
-    'mapsApiKey': 'AIzaSyDp7gKLNrLGlNIZJtj81lKoFQqIOHJG_PQ'
+    'mapsApiKey': await getKey('mapsAPIKey')
   });
   google.charts.setOnLoadCallback(drawRegionsMap);
   loadMapStatistics(countryData);
