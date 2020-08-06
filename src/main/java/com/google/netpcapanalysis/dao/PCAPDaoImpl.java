@@ -9,18 +9,28 @@
 package com.google.netpcapanalysis.dao;
 
 import com.google.netpcapanalysis.models.PCAPdata;
+import com.google.netpcapanalysis.models.MaliciousPacket;
 import java.util.ArrayList;
+import java.util.List;
+
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 
 
 public class PCAPDaoImpl implements PCAPDao {
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+  private final String cacheEntity= "Malicious_IP_Cache";
+
+  
 
   public PCAPDaoImpl() {
 
@@ -63,6 +73,31 @@ public class PCAPDaoImpl implements PCAPDao {
     pcapEntity.setProperty("Frequency", data.frequency);
 
     datastore.put(pcapEntity);
+  }
+
+  public Boolean searchMaliciousDB(String seachIP) {
+   
+    Filter propertyFilter =
+    new FilterPredicate("IP", FilterOperator.EQUAL, seachIP);
+    Query q = new Query(cacheEntity).setFilter(propertyFilter);
+    PreparedQuery pq = datastore.prepare(q);
+    List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(1));
+
+    if(result.size() == 0){
+      return false;
+    }
+    else{
+      return true;
+    }
+  }
+
+  public void setMaliciousIPObjects(MaliciousPacket data) {
+    Entity Entity = new Entity(cacheEntity);
+
+    Entity.setProperty("IP", data.ip);
+    Entity.setProperty("Flagged", data.flagged);
+
+    datastore.put(Entity);
   }
 
 }

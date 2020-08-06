@@ -10,7 +10,7 @@ import com.google.netpcapanalysis.models.PCAPdata;
 import com.google.netpcapanalysis.interfaces.dao.MaliciousIPDao;
 
 
-public class TestMaliciousIP {
+public class BenchmarkMaliciousIP {
   private String CSV_FILE = "maliciousIPTest.csv"; //first 1-30 valid IP's, 31-60 malicious IP's
   ArrayList<PCAPdata> IPlist;
     long AvgTime;
@@ -18,7 +18,7 @@ public class TestMaliciousIP {
     int flagged_true;
     int flagged_false;
 
-  public TestMaliciousIP(){
+  public BenchmarkMaliciousIP(){
         MockDataLoader mockData = new MockDataLoader();
         IPlist = mockData.CSVDataLoader(CSV_FILE);
         flagged_true=0;
