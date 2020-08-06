@@ -15,15 +15,10 @@ const MAX_VEL = 30;
 const TIMESTEP = 0.35;
 const ITER = 200; 
 const OVERLAP_CONST = 1;
+const CLUSTER_SIZE = 5;
 
-const NUM_GROUPS = 5;
-
-/** Create network graph based on data in datastore. 
-  ** Graph consists of three harded groups for visuals based on first two bits of IP addresses: 
-  ** Group 17, Group 18, and Group 19 for IP addresses with those two bits as their first two bits. 
-  ** All other IP addresses that don't have 17, 18, or 19 as their first two bits are connected to the source node.
- */
-function createNetworkOne(){
+/** Create network graph based on data in datastore.*/
+function createNetwork(){
   fetch('/PCAP-loader') // retrieve all Datastore data that has "data" label
   .then(response => response.json())
   .then((data) => {
@@ -33,25 +28,19 @@ function createNetworkOne(){
     var edges = new Array();
 
     var num_nodes = data.length;
-    var title = "My Computer " + num_nodes;
+    var title = "My Computer";
 
     // add source node
     var curr = SOURCE;
     var edge = 0;
     nodes[SOURCE] = {id: SOURCE, label: title, group: SOURCE}; 
     
-    if (num_nodes > NUM_GROUPS) {
+    if (num_nodes > CLUSTER_SIZE) {
       populateLargeGraph();
       createNetwork();
     }
     else {
-      for (var n = 1; n < data.length; n++) {
-        nodes[n] = {id: n, label: "Node " + n, group: n};
-        for (var m = 0; m < data[n].frequency; m++) {
-            edges[edge] = {from: SOURCE, to: n};
-            edge++;
-        }
-      }
+      populateSmallGraph();
       createNetwork();
     }
 
@@ -60,36 +49,42 @@ function createNetworkOne(){
      ** EDGE: {from: SOURCE, to: DESTINATION}
     */
     function populateLargeGraph(){
+      // layer 1
       helper(SOURCE);
-      for (var i = 1; i <= NUM_GROUPS; i++) {
-        var inc = SOURCE + i;
-        helper(inc);
+
+      // layer 2
+      for (var i = 1; i <= CLUSTER_SIZE; i++) {
+        helper(i);
       }
-      for (var j = NUM_GROUPS+1; j <= 25; j++) {
+
+      // layer 3 -- maximum of 125 nodes on the graph (with CLUSTER_SIZE of 5) since graph slows with more nodes
+      for (var j = CLUSTER_SIZE+1; j <= Math.pow(CLUSTER_SIZE, 2); j++) {
         helper(j);
       }
 
       function helper(node) {
-        for (var i = 0; i < NUM_GROUPS; i++) { 
+        for (var i = 0; i < CLUSTER_SIZE; i++) { 
           curr++;
-          nodes[curr] = {id: curr, label: "Node " + curr, group: curr%NUM_GROUPS};
-          for (var j = 0; j < EDGE_LIMIT && j < data[curr].frequency; j++) { 
-            edges[edge] = {from: node, to: curr};
-            edge++;
+          if (curr < num_nodes) {
+            nodes[curr] = {id: curr, label: "Node " + curr, group: curr%CLUSTER_SIZE};
+            for (var j = 0; j < EDGE_LIMIT && j < data[curr].frequency; j++) { 
+              edges[edge] = {from: node, to: curr};
+              edge++;
+           }
           }
         }
       }
-    }
+    } // end large graph
 
     function populateSmallGraph(){
-      for (var n = 1; n < num_nodes; n++) {
-        nodes[n] = {id: n, label: "Node " + n, group: n%NUM_GROUPS};
-        for (var m = 0; m < EDGE_LIMIT && m < data[n].frequency; m++) { 
-          edges[edge] = {from: SOURCE, to: n};
-          edge++;
+      for (var n = 1; n < data.length; n++) {
+        nodes[n] = {id: n, label: "Node " + n, group: n};
+        for (var m = 0; m < data[n].frequency; m++) {
+            edges[edge] = {from: SOURCE, to: n};
+            edge++;
         }
       }
-    }
+    } // end small graph
 
     /* Initialize network based on nodes and edges. */
     function createNetwork(){
@@ -124,4 +119,4 @@ function createNetworkOne(){
     
     window.addEventListener("load", () => {draw();});
   });
-}
+} // end obfuscated 
