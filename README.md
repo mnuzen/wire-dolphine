@@ -11,7 +11,7 @@ Reviewers: arunkaly@, promanov@
 ## To add sample PCAP files: 
 
 1. Download `file1.pcap` and `file2.pcap` from GDrive's PCAP Files folder.
-2. Put in repo under `resources/files/file1.pcap` and `resources/files/file2.pcap`, respectively.
+2. Put in repo under `resources/files/file1.pcap` and `resources/files/file2.pcap`, respectively. 
 
 ## To add IP information for PCAP parser testing:
 

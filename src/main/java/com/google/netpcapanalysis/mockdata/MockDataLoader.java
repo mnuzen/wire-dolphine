@@ -13,7 +13,7 @@ public class MockDataLoader {
 
   private static final String FILE_NAME = "file_1";
   // CSV format:
-  // Source,Destination,Domain,Location,Protocal,Size,Flagged,Frequency
+  // Source,Destination,Domain,Location,Protocol,Size,Flagged,Frequency
   private String csvFile = "data.csv"; // CSV located in project dir /webapp
 
   public MockDataLoader() {
@@ -28,7 +28,7 @@ public class MockDataLoader {
     }
   }
 
-  // Source,Destination,Domain,Location,Protocal,Size,Flagged,Frequency
+  // Source,Destination,Domain,Location,Protocol,Size,Flagged,Frequency
   public ArrayList<PCAPdata> CSVDataLoader() {
     ArrayList<PCAPdata> data = new ArrayList<PCAPdata>();
     String line = "";
