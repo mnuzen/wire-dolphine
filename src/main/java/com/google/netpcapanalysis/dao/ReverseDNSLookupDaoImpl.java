@@ -2,10 +2,9 @@ package com.google.netpcapanalysis.dao;
 
 import com.google.gson.Gson;
 import com.google.netpcapanalysis.interfaces.dao.ReverseDNSLookupDao;
-import com.google.netpcapanalysis.models.ReverseDNS;
+import com.google.netpcapanalysis.models.DNSRecord;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -48,13 +47,13 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
     dnsPattern = Pattern.compile(DNS_REGEX);
   }
 
-  public ReverseDNS lookup(String ip) {
+  public DNSRecord lookup(String ip) {
     try {
       String request = dnsRequest(ip);
       GoogleDNS res = new Gson().fromJson(request, GoogleDNS.class);
 
       String data;
-      ReverseDNS rdns = new ReverseDNS();
+      DNSRecord rdns = new DNSRecord();
       if (res.Answer != null) {
         data = res.Answer[res.Answer.length - 1].data;
         rdns.setServer(true);
@@ -77,7 +76,7 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
         data = data.substring(0, data.length() - 1);
       }
 
-      rdns.setRecord(data);
+      rdns.setDomain(data);
       return rdns;
     } catch (Exception e) {
       return null;

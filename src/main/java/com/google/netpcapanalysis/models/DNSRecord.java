@@ -1,16 +1,16 @@
 package com.google.netpcapanalysis.models;
 
-public class ReverseDNS {
+public class DNSRecord {
   public boolean authority;
   public boolean server;
-  public String record;
+  public String domain;
 
-  public ReverseDNS() {
+  public DNSRecord() {
     this("", false, false);
   }
 
-  public ReverseDNS(String record, boolean server, boolean authority) {
-    this.record = record;
+  public DNSRecord(String domain, boolean server, boolean authority) {
+    this.domain = domain;
     this.authority = authority;
     this.server = server;
   }
@@ -31,11 +31,16 @@ public class ReverseDNS {
     this.server = server;
   }
 
-  public String getRecord() {
-    return record;
+  public String getDomain() {
+    return domain;
   }
 
-  public void setRecord(String record) {
-    this.record = record;
+  public void setDomain(String domain) {
+    this.domain = domain;
+  }
+
+  public String getHostname() {
+    String[] parts =  getDomain().split("\\.");
+    return parts[parts.length - 2] + "." + parts[parts.length - 1];
   }
 }
