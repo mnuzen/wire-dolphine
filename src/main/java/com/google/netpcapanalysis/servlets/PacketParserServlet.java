@@ -22,7 +22,6 @@ import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.dao.PCAPParserDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPParserDao;
 
-import com.google.netpcapanalysis.utils.NetUtils;
 import io.pkts.PacketHandler;
 import io.pkts.Pcap;
 import io.pkts.buffer.Buffer;
@@ -59,7 +58,7 @@ public class PacketParserServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Retrieve user input to determine file name and local IP address.
-    String file = NetUtils.getParameter(request, "file-input", "");
+    String file = getParameter(request, "file-input", "");
    
     PCAPParserDao parser = new PCAPParserDaoImpl(file);
     parser.parseRaw();
@@ -69,4 +68,17 @@ public class PacketParserServlet extends HttpServlet {
     // Respond with the result.
     response.sendRedirect("/packet.html");
   }
-}
+
+  /**
+   * @return the request parameter, or the default value if the parameter
+   *         was not specified by the client
+   */
+  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
+    String value = request.getParameter(name);
+    if (value == null) {
+      return defaultValue;
+    }
+    return value;
+  }
+
+} // end of PacketParserServlet class
