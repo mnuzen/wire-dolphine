@@ -14,11 +14,12 @@ import com.google.netpcapanalysis.interfaces.dao.KeystoreDao;
 
 public class  MaliciousIPDaoImpl implements MaliciousIPDao{
 
-      private KeystoreDao keystoreDao = new KeystoreDaoImpl();
-    private final String AUTH0_API_KEY = keystoreDao.getKeystore().getAuth0APIKey();
+    private KeystoreDao keystoreDao = new KeystoreDaoImpl();
+    private final String AUTH0_API_KEY = keystoreDao.getKeystore().getAuth0APIKey(); //null pointer error if keystore fails to load
 
     private static final String FLAGGED_FALSE = "Resource not found";
     private static final String FLAGGED_TRUE = "200: OK";
+    private static final String REQUEST_LIMIT = "Rate limit exceeded";
 
     private PCAPDao ipCache = new PCAPDaoImpl();
 
@@ -28,28 +29,39 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
     {
         HttpResponse<String> result;
 
-        if(ipCache.searchMaliciousDB(data.destination) == true)
+        String searchDB = ipCache.searchMaliciousDB(data.destination);
+        if(searchDB.equalsIgnoreCase(Flagged.TRUE))
         {
             data.flagged = Flagged.TRUE;
         }
+        else if(searchDB.equalsIgnoreCase(Flagged.FALSE)){
+            data.flagged = Flagged.FALSE;
+        }
         else{
+            System.out.println("Else statement");
             try {
                 result = Unirest.get("https://signals.api.auth0.com/badip/" + data.destination)
                         .header("X-Auth-Token", AUTH0_API_KEY)
                         .asString();
            
-                if(result.getBody().equals(FLAGGED_FALSE))
+                if(result.getBody().equalsIgnoreCase(FLAGGED_FALSE))
                 {
                     data.flagged = Flagged.FALSE;
+                    MaliciousPacket tempPacket = new MaliciousPacket(data.destination,data.flagged);
+                    ipCache.setMaliciousIPObjects(tempPacket);
                 }
-                else if(result.getBody().equals(FLAGGED_TRUE))
+                else if(result.getBody().equalsIgnoreCase(FLAGGED_TRUE))
                 {
                     data.flagged = Flagged.TRUE; 
                     MaliciousPacket tempPacket = new MaliciousPacket(data.destination,data.flagged);
                     ipCache.setMaliciousIPObjects(tempPacket);
                 }
-                else{
+                else if (result.getBody().contains(REQUEST_LIMIT))
+                {
                     data.flagged = Flagged.UNKNOWN; 
+                }
+                else{
+                    data.flagged = Flagged.ERROR; 
                 }
     
             } catch (UnirestException e) {

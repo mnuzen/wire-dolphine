@@ -10,6 +10,7 @@ package com.google.netpcapanalysis.dao;
 
 import com.google.netpcapanalysis.models.PCAPdata;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
+import com.google.netpcapanalysis.models.Flagged;
 import com.google.netpcapanalysis.models.MaliciousPacket;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,19 +76,28 @@ public class PCAPDaoImpl implements PCAPDao {
     datastore.put(pcapEntity);
   }
 
-  public Boolean searchMaliciousDB(String seachIP) {
+  public String searchMaliciousDB(String searchIP) {
    
     Filter propertyFilter =
-    new FilterPredicate("IP", FilterOperator.EQUAL, seachIP);
+    new FilterPredicate("IP", FilterOperator.EQUAL, searchIP);
     Query q = new Query(cacheEntity).setFilter(propertyFilter);
     PreparedQuery pq = datastore.prepare(q);
     List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(1));
 
-    if(result.size() == 0){
-      return false;
+    if(result.size() > 0){
+      String value = (String) result.get(0).getProperty("Flagged");
+
+      if(value.equalsIgnoreCase(Flagged.TRUE)){
+        return Flagged.TRUE;
+      }
+      else
+      {
+        return Flagged.FALSE;
+      }
     }
-    else{
-      return true;
+    else
+    {
+      return Flagged.UNKNOWN;
     }
   }
 
@@ -96,7 +106,7 @@ public class PCAPDaoImpl implements PCAPDao {
    
     Entity.setProperty("IP", data.ip);
     Entity.setProperty("Flagged", data.flagged);
-    System.out.println("in set object");
+    System.out.println("Object placed in cache");
     datastore.put(Entity);
   }
 

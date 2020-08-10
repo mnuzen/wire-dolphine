@@ -21,10 +21,13 @@ public class TestServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
+      /*
         MaliciousIPDao lookup = new MaliciousIPDaoImpl();
-        PCAPdata temp = new PCAPdata("210.48.204.118","210.48.204.118","blank","blank","blank",4,Flagged.UNKNOWN,4);
-        temp = lookup.isMalicious(temp);
-        System.out.println(temp);
+        PCAPdata bad = new PCAPdata("210.48.204.118","210.48.204.118","blank","blank","blank",4,Flagged.UNKNOWN,4);
+        PCAPdata good = new PCAPdata("8.8.8.8","8.8.8.8","blank","blank","blank",4,Flagged.UNKNOWN,4);
+        bad = lookup.isMalicious(bad);
+        good = lookup.isMalicious(good);
+        */
 
         
         response.sendRedirect("/index.html");

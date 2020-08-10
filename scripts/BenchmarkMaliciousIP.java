@@ -12,49 +12,49 @@ import com.google.netpcapanalysis.interfaces.dao.MaliciousIPDao;
 
 public class BenchmarkMaliciousIP {
   private String CSV_FILE = "maliciousIPTest.csv"; //first 1-30 valid IP's, 31-60 malicious IP's
-  ArrayList<PCAPdata> IPlist;
-    long AvgTime;
-    long TotalTime;
-    int flagged_true;
-    int flagged_false;
+  ArrayList<PCAPdata> ipList;
+    long avgTime;
+    long totalTime;
+    int flaggedTrue;
+    int faflaggedFalse;
 
   public BenchmarkMaliciousIP(){
         MockDataLoader mockData = new MockDataLoader();
-        IPlist = mockData.CSVDataLoader(CSV_FILE);
-        flagged_true=0;
-        flagged_false=0;
-        AvgTime = 0L;
-        TotalTime = 0L;
+        ipList = mockData.CSVDataLoader(CSV_FILE);
+        flaggedTrue=0;
+        faflaggedFalse=0;
+        avgTime = 0L;
+        totalTime = 0L;
     }
 
    public void test(){
         Long start, end;
         MaliciousIPDao ipTest = new MaliciousIPDaoImpl();
 
-        for(PCAPdata packet : IPlist)
+        for(PCAPdata packet : ipList)
         {
             start = System.currentTimeMillis();
             packet = ipTest.isMalicious(packet); 
             end = System.currentTimeMillis();
-            AvgTime+=(end-start);
+            avgTime+=(end-start);
 
             if(packet.flagged == true)
             {
-              flagged_true++;
+              flaggedTrue++;
             }
             else{
-              flagged_false++;
+              faflaggedFalse++;
             }
         }
-        TotalTime = AvgTime;
-        AvgTime = AvgTime/IPlist.size();
+        totalTime = avgTime;
+        avgTime = avgTime/ipList.size();
     }
 
     public  void results()
     { 
-      System.out.println("Average lookup time: " + AvgTime + "\n");
-      System.out.println("Total lookup time: " + TotalTime + "\n");
-      System.out.println("Flagged True:"+ flagged_true + "  False:" + flagged_false + "\n");
+      System.out.println("Average lookup time: " + avgTime + "\n");
+      System.out.println("Total lookup time: " + totalTime + "\n");
+      System.out.println("Flagged True:"+ flaggedTrue + "  False:" + faflaggedFalse + "\n");
     }
 }
 

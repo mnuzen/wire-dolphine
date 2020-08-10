@@ -8,6 +8,6 @@ public interface PCAPDao {
 
     public ArrayList<PCAPdata> getPCAPObjects(String searchEntity);
     public void setPCAPObjects(PCAPdata data, String searchEntity);
-    public Boolean searchMaliciousDB(String seachIP);
+    public String searchMaliciousDB(String seachIP);
     public void setMaliciousIPObjects(MaliciousPacket data);
 }
