@@ -106,7 +106,6 @@ public class PCAPDaoImpl implements PCAPDao {
    
     Entity.setProperty("IP", data.ip);
     Entity.setProperty("Flagged", data.flagged);
-    System.out.println("Object placed in cache");
     datastore.put(Entity);
   }
 
