@@ -1,17 +1,21 @@
+$(document).ready(async function() {
+  await dataloader();
+});
+
 // Set new default font family and font color to mimic Bootstrap's default styling
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
 
 // Pie Chart Example
-var ctx = document.getElementById("myPieChart");
+var ctx = document.getElementById("maliciousPieChart");
 var myPieChart = new Chart(ctx, {
-  type: 'doughnut',
+  type: 'pie',
   data: {
-    labels: ["Direct", "Referral", "Social"],
+    labels: ["Good", "Bad", "Unknown"],
     datasets: [{
-      data: [55, 30, 15],
-      backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
-      hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+      data: [maliciousCount.false, maliciousCount.true, maliciousCount.unknown],
+      backgroundColor: ['#1cc88a', '#e74a3b', '#36b9cc'],
+      hoverBackgroundColor: ['#03AF71', '#CE3122', '#1DA0B3'],
       hoverBorderColor: "rgba(234, 236, 244, 1)",
     }],
   },
@@ -28,8 +32,9 @@ var myPieChart = new Chart(ctx, {
       caretPadding: 10,
     },
     legend: {
-      display: false
+      display: true,
+      position: 'bottom',
+      align: "start"
     },
-    cutoutPercentage: 80,
   },
 });
