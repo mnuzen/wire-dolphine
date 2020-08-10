@@ -13,7 +13,9 @@
 
   <!-- Custom fonts for this template-->
   <link href="js/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+  <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet">
 
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
@@ -22,55 +24,64 @@
 
 <body id="page-top">
 
-  <!-- Page Wrapper -->
-  <div id="wrapper">
+<!-- Page Wrapper -->
+<div id="wrapper">
 
-    <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+  <!-- Sidebar -->
+  <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-      <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-        <div class="sidebar-brand-icon rotate-n-15">
-          <i class="fas fa-laugh-wink"></i>
-        </div>
-        <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
-      </a>
-
-      <!-- Divider -->
-      <hr class="sidebar-divider my-0">
-
-      <!-- Nav Item - Dashboard -->
-      <li class="nav-item active">
-        <a class="nav-link" href="index.html">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Dashboard</span></a>
-      </li>
-
-      <!-- Divider -->
-      <hr class="sidebar-divider">
-
-      <!-- Heading -->
-      <div class="sidebar-heading">
-        Explore Your Data
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+      <div class="sidebar-brand-icon rotate-n-15">
+        <i class="fas fa-laugh-wink"></i>
       </div>
+      <div class="sidebar-brand-text mx-3">PCAP Analyzer</div>
+    </a>
 
-      <!-- Nav Item - Map Viz - Jevin -->
-      <li class="nav-item">
-        <a class="nav-link active" href="mapviz.html">
-          <i class="fas fa-fw fa-table"></i>
-          <span>Where are your requests going?</span></a>
-      </li>
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
 
-      <!-- Divider -->
-      <hr class="sidebar-divider d-none d-md-block">
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item active">
+      <a class="nav-link" href="index.html">
+        <i class="fas fa-fw fa-tachometer-alt"></i>
+        <span>Dashboard</span></a>
+    </li>
 
-      <!-- Sidebar Toggler (Sidebar) -->
-      <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-      </div>
+    <!-- Divider -->
+    <hr class="sidebar-divider">
 
-    </ul>
-    <!-- End of Sidebar -->
+    <!-- Heading -->
+    <div class="sidebar-heading">
+      Explore Your Data
+    </div>
+
+    <!-- Nav Item - Map Viz - Jevin -->
+    <li class="nav-item">
+      <a class="nav-link active" href="mapviz.html">
+        <i class="fas fa-fw fa-globe-americas"></i>
+        <span>Where are your requests going?</span></a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="network.html">
+        <i class="fas fa-fw fa-project-diagram"></i>
+        <span>What does your network look like?</span></a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="tables.html">
+        <i class="fas fa-fw fa-table"></i>
+        <span>View your packets</span></a>
+    </li>
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+      <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+  </ul>
+  <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
@@ -119,13 +130,13 @@
 
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
-              <a href="#" class="btn btn-primary btn-icon-split mr-2">
+              <a href="index.html" class="btn btn-primary btn-icon-split mr-2">
                     <span class="icon text-white-50">
                       <i class="fas fa-arrow-left"></i>
                     </span>
                 <span class="text">Previous</span>
               </a>
-              <a href="#" class="btn btn-success btn-icon-split">
+              <a href="network.html" class="btn btn-success btn-icon-split">
                   <span class="text">Next</span>
 
                   <span class="icon text-white-50">
@@ -139,33 +150,43 @@
 
         </nav>
         <!-- End of Topbar -->
+    
 
-
-      <!-- Main Content -->
-      <div id="content">
+    <!-- Main Content -->
+    <div id="content">
 
       <!-- Begin Page Content -->
-        <div class="container-fluid h-100 w-100">
+      <div class="container-fluid h-100 w-100">
 
-          <!-- Page Heading -->
-          <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Where Are Your Requests Going? </h1>
-          </div>
-          <div id="map-container">
-            <div style="height: 100%;width: 100%;"><div class="row" style=" position: absolute;z-index: 1000;width: 100%;left: 0;/*! top: 0; */">
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+          <h1 class="h3 mb-0 text-gray-800">Where Are Your Requests Going? </h1>
+        </div>
+        <div id="map-container">
+          <div style="height: 100%;width: 100%;">
+            <div class="row"
+                 style=" position: absolute;z-index: 1000;width: 100%;left: 0;/*! top: 0; */">
               <div class="offset-md-8 col-md-4">
                 <div class="card shadow mb-4">
                   <!-- Card Header - Accordion -->
-                  <a href="#map-info-card" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                  <a href="#map-info-card" class="d-block card-header py-3" data-toggle="collapse"
+                     role="button" aria-expanded="true" aria-controls="collapseCardExample">
                     <h6 class="m-0 font-weight-bold text-primary">Lets take a look...</h6>
                   </a>
                   <!-- Card Content - Collapse -->
                   <div class="collapse show" id="map-info-card" style="">
                     <div class="card-body">
                       <ul>
-                        <li><span class="font-weight-bold" id="request-num"></span> packets were sent.</li>
-                        <li>Packets were sent to <span class="font-weight-bold" id="request-countries"></span> countries</li>
-                        <li><span class="font-weight-bold" id="mostFreqCountry"></span> had the most requests with <b><span id="mostFreqCountryNum"></span> (<span id="mostFreqCountryPercentage"></span>%)</b> of all requests.</li>
+                        <li><span class="font-weight-bold" id="request-num"></span> packets were
+                          sent.
+                        </li>
+                        <li>Packets were sent to <span class="font-weight-bold"
+                                                       id="request-countries"></span> countries
+                        </li>
+                        <li><span class="font-weight-bold" id="mostFreqCountry"></span> had the most
+                          requests with <b><span id="mostFreqCountryNum"></span> (<span
+                              id="mostFreqCountryPercentage"></span>%)</b> of all requests.
+                        </li>
                       </ul>
                       This product includes GeoLite2 data created by MaxMind, available from
                       <a href="https://www.maxmind.com">https://www.maxmind.com</a>.
@@ -173,55 +194,50 @@
                   </div>
                 </div>
               </div>
-            </div></div>
-            <div id="regions_div" style="max-width: 100%; height:100%;"></div>
+            </div>
           </div>
+          <div id="regions_div" style="max-width: 100%; height:100%;"></div>
+        </div>
         <!-- /.container-fluid -->
-        </div>
-
       </div>
-      <!-- End of Main Content -->
-
-      <!-- Footer -->
-      <footer class="sticky-footer bg-white">
-        <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-            <span>Copyright &copy; Your Website 2020</span>
-          </div>
-        </div>
-      </footer>
-      <!-- End of Footer -->
 
     </div>
-    <!-- End of Content Wrapper -->
+    <!-- End of Main Content -->
+
+    <!-- Footer -->
+    <footer class="sticky-footer bg-white">
+      <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+          <span>Made with <i class="fa fa-heart" aria-hidden="true"></i> by Google Interns</span>
+        </div>
+      </div>
+    </footer>
+    <!-- End of Footer -->
 
   </div>
-  <!-- End of Page Wrapper -->
+  <!-- End of Content Wrapper -->
 
-  <!-- Scroll to Top Button-->
-  <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-  </a>
+</div>
+<!-- End of Page Wrapper -->
 
-  <!-- Bootstrap core JavaScript-->
-  <script src="js/vendor/jquery/jquery.min.js"></script>
-  <script src="js/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+  <i class="fas fa-angle-up"></i>
+</a>
 
-  <!-- Core plugin JavaScript-->
-  <script src="js/vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- Bootstrap core JavaScript-->
+<script src="js/vendor/jquery/jquery.min.js"></script>
+<script src="js/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Custom scripts for all pages-->
-  <script src="js/sb-admin-2.min.js"></script>
+<!-- Core plugin JavaScript-->
+<script src="js/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-  <!-- Page level plugins -->
-  <script src="js/vendor/chart.js/Chart.min.js"></script>
+<!-- Custom scripts for all pages-->
+<script src="js/sb-admin-2.min.js"></script>
 
-  <!-- Page level custom scripts -->
-  <script src="js/demo/chart-area-demo.js"></script>
-  <script src="js/demo/chart-pie-demo.js"></script>
+<!-- Page level custom scripts -->
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src="/js/mapviz.js"></script>
 
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <script type="text/javascript" src="/mapviz.js"></script>
 </body>
-
 </html>
