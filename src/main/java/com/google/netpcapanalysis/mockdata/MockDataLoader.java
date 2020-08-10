@@ -14,7 +14,7 @@ public class MockDataLoader {
   private static final String FILE_NAME = "file_1";
   // CSV format:
   // Source,Destination,Domain,Location,Protocal,Size,Flagged,Frequency
-  private String csvFile = "data.csv"; // CSV located in project dir /webapp
+  private String CSV_FILE = "data.csv"; // CSV located in project dir /webapp
 
   public MockDataLoader() {
 
@@ -29,7 +29,7 @@ public class MockDataLoader {
   }
 
   // Source,Destination,Domain,Location,Protocal,Size,Flagged,Frequency
-  public ArrayList<PCAPdata> CSVDataLoader() {
+  public ArrayList<PCAPdata> CSVDataLoader(String csvFile) {
     ArrayList<PCAPdata> data = new ArrayList<PCAPdata>();
     String line = "";
     String cvsSplitBy = ",";
@@ -42,8 +42,7 @@ public class MockDataLoader {
         String[] pcapLine = line.split(cvsSplitBy);
 
         PCAPdata tempPCAP = new PCAPdata(pcapLine[0], pcapLine[1], pcapLine[2], pcapLine[3],
-            pcapLine[4],
-            Integer.parseInt(pcapLine[5]), Boolean.parseBoolean(pcapLine[6]),
+            pcapLine[4], Integer.parseInt(pcapLine[5]), pcapLine[6],
             Integer.parseInt(pcapLine[7]));
 
         data.add(tempPCAP);
@@ -57,7 +56,7 @@ public class MockDataLoader {
   }
 
   public void CSVDataUpload() {
-    LoadData(CSVDataLoader());
+    LoadData(CSVDataLoader(CSV_FILE));
   }
 
 }

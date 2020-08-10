@@ -35,7 +35,7 @@ public class TableServlet extends HttpServlet {
     String location = request.getParameter("location");
     String protocol = request.getParameter("protocol");
     int size = Integer.parseInt(request.getParameter("size"));
-    boolean flagged = Boolean.parseBoolean(request.getParameter("flagged"));
+    String flagged = request.getParameter("flagged");
     int frequency = Integer.parseInt(request.getParameter("frequency"));
 
     PCAPdata tempPCAP = new PCAPdata(source, destination, domain, location, protocol,
