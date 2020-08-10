@@ -24,9 +24,9 @@ function loadData() {
       for (i in data) {
 
         //malicious Counter
-        if (data[i].flagged.equalsIgnoreCase("true")) {
+        if (data[i].flagged.toLowerCase() === "true") {
           window.maliciousCount.true++;
-        } else if (data[i].flagged.equalsIgnoreCase("false")) {
+        } else if (data[i].flagged.toLowerCase() === "false") {
           window.maliciousCount.false++;
         } else {
           window.maliciousCount.unknown++;
@@ -58,6 +58,8 @@ function loadData() {
             window.protocolCount.OTHER++;
         }
       }
+
+      
 
       // Set new default font family and font color to mimic Bootstrap's default styling
       Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';

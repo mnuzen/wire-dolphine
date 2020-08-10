@@ -10,10 +10,10 @@ $(document).ready(function () {
                 var table = document.getElementById("table");
                 var row = document.createElement("tr");
 
-                if (data[i].flagged === "TRUE") { //change for string value in malicous final
+                if (data[i].flagged.toLowerCase() === "true") { //change for string value in malicous final
                     row.setAttribute("id", "flagged");
                 }
-                else if (data[i].protocol === "HTTP") {
+                else if (data[i].protocol.toLowerCase() === "http") {
                     row.setAttribute("id", "warning");
                 }
 
