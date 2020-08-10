@@ -26,6 +26,13 @@ Reviewers: arunkaly@, promanov@
 ## MaxmindDB perf: 
 Averaged 14572 ms for 1000000 requests, 68623.19 rps on i7-9750H single core.
 
+## API limitations: 
+1. [Auth0 Signal API](https://auth0.com/signals/docs/)
+    - 40,000 requests per day
+    - 10 requests per second
+    - Cache DB used to mitigate limitations
+
+
 ## Adding privileged information: 
 1. Add to resources folder
 2. To use in code, get the resource using resource loader like so:
