@@ -12,12 +12,14 @@
   <title>Domain Visualizer</title>
 
   <!-- Custom fonts for this template-->
-  <link href="js/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+  <link href="/js/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="/css/domains.css" rel="stylesheet" type="text/css">
+  <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet">
 
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
 </head>
 
 <body id="page-top">
@@ -40,7 +42,7 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
+    <li class="nav-item">
       <a class="nav-link" href="index.html">
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>Dashboard</span></a>
@@ -54,19 +56,24 @@
       Explore Your Data
     </div>
 
-    <!-- Nav Item - Map Viz - Jevin -->
+    <!-- Nav Item - Jevin -->
     <li class="nav-item">
-      <a class="nav-link active" href="mapviz.html">
+      <a class="nav-link" href="/mapviz.html">
         <i class="fas fa-fw fa-globe-americas"></i>
         <span>Where are your requests going?</span></a>
     </li>
+    <li class="nav-item active">
+      <a class="nav-link" href="/domains.html">
+        <i class="fas fa-fw fa-satellite"></i>
+        <span>Who are you sending to?</span></a>
+    </li>
     <li class="nav-item">
-      <a class="nav-link" href="network.html">
+      <a class="nav-link" href="/network.html">
         <i class="fas fa-fw fa-project-diagram"></i>
         <span>What does your network look like?</span></a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="tables.html">
+      <a class="nav-link" href="/tables.html">
         <i class="fas fa-fw fa-table"></i>
         <span>View your packets</span></a>
     </li>
@@ -96,14 +103,18 @@
 
         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
         <li class="nav-item dropdown no-arrow d-sm-none">
-          <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-search fa-fw"></i>
           </a>
           <!-- Dropdown - Messages -->
-          <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
+          <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+               aria-labelledby="searchDropdown">
             <form class="form-inline mr-auto w-100 navbar-search">
               <div class="input-group">
-                <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                <input type="text" class="form-control bg-light border-0 small"
+                       placeholder="Search for..." aria-label="Search"
+                       aria-describedby="basic-addon2">
                 <div class="input-group-append">
                   <button class="btn btn-primary" type="button">
                     <i class="fas fa-search fa-sm"></i>
@@ -135,90 +146,96 @@
 
     <!-- Main Content -->
     <div id="content">
-      <div class="underlay">
-
-      </div>
-      <div class="overlay">
-        <div style="height: 100%;width: 100%;">
-          <div class="row"
-               style=" position: absolute;z-index: 1000;width: 100%;left: 0;/*! top: 0; */">
-            <div class="offset-md-8 col-md-4">
-              <div class="card shadow mb-4">
-                <!-- Card Header - Accordion -->
-                <a href="#map-info-card" class="d-block card-header py-3" data-toggle="collapse"
-                   role="button" aria-expanded="true" aria-controls="collapseCardExample">
-                  <h6 class="m-0 font-weight-bold text-primary">DNS Requests</h6>
-                </a>
-                <!-- Card Content - Collapse -->
-                <div class="collapse show" id="map-info-card" style="">
-                  <div class="card-body">
-                    <ul>
-                      <li>
-                        <span class="font-weight-bold" id="request-num"></span> packets were
-                        sent.
-                      </li>
-                      <li>Packets were sent to
-                        <span class="font-weight-bold"
-                              id="request-countries"></span> countries
-
-                      </li>
-                      <li>
-                        <span class="font-weight-bold" id="mostFreqCountry"></span> had the most
-                        requests with
-                        <b>
-                          <span id="mostFreqCountryNum"></span> (
-                          <span
-                              id="mostFreqCountryPercentage"></span>%)
-                        </b> of all requests.
-
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card shadow mb-4 ml-4 mr-4">
+            <!-- Card Header - Accordion -->
+            <span class="d-block card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Who are you sending to?</h6>
+            </span>
+            <div class="show" style="">
+              <div class="card-body">
+                <ul>
+                  <li><span class="font-weight-bold" id="cdnPackets"></span> packets were
+                    sent to CDNs.
+                  </li>
+                  <li>
+                    <span class="font-weight-bold" id="domainPackets"></span> packets were
+                    sent to domains.
+                  </li>
+                  <li>
+                    <span class="font-weight-bold" id="percentCDN"></span>% of your packets were
+                    sent from CDNs
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
         </div>
-
       </div>
-      <canvas id="domainChart"></canvas>
-    </div>
-    <!-- End of Main Content -->
-
-    <!-- Footer -->
-    <footer class="sticky-footer bg-white">
-      <div class="container my-auto">
-        <div class="copyright text-center my-auto">
-          <span>Made with <i class="fa fa-heart" aria-hidden="true"></i> by Google Interns</span>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="card shadow  ml-lg-4 mb-lg-4">
+            <span class="d-block card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">CDNs visited</h6>
+            </span>
+            <div class="show" style="">
+              <div class="card-body chart-body">
+                <canvas id="cdnChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card shadow mr-lg-4 mb-lg-4">
+          <span class="d-block card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Domains visited</h6>
+            </span>
+            <div class="show">
+              <div class="card-body chart-body">
+                <canvas id="domainChart"></canvas>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </footer>
-    <!-- End of Footer -->
+      <!-- End of Main Content -->
+
+      <!-- Footer -->
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Made with <i class="fa fa-heart" aria-hidden="true"></i> by Google Interns</span>
+          </div>
+        </div>
+      </footer>
+      <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
 
   </div>
-  <!-- End of Content Wrapper -->
+  <!-- End of Page Wrapper -->
 
-</div>
-<!-- End of Page Wrapper -->
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
 
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-  <i class="fas fa-angle-up"></i>
-</a>
+  <!-- Bootstrap core JavaScript-->
+  <script src="js/vendor/jquery/jquery.min.js"></script>
+  <script src="js/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-<!-- Bootstrap core JavaScript-->
-<script src="js/vendor/jquery/jquery.min.js"></script>
-<script src="js/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Core plugin JavaScript-->
+  <script src="js/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-<!-- Core plugin JavaScript-->
-<script src="js/vendor/jquery-easing/jquery.easing.min.js"></script>
+  <!-- Custom scripts for all pages-->
+  <script src="js/sb-admin-2.min.js"></script>
 
-<!-- Custom scripts for all pages-->
-<script src="js/sb-admin-2.min.js"></script>
-
-<!-- PAGE LEVEL CUSTOM SCRIPTS -->
-<script src="js/vendor/chart.js/Chart.min.js"></script>
-<script src="js/domains.js"></script>
+  <!-- PAGE LEVEL CUSTOM SCRIPTS -->
+  <script src="js/vendor/chart.js/Chart.min.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/domains.js"></script>
 
 </body>
 

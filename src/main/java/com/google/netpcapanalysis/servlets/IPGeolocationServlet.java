@@ -51,7 +51,7 @@ public class IPGeolocationServlet extends HttpServlet {
 
     for (PCAPdata pcap: analysis) {
       String country = this.geolocationDao.getCountry(InetAddress.getByName(pcap.destination));
-      countryCount.put(country, countryCount.getOrDefault(country, 1));
+      countryCount.put(country, countryCount.getOrDefault(country, 1) + 1);
     }
 
     response.setContentType("application/json;");
