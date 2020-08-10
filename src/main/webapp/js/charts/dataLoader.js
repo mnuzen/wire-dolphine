@@ -24,33 +24,33 @@ function loadData() {
       for (i in data) {
 
         //malicious Counter
-        if (data[i].flagged == true) {
+        if (data[i].flagged.equalsIgnoreCase("true")) {
           window.maliciousCount.true++;
-        } else if (data[i].flagged == false) {
+        } else if (data[i].flagged.equalsIgnoreCase("false")) {
           window.maliciousCount.false++;
         } else {
           window.maliciousCount.unknown++;
         }
 
         //protocol
-        switch (data[i].protocol) {
-          case "HTTP":
+        switch (data[i].protocol.toLowerCase()) {
+          case "http":
             window.protocolCount.HTTP++;
             break;
 
-          case "HTTPS":
+          case "https":
             window.protocolCount.HTTPS++;
             break;
 
-          case "UDP":
+          case "udp":
             window.protocolCount.UDP++;
             break;
 
-          case "TCP":
+          case "tcp":
             window.protocolCount.TCP++;
             break;
 
-          case "DNS":
+          case "dns":
             window.protocolCount.DNS++;
             break;
 
