@@ -49,7 +49,6 @@ public class PCAPParserDaoImplTest {
     // Retrieve PCAPParser information
     parser = new PCAPParserDaoImpl(PCAPNAME);
     parser.parseRaw();
-    parser.processData();
   }
 
   @Test
@@ -104,24 +103,6 @@ public class PCAPParserDaoImplTest {
 
     // compare
     assertEquals(protocols, comparison);
-  }
-
-  /* Verify that the frequency of connections has been properly incremented after data has been processed. */
-  @Test
-  public void testFrequency() {
-    HashMap<String, PCAPdata> finalPCAP = parser.getFinalPCAP();
-    int frequency = finalPCAP.get(IP2).getFrequency();
-    int comparison = FREQ;
-    assertEquals(frequency, comparison);
-  }
-
-  /* Checks number of unique packets. */
-  @Test
-  public void testDuplicates() {
-    HashMap<String, PCAPdata> finalPCAP = parser.getFinalPCAP();
-    int size = finalPCAP.size();
-    int comparison = SIZE;
-    assertEquals(size, comparison);
   }
 
 }

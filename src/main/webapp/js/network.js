@@ -18,8 +18,8 @@ const OVERLAP_CONST = 1;
 const CLUSTER_SIZE = 5;
 
 /** Create basic visualization network graph based on data in datastore without descriptive labels.*/
-function createNetwork(){
-  fetch('/PCAP-loader') // retrieve all Datastore data that has "data" label
+function drawNetwork(){
+  fetch('/PCAP-freq-loader') // retrieve all Datastore data that has "data" label
   .then(response => response.json())
   .then((data) => {
   
@@ -77,9 +77,9 @@ function createNetwork(){
     } // end large graph
 
     function populateSmallGraph(){
-      for (var n = 1; n < data.length; n++) {
+      for (var n = 1; n < data.length+1; n++) {
         nodes[n] = {id: n, label: "Node " + n, group: n};
-        for (var m = 0; m < data[n].frequency; m++) {
+        for (var m = 0; m < data[n-1].frequency; m++) {
             edges[edge] = {from: SOURCE, to: n};
             edge++;
         }

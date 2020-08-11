@@ -22,6 +22,9 @@ import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.dao.PCAPParserDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPParserDao;
 
+import com.google.netpcapanalysis.dao.FrequencyDaoImpl;
+import com.google.netpcapanalysis.interfaces.dao.FrequencyDao;
+
 import io.pkts.PacketHandler;
 import io.pkts.Pcap;
 import io.pkts.buffer.Buffer;
@@ -49,23 +52,26 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.*;
 
-/** Servlet that loads specific data from datastore */
-@WebServlet("/PCAP-loader")
-public class PacketLoaderServlet extends HttpServlet {
-  private String FILENAME;
-  private PCAPDao data = new PCAPDaoImpl();
+/** Servlet that retrieves and returns frequencies. */
+@WebServlet("/PCAP-freq-loader")
+public class FrequencyLoaderServlet extends HttpServlet {
+  private String filename;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String json = convertToJsonUsingGson(data.getPCAPObjects(FILENAME));
+    FrequencyDao freq = new FrequencyDaoImpl(filename);
+    freq.loadFrequency();
+    ArrayList<PCAPdata> finalFrequencies = freq.getFinalFreq(); 
+
+    String json = convertToJsonUsingGson(finalFrequencies);
     response.setContentType("application/json;");
-    response.getWriter().println(json);
+    response.getWriter().println(json); 
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    FILENAME = getParameter(request, "file-input", "");
-    response.sendRedirect("/network.html"); // is there a way to put down the website that sent the request?
+    filename = getParameter(request, "file-input", "");
+    response.sendRedirect("/network.html");
   }
 
   private String convertToJsonUsingGson(ArrayList<PCAPdata> data) {
