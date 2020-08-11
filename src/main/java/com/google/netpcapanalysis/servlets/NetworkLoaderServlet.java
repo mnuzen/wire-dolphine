@@ -53,8 +53,8 @@ import java.io.IOException;
 import java.io.*;
 
 /** Servlet that retrieves and returns frequencies. */
-@WebServlet("/PCAP-freq-loader")
-public class FrequencyLoaderServlet extends HttpServlet {
+@WebServlet("/PCAP-net-loader")
+public class NetworkLoaderServlet extends HttpServlet {
   private String filename;
   private PCAPDao data = new PCAPDaoImpl();
 
@@ -63,6 +63,7 @@ public class FrequencyLoaderServlet extends HttpServlet {
     FrequencyDao freq = new FrequencyDaoImpl(data.getPCAPObjects(filename));
     freq.loadFrequency();
     ArrayList<PCAPdata> finalFrequencies = freq.getFinalFreq(); 
+    // add a sort function
 
     String json = convertToJsonUsingGson(finalFrequencies);
     response.setContentType("application/json;");

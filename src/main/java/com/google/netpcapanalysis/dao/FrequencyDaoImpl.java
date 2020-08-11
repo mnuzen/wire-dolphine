@@ -30,9 +30,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class FrequencyDaoImpl implements FrequencyDao {
-  private ArrayList<PCAPdata> allPCAP = new ArrayList<PCAPdata>(); 
-  private ArrayList<PCAPdata> finalFreq = new ArrayList<PCAPdata>();
-  private HashMap<String, PCAPdata> finalMap = new HashMap<String, PCAPdata>();
+  private ArrayList<PCAPdata> allPCAP; 
+  private ArrayList<PCAPdata> finalFreq;
+  private HashMap<String, PCAPdata> finalMap;
   private String myip = "";
   private String filename;  
   private boolean first = true;
@@ -58,7 +58,7 @@ public class FrequencyDaoImpl implements FrequencyDao {
     for (PCAPdata packet : allPCAP) {
       // source
       if (hm.containsKey(packet.source)) { 
-        // if IP already exists, increment
+        // if IP already exists, increment by 1
         hm.merge(packet.source, 1, Integer::sum);
       }
       else {
@@ -74,8 +74,8 @@ public class FrequencyDaoImpl implements FrequencyDao {
       }
     }
     // find largest recurrence
-    String key = Collections.max(hm.entrySet(), Map.Entry.comparingByValue()).getKey();
-    myip = key;
+    myip = Collections.max(hm.entrySet(), Map.Entry.comparingByValue()).getKey();
+    //myip = key;
   }
 
   public String getMyIP() {
@@ -84,12 +84,14 @@ public class FrequencyDaoImpl implements FrequencyDao {
 
   /* Fills out finalMap with frequencies based on IP address only (not protocol). */
   private void processData(){
+    finalMap = new HashMap<String, PCAPdata>();
     for (PCAPdata packet : allPCAP) {
-      String outip = "";
       String srcip = packet.source;
       String dstip = packet.destination;
+      String protocol = "";
+      String outip = "";
 
-      if (srcip == myip) {
+      if (srcip.equals(myip)) {
         outip = dstip;
       }
       else {
@@ -104,7 +106,7 @@ public class FrequencyDaoImpl implements FrequencyDao {
       }
       else {
         PCAPdata tempPCAP = new PCAPdata(myip, outip, "", "", packet.protocol, packet.size, packet.flagged, packet.frequency); 
-        finalMap.put(outip, packet);
+        finalMap.put(outip, tempPCAP);
       }
     }
   }
@@ -113,11 +115,24 @@ public class FrequencyDaoImpl implements FrequencyDao {
     return finalMap;
   }
 
-  /* Transfers all unique connections to an arraylist for return. */
+  /* Transfers all unique connections to an arraylist and sorts for return. */
   private void putFinalFreq() {
+    finalFreq = new ArrayList<PCAPdata>();
     for (PCAPdata packet : finalMap.values()) {
       finalFreq.add(packet);
     }
+
+    // sort by destination ip addresses
+    Collections.sort(finalFreq, new Comparator<PCAPdata>() {
+      @Override
+      public int compare(PCAPdata p1, PCAPdata p2) {
+        String[] ip1 = p1.destination.split("\\.");
+        String ipFormatted1 = String.format("%3s.%3s.%3s.%3s", ip1[0],ip1[1],ip1[2],ip1[3]);
+        String[] ip2 = p2.destination.split("\\.");
+        String ipFormatted2 = String.format("%3s.%3s.%3s.%3s",  ip2[0],ip2[1],ip2[2],ip2[3]);
+        return ipFormatted1.compareTo(ipFormatted2);
+      }
+    });
   }
 
   public ArrayList<PCAPdata> getFinalFreq() {
