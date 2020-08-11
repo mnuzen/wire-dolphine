@@ -28,8 +28,8 @@ import java.net.URL;
 
 /* Compares file2.pcap's parsed results to hard-coded results. IP1 and IP2 addresses are located in hidden text file and retrieved as a stream. */
 public class FrequencyDaoImplTest {
-  public FrequencyDao freq;
-  public String PCAPNAME = "files/file2.pcap";
+  private FrequencyDao freq;
+  private String PCAPNAME = "files/file2.pcap";
   private String FILENAME = "files/file2.txt";
 
   private String IP1;

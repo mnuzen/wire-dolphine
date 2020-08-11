@@ -30,12 +30,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class FrequencyDaoImpl implements FrequencyDao {
-  private ArrayList<PCAPdata> allPCAP = new ArrayList<PCAPdata>(); 
-  private ArrayList<PCAPdata> finalFreq = new ArrayList<PCAPdata>();
-  private HashMap<String, PCAPdata> finalMap = new HashMap<String, PCAPdata>();
+  private ArrayList<PCAPdata> allPCAP; 
+  private ArrayList<PCAPdata> finalFreq;
+  private HashMap<String, PCAPdata> finalMap;
+
   private String myip = "";
-  private String filename;  
   private boolean first = true;
+  private int NUM_NODES = 15;
 
   public FrequencyDaoImpl(ArrayList<PCAPdata> packets) {
     allPCAP = packets; 
@@ -74,8 +75,7 @@ public class FrequencyDaoImpl implements FrequencyDao {
       }
     }
     // find largest recurrence
-    String key = Collections.max(hm.entrySet(), Map.Entry.comparingByValue()).getKey();
-    myip = key;
+    myip = Collections.max(hm.entrySet(), Map.Entry.comparingByValue()).getKey();
   }
 
   public String getMyIP() {
@@ -84,12 +84,14 @@ public class FrequencyDaoImpl implements FrequencyDao {
 
   /* Fills out finalMap with frequencies based on IP address only (not protocol). */
   private void processData(){
+    finalMap = new HashMap<String, PCAPdata>();
     for (PCAPdata packet : allPCAP) {
-      String outip = "";
       String srcip = packet.source;
       String dstip = packet.destination;
+      String protocol = "";
+      String outip = "";
 
-      if (srcip == myip) {
+      if (srcip.equals(myip)) {
         outip = dstip;
       }
       else {
@@ -104,7 +106,7 @@ public class FrequencyDaoImpl implements FrequencyDao {
       }
       else {
         PCAPdata tempPCAP = new PCAPdata(myip, outip, "", "", packet.protocol, packet.size, packet.flagged, packet.frequency); 
-        finalMap.put(outip, packet);
+        finalMap.put(outip, tempPCAP);
       }
     }
   }
@@ -115,8 +117,27 @@ public class FrequencyDaoImpl implements FrequencyDao {
 
   /* Transfers all unique connections to an arraylist for return. */
   private void putFinalFreq() {
+    finalFreq = new ArrayList<PCAPdata>();
+    ArrayList<PCAPdata> allValues = new ArrayList<PCAPdata>();
+
     for (PCAPdata packet : finalMap.values()) {
-      finalFreq.add(packet);
+      allValues.add(packet);
+    }
+    // sort frequencies
+    Collections.sort(allValues, new Comparator<PCAPdata>() {
+      @Override
+      public int compare(PCAPdata p1, PCAPdata p2) {
+        Integer freq1 = p1.frequency;
+        Integer freq2 = p2.frequency;
+        return freq2.compareTo(freq1); // sorted frequencies in reverse (largest numbers first)
+      }
+    });
+
+    // add top NUM_NODE frequencies
+    for (int i = 0; i < NUM_NODES; i++) {
+      if (i < allValues.size()){
+        finalFreq.add(allValues.get(i));
+      }
     }
   }
 
