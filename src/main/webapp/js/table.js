@@ -3,16 +3,17 @@ $(document).ready(function () {
         type: 'GET',
         dataType: 'json',
         async: false,
-        url: '/data', //table.json for hardcode
+        url: '/data',
         success: function (data) {
             for (i in data) {
+
                 var table = document.getElementById("table");
                 var row = document.createElement("tr");
 
-                if (data[i].flagged == true) {
+                if (data[i].flagged.toLowerCase() === "true") { //change for string value in malicous final
                     row.setAttribute("id", "flagged");
                 }
-                else if (data[i].protocol.localeCompare("HTTP") == 0) {
+                else if (data[i].protocol.toLowerCase() === "http") {
                     row.setAttribute("id", "warning");
                 }
 

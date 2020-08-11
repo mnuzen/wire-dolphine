@@ -19,14 +19,19 @@
 
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
+  
+   <!-- Custom styles for this page -->
+   <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
   <style>
     #flagged {
-      background-color: brown;
+      background-color: #e74a3b;
+      color: #fff
     }
 
     #warning {
-      background-color: yellow;
+      background-color: #f6c23e;
+      color: #fff
     }
   </style>
 </head>
@@ -151,51 +156,15 @@
     <div class="container-fluid">
 
       <!-- Page Heading -->
-      <h1 class="h3 mb-2 text-gray-800">Tables</h1>
-      <p class="mb-4"> Yellow lines show unencypted protocol, Red lines show flagged IP address.</p>
+      <h1 class="h3 mb-2 text-gray-800">View your packets</h1>
 
       <form action="/load_mock_data" method="post">
-        <label for="mockdata">Load Mock Data from data.csv located in /webapp</label>
+        <label for="mockdata">Load Mock Data</label>
         <input type="submit" name="mockdata" value="Click Me!"/>
       </form>
 
 
-      <!-- Temp Data Uploader -->
-      <div id="form">
-        <h1>Upload Data</h1>
-        <form action="/data" method="POST">
-          <p>Data:</p>
-          <label for="source">source:</label>
-          <input type="text" name="source" required><br>
 
-          <label for="destination">destination:</label>
-          <input type="text" name="destination" required><br>
-
-          <label for="domain">domain:</label>
-          <input type="text" name="domain" required><br>
-
-          <label for="location">location:</label>
-          <input type="text" name="location" required><br>
-
-          <label for="size">size:</label>
-          <input type="number" name="size" required><br>
-
-          <label for="protocol">protocol:</label>
-          <input type="text" name="protocol" required><br>
-
-          <label for="frequency">frequency:</label>
-          <input type="text" name="frequency" required><br>
-
-          <label for="flagged">flagged:</label>
-          <select id="cars" name="flagged">
-            <option value="false">False</option>
-            <option value="true">True</option>
-          </select>
-
-          <br/>
-          <input type="submit"/>
-        </form>
-      </div>
 
       <!-- DataTales Example -->
       <div class="card shadow mb-4">
@@ -279,9 +248,8 @@
 <script src="vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 <script src="js/table.js"></script>
+<script src="vendor/chart.js/Chart.min.js"></script>
 
 <!-- Page level custom scripts -->
-<script src="js/demo/datatables-demo.js"></script>
-
 </body>
 </html>
