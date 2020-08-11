@@ -1,5 +1,6 @@
 package com.google.netpcapanalysis.dao;
 
+import com.google.netpcapanalysis.models.Flagged;
 import com.google.netpcapanalysis.models.PCAPdata;
 import java.util.*; 
 import java.io.*;
@@ -76,7 +77,7 @@ public class PCAPParserDaoImpl implements PCAPParserDao {
         }
         
         // PCAPdata takes in (source, destination, domain, location, protocol, size, flagged, frequency) 
-        PCAPdata rawPCAP = new PCAPdata(srcip, dstip, "", "", protocol, size, false, 1);
+        PCAPdata rawPCAP = new PCAPdata(srcip, dstip, "", "", protocol, size, Flagged.UNKNOWN, 1);
         allPCAP.add(rawPCAP);
       }
       return true;
