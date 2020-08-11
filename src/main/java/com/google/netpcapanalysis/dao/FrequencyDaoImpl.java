@@ -33,18 +33,16 @@ public class FrequencyDaoImpl implements FrequencyDao {
   private ArrayList<PCAPdata> allPCAP = new ArrayList<PCAPdata>(); 
   private ArrayList<PCAPdata> finalFreq = new ArrayList<PCAPdata>();
   private HashMap<String, PCAPdata> finalMap = new HashMap<String, PCAPdata>();
-  private PCAPDao data = new PCAPDaoImpl();
   private String myip = "";
   private String filename;  
   private boolean first = true;
 
-  public FrequencyDaoImpl(String file) { 
-      this.filename = file;
+  public FrequencyDaoImpl(ArrayList<PCAPdata> packets) {
+    allPCAP = packets; 
   }
 
   /* Retrieve all necessary entities, processes, and puts into final arraylist */
-  public void loadFrequency() throws IOException {
-    allPCAP = data.getPCAPObjects(filename);
+  public void loadFrequency() {
     findMyIP();
     processData();
     putFinalFreq();
@@ -78,7 +76,10 @@ public class FrequencyDaoImpl implements FrequencyDao {
     // find largest recurrence
     String key = Collections.max(hm.entrySet(), Map.Entry.comparingByValue()).getKey();
     myip = key;
-    System.out.println("MYIP: " + myip);
+  }
+
+  public String getMyIP() {
+    return myip;
   }
 
   /* Fills out finalMap with frequencies based on IP address only (not protocol). */

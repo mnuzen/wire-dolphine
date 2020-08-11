@@ -38,8 +38,6 @@ public class PCAPParserDaoImplTest {
     // Parse set IP addresses from hidden text file
     Path path = Paths.get(FILENAME);
     InputStream stream = PCAPParserDaoImplTest.class.getClassLoader().getResourceAsStream(path.toString());
-    System.out.println("Path: " + path.toString());  //InputStream stream = PCAPParserDaoImplTest.class.getResourceAsStream(path.toString());
-    //InputStream stream = this.getClass().getResourceAsStream(FILENAME);
     
     String text = IOUtils.toString(stream, StandardCharsets.UTF_8);
     String[] values = text.split(",");

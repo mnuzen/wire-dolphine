@@ -56,10 +56,11 @@ import java.io.*;
 @WebServlet("/PCAP-freq-loader")
 public class FrequencyLoaderServlet extends HttpServlet {
   private String filename;
+  private PCAPDao data = new PCAPDaoImpl();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    FrequencyDao freq = new FrequencyDaoImpl(filename);
+    FrequencyDao freq = new FrequencyDaoImpl(data.getPCAPObjects(filename));
     freq.loadFrequency();
     ArrayList<PCAPdata> finalFrequencies = freq.getFinalFreq(); 
 
