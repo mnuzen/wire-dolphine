@@ -59,9 +59,9 @@ function createIPNetwork(){
       }
 
       // layer 3 -- maximum of 125 nodes on the graph (with CLUSTER_SIZE of 5) since graph slows with more nodes
-      /*for (var j = CLUSTER_SIZE+1; j <= Math.pow(CLUSTER_SIZE, 2); j++) {
-        helper(j);
-      }*/
+      for (var j = CLUSTER_SIZE+1; j <= Math.pow(CLUSTER_SIZE, 2); j++) {
+        addNodes(j);
+      }
 
       function addDummies(node) {
         for (var i = 0; i < CLUSTER_SIZE; i++) { 
@@ -132,21 +132,6 @@ function createIPNetwork(){
     window.addEventListener("load", () => {draw();});
   });
 } // end IP network
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /** Create visualization network graph based on data in datastore without descriptive labels.*/

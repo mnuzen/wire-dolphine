@@ -63,6 +63,7 @@ public class FrequencyDaoImplTest {
 
     freq = new FrequencyDaoImpl(data);
     freq.loadFrequency();
+    System.out.println("MOST FREQ: " + freq.getMyIP());
   }
 
   /* Checks the most recurrent IP address */
