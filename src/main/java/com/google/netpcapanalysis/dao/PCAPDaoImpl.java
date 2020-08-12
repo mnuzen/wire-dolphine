@@ -14,6 +14,10 @@ import com.google.netpcapanalysis.models.Flagged;
 import com.google.netpcapanalysis.models.MaliciousPacket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.HashMap;
+import java.util.Collections;
+import java.util.Map;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -32,12 +36,11 @@ public class PCAPDaoImpl implements PCAPDao {
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   private final String cacheEntity= "Malicious_IP_Cache";
 
-  
-
   public PCAPDaoImpl() {
 
   }
 
+ //gets all PCAP data under a given entity from datastore
   public ArrayList<PCAPdata> getPCAPObjects(String searchEntity) {
     ArrayList<PCAPdata> dataTable = new ArrayList<>();
 
@@ -62,6 +65,7 @@ public class PCAPDaoImpl implements PCAPDao {
     return dataTable;
   }
 
+  //uploades a given databack to datastore under the given name 
   public void setPCAPObjects(PCAPdata data, String searchEntity) {
     Entity pcapEntity = new Entity(searchEntity);
 
@@ -81,7 +85,7 @@ public class PCAPDaoImpl implements PCAPDao {
   public void updateFlagged(String searchEntity, PCAPdata oldData, String flagged) {
     
     ArrayList<PCAPdata> dataTable = new ArrayList<>();
-
+  //add inverse for when myip is not source
     Filter propertyFilter = CompositeFilterOperator.and(
         FilterOperator.EQUAL.of("Source", oldData.source),
         FilterOperator.EQUAL.of("Destination", oldData.destination));
@@ -134,6 +138,58 @@ public class PCAPDaoImpl implements PCAPDao {
       datastore.put(updatedEntity);
     }
   }
+
+ //Gets most use IP in PCAPdata
+ private String findMyIP(ArrayList<PCAPdata> allData) {
+  String myip = "";
+  HashMap<String, Integer> hm = new HashMap<String, Integer>();
+  for (PCAPdata packet : allData) {
+    // source
+    if (hm.containsKey(packet.source)) { 
+      // if IP already exists, increment
+      hm.merge(packet.source, 1, Integer::sum);
+    }
+    else {
+      hm.put(packet.source, 1);
+    }
+    // destination
+    if (hm.containsKey(packet.destination)) { 
+      // if IP already exists, increment
+      hm.merge(packet.destination, 1, Integer::sum);
+    }
+    else {
+      hm.put(packet.destination, 1);
+    }
+  }
+  // find largest recurrence
+  myip = Collections.max(hm.entrySet(), Map.Entry.comparingByValue()).getKey();
+  return myip;
+}
+
+//Finds all unique IPs and sets myip to source
+public ArrayList<PCAPdata> getUniqueIPs(ArrayList<PCAPdata> allData){
+  HashMap<String, PCAPdata> finalMap = new HashMap<String, PCAPdata>();
+  String myip = findMyIP(allData);;
+  String outip = "";
+
+  for (PCAPdata packet : allData) {
+
+    //swaps packet order based on myip
+    if (packet.source.equals(myip)) {
+      outip = packet.destination;
+    }
+    else {
+      outip = packet.source;
+    }
+    
+    //puts data into map if not already there
+    if (!finalMap.containsKey(outip)){
+      PCAPdata tempPCAP = new PCAPdata(myip, outip, "", "", packet.protocol, packet.size, packet.flagged, packet.frequency); 
+      finalMap.put(outip, tempPCAP);
+    }
+  }
+  return (new ArrayList<PCAPdata>(finalMap.values()));
+}
 
   public String searchMaliciousDB(String searchIP) {
    

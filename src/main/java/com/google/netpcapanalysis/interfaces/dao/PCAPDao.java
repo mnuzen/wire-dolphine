@@ -11,6 +11,9 @@ public interface PCAPDao {
     public void updateFlagged(String searchEntity, PCAPdata oldData, String flagged);
     public void updateDomain(String searchEntity, PCAPdata oldData, String domain);
     public void updateLocation(String searchEntity, PCAPdata oldData, String location);
+
+    public ArrayList<PCAPdata> getUniqueIPs(ArrayList<PCAPdata> allData);
+
     public String searchMaliciousDB(String seachIP);
     public void setMaliciousIPObjects(MaliciousPacket data);
 }
