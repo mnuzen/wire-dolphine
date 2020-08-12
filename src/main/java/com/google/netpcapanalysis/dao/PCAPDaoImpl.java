@@ -25,7 +25,8 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.FilterOperator;
-
+import com.google.appengine.api.datastore.Query.CompositeFilter;
+import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 
 public class PCAPDaoImpl implements PCAPDao {
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -74,6 +75,64 @@ public class PCAPDaoImpl implements PCAPDao {
     pcapEntity.setProperty("Frequency", data.frequency);
 
     datastore.put(pcapEntity);
+  }
+
+  //Updates all PCAP entities that match Source and Destination IP new String input
+  public void updateFlagged(String searchEntity, PCAPdata oldData, String flagged) {
+    
+    ArrayList<PCAPdata> dataTable = new ArrayList<>();
+
+    Filter propertyFilter = CompositeFilterOperator.and(
+        FilterOperator.EQUAL.of("Source", oldData.source),
+        FilterOperator.EQUAL.of("Destination", oldData.destination));
+
+    Query query = new Query(searchEntity).setFilter(propertyFilter);
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity updatedEntity : results.asIterable()) {
+    
+      updatedEntity.setProperty("Flagged", flagged);
+  
+      datastore.put(updatedEntity);
+    }
+  }
+
+  public void updateDomain(String searchEntity, PCAPdata oldData, String domain) {
+    
+    ArrayList<PCAPdata> dataTable = new ArrayList<>();
+
+    Filter propertyFilter = CompositeFilterOperator.and(
+        FilterOperator.EQUAL.of("Source", oldData.source),
+        FilterOperator.EQUAL.of("Destination", oldData.destination));
+
+    Query query = new Query(searchEntity).setFilter(propertyFilter);
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity updatedEntity : results.asIterable()) {
+    
+      updatedEntity.setProperty("Domain", domain);
+  
+      datastore.put(updatedEntity);
+    }
+  }
+
+  public void updateLocation(String searchEntity, PCAPdata oldData, String location) {
+    
+    ArrayList<PCAPdata> dataTable = new ArrayList<>();
+
+    Filter propertyFilter = CompositeFilterOperator.and(
+        FilterOperator.EQUAL.of("Source", oldData.source),
+        FilterOperator.EQUAL.of("Destination", oldData.destination));
+
+    Query query = new Query(searchEntity).setFilter(propertyFilter);
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity updatedEntity : results.asIterable()) {
+    
+      updatedEntity.setProperty("Location", location);
+  
+      datastore.put(updatedEntity);
+    }
   }
 
   public String searchMaliciousDB(String searchIP) {

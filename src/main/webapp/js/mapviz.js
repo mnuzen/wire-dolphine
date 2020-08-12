@@ -64,9 +64,16 @@ async function loadMapStatistics(data) {
   const byRequestNum = (a, b) => data[a] - data[b];
   const mostFreqCountry = Object.keys(data).sort(byRequestNum).pop();
   const mostFreqPercentage = (100.0 * data[mostFreqCountry] / totalRequests).toFixed(1);
+  const unknowns = data.unknown || 0;
+
   $('#request-num').text(totalRequests);
   $('#request-countries').text(totalCountries);
   $('#mostFreqCountry').text(mostFreqCountry);
   $('#mostFreqCountryNum').text(data[mostFreqCountry]);
   $('#mostFreqCountryPercentage').text(mostFreqPercentage);
+  if (unknowns > 0) {
+    $('#unknownPackets').text(unknowns);
+  } else {
+    $('#unknownPacketBullet').remove();
+  }
 }
