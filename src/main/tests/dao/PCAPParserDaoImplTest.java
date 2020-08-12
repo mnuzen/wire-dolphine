@@ -38,8 +38,6 @@ public class PCAPParserDaoImplTest {
     // Parse set IP addresses from hidden text file
     Path path = Paths.get(FILENAME);
     InputStream stream = PCAPParserDaoImplTest.class.getClassLoader().getResourceAsStream(path.toString());
-    System.out.println("Path: " + path.toString());  //InputStream stream = PCAPParserDaoImplTest.class.getResourceAsStream(path.toString());
-    //InputStream stream = this.getClass().getResourceAsStream(FILENAME);
     
     String text = IOUtils.toString(stream, StandardCharsets.UTF_8);
     String[] values = text.split(",");
@@ -49,7 +47,6 @@ public class PCAPParserDaoImplTest {
     // Retrieve PCAPParser information
     parser = new PCAPParserDaoImpl(PCAPNAME);
     parser.parseRaw();
-    parser.processData();
   }
 
   @Test
@@ -104,24 +101,6 @@ public class PCAPParserDaoImplTest {
 
     // compare
     assertEquals(protocols, comparison);
-  }
-
-  /* Verify that the frequency of connections has been properly incremented after data has been processed. */
-  @Test
-  public void testFrequency() {
-    HashMap<String, PCAPdata> finalPCAP = parser.getFinalPCAP();
-    int frequency = finalPCAP.get(IP2).getFrequency();
-    int comparison = FREQ;
-    assertEquals(frequency, comparison);
-  }
-
-  /* Checks number of unique packets. */
-  @Test
-  public void testDuplicates() {
-    HashMap<String, PCAPdata> finalPCAP = parser.getFinalPCAP();
-    int size = finalPCAP.size();
-    int comparison = SIZE;
-    assertEquals(size, comparison);
   }
 
 }
