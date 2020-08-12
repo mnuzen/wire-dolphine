@@ -8,6 +8,7 @@ import com.google.netpcapanalysis.interfaces.dao.GeolocationDao;
 import com.google.netpcapanalysis.interfaces.dao.KeystoreDao;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.models.PCAPdata;
+import com.google.netpcapanalysis.utils.NetUtils;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.HashMap;
@@ -36,7 +37,7 @@ public class KeystoreServlet extends HttpServlet {
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String id = getParameter(request, "key", "");
+    String id = NetUtils.getParameter(request, "key", "");
     String key = "";
 
     if (id.equals("mapsAPIKey")) {
@@ -49,18 +50,5 @@ public class KeystoreServlet extends HttpServlet {
     response.setContentType("text/html;");
     response.setCharacterEncoding("UTF-8");
     response.getWriter().println(key);
-  }
-
-
-  /**
-   * @return the request parameter, or the default value if the parameter was not specified by the
-   * client
-   */
-  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
-    String value = request.getParameter(name);
-    if (value == null) {
-      return defaultValue;
-    }
-    return value;
   }
 }

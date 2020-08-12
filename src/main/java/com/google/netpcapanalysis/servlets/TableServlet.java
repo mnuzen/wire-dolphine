@@ -19,7 +19,6 @@ public class TableServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
     String json = convertToJsonUsingGson(datastore.getPCAPObjects(FILE_NAME));
     response.setContentType("application/json;");
     response.getWriter().println(json);
