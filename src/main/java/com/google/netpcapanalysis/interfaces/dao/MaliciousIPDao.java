@@ -5,6 +5,6 @@ import java.util.ArrayList;
 
 public interface MaliciousIPDao {
 
-  public void run(String searchEntity);
+  public ArrayList<PCAPdata> run(ArrayList<PCAPdata> allData);
     
 }

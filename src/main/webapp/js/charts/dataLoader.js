@@ -1,5 +1,5 @@
 function loadData() {
-  fetch('/data')
+  fetch('/data-table')
     .then(response => response.json())
     .then((data) => {
       maliciousCount = {

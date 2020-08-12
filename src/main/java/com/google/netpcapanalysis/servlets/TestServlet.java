@@ -25,8 +25,7 @@ public class TestServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      MaliciousIPDao lookup = new MaliciousIPDaoImpl();
-      lookup.run(FILE_NAME);
+      
   
         response.sendRedirect("/index.html");
     }

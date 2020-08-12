@@ -3,7 +3,7 @@ $(document).ready(function () {
         type: 'GET',
         dataType: 'json',
         async: false,
-        url: '/data',
+        url: '/data-table',
         success: function (data) {
             for (i in data) {
 

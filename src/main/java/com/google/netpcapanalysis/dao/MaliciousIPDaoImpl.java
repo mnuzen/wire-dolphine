@@ -43,7 +43,6 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
             data.flagged = Flagged.FALSE;
         }
         else{
-            System.out.println("Else statement");
             try {
                 result = Unirest.get("https://signals.api.auth0.com/badip/" + data.destination)
                         .header("X-Auth-Token", AUTH0_API_KEY)
@@ -70,8 +69,7 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
                 }
     
             } catch (UnirestException e) {
-                System.out.println("IP lookup failed");
-                // TODO Auto-generated catch block
+                data.flagged = Flagged.ERROR; 
                 e.printStackTrace();
             }
         }
@@ -92,7 +90,6 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
             result = Flagged.FALSE;
         }
         else{
-            System.out.println("Else statement");
             try {
                 apiResult = Unirest.get("https://signals.api.auth0.com/badip/" + ip)
                         .header("X-Auth-Token", AUTH0_API_KEY)
@@ -119,24 +116,20 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
                 }
     
             } catch (UnirestException e) {
-                System.out.println("IP lookup failed");
                 result = Flagged.ERROR;
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
         return result;
     }
     
-    public void run(String searchEntity){
-        PCAPDao datastore = new PCAPDaoImpl();
-        ArrayList<PCAPdata> allData = datastore.getPCAPObjects(searchEntity); 
-        ArrayList<PCAPdata> uniqueData = datastore.getUniqueIPs(allData); 
+    public ArrayList<PCAPdata> run(ArrayList<PCAPdata> allData){
         String flaggeValue;
 
-        for(PCAPdata packet : uniqueData){
-            flaggeValue = isMalicious(packet.destination);
-            datastore.updateFlagged(searchEntity, packet, flaggeValue);
+        for(PCAPdata packet : allData){
+            packet = isMalicious(packet);
         }
+
+        return allData;
     }
 }
