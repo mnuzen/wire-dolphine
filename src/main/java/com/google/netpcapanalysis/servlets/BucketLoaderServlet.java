@@ -22,8 +22,8 @@ import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.dao.PCAPParserDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPParserDao;
 
-import com.google.netpcapanalysis.dao.FrequencyDaoImpl;
-import com.google.netpcapanalysis.interfaces.dao.FrequencyDao;
+import com.google.netpcapanalysis.dao.BucketDaoImpl;
+import com.google.netpcapanalysis.interfaces.dao.BucketDao;
 
 import io.pkts.PacketHandler;
 import io.pkts.Pcap;
@@ -53,19 +53,16 @@ import java.io.IOException;
 import java.io.*;
 
 /** Servlet that retrieves and returns frequencies. */
-@WebServlet("/PCAP-net-loader")
-public class NetworkLoaderServlet extends HttpServlet {
+@WebServlet("/PCAP-bucket")
+public class BucketLoaderServlet extends HttpServlet {
   private String filename;
   private PCAPDao data = new PCAPDaoImpl();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    FrequencyDao freq = new FrequencyDaoImpl(data.getPCAPObjects(filename));
-    freq.loadFrequency();
-    ArrayList<PCAPdata> finalFrequencies = freq.getFinalFreq(); 
-    // add a sort function
-
-    String json = convertToJsonUsingGson(finalFrequencies);
+    BucketDao bucket = new BucketDaoImpl(data.getPCAPObjects(filename));
+    LinkedHashMap<String, int[]> bucketData = bucket.getBuckets();
+    String json = convertToJsonUsingGson(bucketData);
     response.setContentType("application/json;");
     response.getWriter().println(json); 
   }
@@ -73,10 +70,10 @@ public class NetworkLoaderServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     filename = getParameter(request, "file-input", "");
-    response.sendRedirect("/network.html");
+    response.sendRedirect("/bucket.html");
   }
 
-  private String convertToJsonUsingGson(ArrayList<PCAPdata> data) {
+  private String convertToJsonUsingGson(LinkedHashMap<String, int[]> data) {
     Gson gson = new Gson();
     String json = gson.toJson(data);
     return json;

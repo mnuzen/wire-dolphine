@@ -33,9 +33,10 @@ public class FrequencyDaoImpl implements FrequencyDao {
   private ArrayList<PCAPdata> allPCAP; 
   private ArrayList<PCAPdata> finalFreq;
   private HashMap<String, PCAPdata> finalMap;
+
   private String myip = "";
-  private String filename;  
   private boolean first = true;
+  private int NUM_NODES = 15;
 
   public FrequencyDaoImpl(ArrayList<PCAPdata> packets) {
     allPCAP = packets; 
@@ -58,13 +59,12 @@ public class FrequencyDaoImpl implements FrequencyDao {
     for (PCAPdata packet : allPCAP) {
       // source
       if (hm.containsKey(packet.source)) { 
-        // if IP already exists, increment by 1
+        // if IP already exists, increment
         hm.merge(packet.source, 1, Integer::sum);
       }
       else {
         hm.put(packet.source, 1);
       }
-
       // destination
       if (hm.containsKey(packet.destination)) { 
         // if IP already exists, increment
@@ -115,109 +115,30 @@ public class FrequencyDaoImpl implements FrequencyDao {
     return finalMap;
   }
 
-  /* Transfers all unique connections to an arraylist and sorts for return. */
+  /* Transfers all unique connections to an arraylist for return. */
   private void putFinalFreq() {
     finalFreq = new ArrayList<PCAPdata>();
-    if (finalMap.size() > 50) {
-      condenseByteOne();
+    ArrayList<PCAPdata> allValues = new ArrayList<PCAPdata>();
+
+    for (PCAPdata packet : finalMap.values()) {
+      allValues.add(packet);
     }
-    else {
-      for (PCAPdata packet : finalMap.values()) {
-        finalFreq.add(packet);
-      }
-    }
-    sortIPs();
-  }
-
-  private void condenseByteOne() {
-      HashMap<String, ArrayList<PCAPdata>> bytes = new HashMap<String, ArrayList<PCAPdata>>();
-      // extract all unique first bytes
-      for (PCAPdata packet : finalMap.values()) {
-        String[] ip = packet.destination.split("\\.");
-        String firstByte = ip[0];
-        if (bytes.containsKey(firstByte)) {
-          ArrayList<PCAPdata> arr = bytes.get(firstByte);
-          arr.add(packet);
-        }
-        else {
-          ArrayList<PCAPdata> arr = new ArrayList<PCAPdata>();
-          arr.add(packet);
-          bytes.put(firstByte, arr);
-        }
-      }
-
-      // put all unique first bytes into finalFreq with longest common prefixes as destinations
-      for (String key : bytes.keySet()) {
-        ArrayList<PCAPdata> arr = bytes.get(key);
-
-        // if size if 1, just put that packet in
-        if (arr.size() == 1) {
-          PCAPdata temp = arr.get(0);
-          finalFreq.add(temp);
-        }
-
-        // sum up all frequencies in that byte
-        else {
-          int freq = 0;
-          String[] dests = new String[arr.size()];
-          int i = 0;
-          for (PCAPdata packet : arr) {
-            freq += packet.frequency;
-            dests[i] = packet.destination;
-            i++;
-          }
-
-          // domain should be longest common prefix
-          String prefix = longestCommonPrefix(dests)+".";
-
-          // PCAPdata takes in (source, destination, domain, location, protocol, size, flagged, frequency) 
-          PCAPdata temp = new PCAPdata(myip, prefix, "", "", "IPv4", 1, "false", freq);
-          finalFreq.add(temp);
-        }
-      }
-    }
-  
-
-  /* Finds longest common prefix between an array of strings in linear time: the algorithm makes log(m) iterations with m*n comparisons 
-     each time, meaning our complexity would be O(s*log(m)) where S = sum of all chars in strings, n = number of strings, m = length of strings*/
-  private String longestCommonPrefix(String[] strs) {
-    if (strs == null || strs.length == 0)
-      return "";
-    int minLen = Integer.MAX_VALUE;
-    for (String str : strs)
-      minLen = Math.min(minLen, str.length());
-    int low = 1;
-    int high = minLen;
-    while (low <= high) {
-      int middle = (low + high) / 2;
-      if (isCommonPrefix(strs, middle))
-        low = middle + 1;
-      else
-        high = middle - 1;
-    }
-    return strs[0].substring(0, (low + high) / 2);
-  }
-
-  private boolean isCommonPrefix(String[] strs, int len){
-    String str1 = strs[0].substring(0,len);
-    for (int i = 1; i < strs.length; i++)
-      if (!strs[i].startsWith(str1))
-        return false;
-    return true;
-  }
-
-  private void sortIPs() {
-    // sort by destination ip addresses
-    Collections.sort(finalFreq, new Comparator<PCAPdata>() {
+    // sort frequencies
+    Collections.sort(allValues, new Comparator<PCAPdata>() {
       @Override
       public int compare(PCAPdata p1, PCAPdata p2) {
-        String[] ip1 = p1.destination.split("\\.");
-        String ipFormatted1 = String.format("%3s", ip1[0]);
-        String[] ip2 = p2.destination.split("\\.");
-        String ipFormatted2 = String.format("%3s",  ip2[0]);
-        return ipFormatted1.compareTo(ipFormatted2);
+        Integer freq1 = p1.frequency;
+        Integer freq2 = p2.frequency;
+        return freq2.compareTo(freq1); // sorted frequencies in reverse (largest numbers first)
       }
     });
+
+    // add top NUM_NODE frequencies
+    for (int i = 0; i < NUM_NODES; i++) {
+      if (i < allValues.size()){
+        finalFreq.add(allValues.get(i));
+      }
+    }
   }
 
   public ArrayList<PCAPdata> getFinalFreq() {
