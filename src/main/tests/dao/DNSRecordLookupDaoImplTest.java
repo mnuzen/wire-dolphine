@@ -2,17 +2,16 @@ package dao;
 
 import static org.junit.Assert.assertEquals;
 
-import com.google.netpcapanalysis.dao.GeolocationDaoImpl;
 import com.google.netpcapanalysis.dao.ReverseDNSLookupDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.ReverseDNSLookupDao;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ReverseDNSLookupDaoImplTest {
+public class DNSRecordLookupDaoImplTest {
   public static ReverseDNSLookupDao dns;
 
   public void checkDns(String url, String expected) {
-    assertEquals(expected, dns.lookup(url).record);
+    assertEquals(expected, dns.lookup(url).getDomain());
   }
 
   @Before

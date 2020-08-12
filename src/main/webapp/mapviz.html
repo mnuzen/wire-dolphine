@@ -28,7 +28,7 @@
 <div id="wrapper">
 
   <!-- Sidebar -->
-  <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+  <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" style="z-index: 10000;">
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
@@ -42,7 +42,7 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
+    <li class="nav-item">
       <a class="nav-link" href="index.html">
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>Dashboard</span></a>
@@ -56,19 +56,24 @@
       Explore Your Data
     </div>
 
-    <!-- Nav Item - Map Viz - Jevin -->
-    <li class="nav-item">
-      <a class="nav-link active" href="mapviz.html">
+    <!-- Nav Item - Jevin -->
+    <li class="nav-item active">
+      <a class="nav-link" href="/mapviz.html">
         <i class="fas fa-fw fa-globe-americas"></i>
         <span>Where are your requests going?</span></a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="network.html">
+      <a class="nav-link" href="/domains.html">
+        <i class="fas fa-fw fa-satellite"></i>
+        <span>Who are you sending to?</span></a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/network.html">
         <i class="fas fa-fw fa-project-diagram"></i>
         <span>What does your network look like?</span></a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="tables.html">
+      <a class="nav-link" href="/tables.html">
         <i class="fas fa-fw fa-table"></i>
         <span>View your packets</span></a>
     </li>
@@ -136,7 +141,7 @@
                     </span>
                 <span class="text">Previous</span>
               </a>
-              <a href="network.html" class="btn btn-success btn-icon-split">
+              <a href="/network.html" class="btn btn-success btn-icon-split">
                   <span class="text">Next</span>
 
                   <span class="icon text-white-50">
@@ -183,6 +188,7 @@
                         <li>Packets were sent to <span class="font-weight-bold"
                                                        id="request-countries"></span> countries
                         </li>
+                        <li id="unknownPacketBullet"><span class="font-weight-bold" id="unknownPackets"></span> packets were from unknown locations.</li>
                         <li><span class="font-weight-bold" id="mostFreqCountry"></span> had the most
                           requests with <b><span id="mostFreqCountryNum"></span> (<span
                               id="mostFreqCountryPercentage"></span>%)</b> of all requests.
