@@ -43,4 +43,32 @@ public final class PCAPdata {
     this.frequency++;
   }
 
+  public boolean equals(PCAPdata other) {
+    if (!this.source.equals(other.source)) {
+      return false;
+    }
+    if (!this.destination.equals(other.destination)) {
+      return false;
+    }
+    if (!this.domain.equals(other.domain)) {
+      return false;
+    }
+    if (!this.location.equals(other.location)) {
+      return false;
+    }
+    if (!this.protocol.equals(other.protocol)) {
+      return false;
+    }
+    if (this.size != other.size) {
+      return false;
+    }
+    if (!this.flagged.equals(other.flagged)) {
+      return false;
+    }
+    if (this.frequency != other.frequency) {
+      return false;
+    }
+    return true;
+  }
+
 }

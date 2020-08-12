@@ -51,6 +51,12 @@ public class FrequencyDaoImplTest {
     IP1 = values[0];
     IP2 = values[1];
 
+    setupHelper();
+    freq = new FrequencyDaoImpl(data);
+    freq.loadFrequency();
+  }
+
+  private void setupHelper(){
     // Generate frequency information
     data = new ArrayList<PCAPdata>();
     PCAPdata tempPCAP1 = new PCAPdata(IP1, IP2, "", "", UDP, SIZE, "false", FREQ);
@@ -61,10 +67,6 @@ public class FrequencyDaoImplTest {
 
     PCAPdata tempPCAP3 = new PCAPdata(IP1, IP1, "", "", UDP, SIZE, "false", FREQ);
     data.add(tempPCAP3);
-
-    freq = new FrequencyDaoImpl(data);
-    freq.loadFrequency();
-    System.out.println("MOST FREQ: " + freq.getMyIP());
   }
 
   /* Checks all packets have been put properly. */
