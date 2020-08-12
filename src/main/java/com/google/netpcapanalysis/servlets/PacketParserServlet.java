@@ -49,7 +49,7 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.*;
 
-/** Servlet that processes raw PCAP files within the repo and puts data to Datastore by calling PCAPParserDao. */
+/** Servlet that puts raw PCAP files to Datastore by calling PCAPParserDao. */
 @WebServlet("/PCAP-data")
 public class PacketParserServlet extends HttpServlet {
   HashMap<String, PCAPdata> allPCAP = new HashMap<String, PCAPdata>();
@@ -57,12 +57,10 @@ public class PacketParserServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Retrieve user input to determine file name and local IP address.
+    // Retrieve user input to determine file name.
     String file = getParameter(request, "file-input", "");
-   
     PCAPParserDao parser = new PCAPParserDaoImpl(file);
     parser.parseRaw();
-    parser.processData();
     parser.putDatastore(); 
 
     // Respond with the result.
