@@ -9,31 +9,17 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>PCAP Viewer</title>
+  <title>Domain Visualizer</title>
 
   <!-- Custom fonts for this template-->
-  <link href="js/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="/js/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="/css/domains.css" rel="stylesheet" type="text/css">
   <link
       href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
       rel="stylesheet">
 
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
-  
-   <!-- Custom styles for this page -->
-   <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
-  <style>
-    #flagged {
-      background-color: #e74a3b;
-      color: #fff
-    }
-
-    #warning {
-      background-color: #f6c23e;
-      color: #fff
-    }
-  </style>
 </head>
 
 <body id="page-top">
@@ -76,7 +62,7 @@
         <i class="fas fa-fw fa-globe-americas"></i>
         <span>Where are your requests going?</span></a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item active">
       <a class="nav-link" href="/domains.html">
         <i class="fas fa-fw fa-satellite"></i>
         <span>Who are you sending to?</span></a>
@@ -86,7 +72,7 @@
         <i class="fas fa-fw fa-project-diagram"></i>
         <span>What does your network look like?</span></a>
     </li>
-    <li class="nav-item active">
+    <li class="nav-item">
       <a class="nav-link" href="/tables.html">
         <i class="fas fa-fw fa-table"></i>
         <span>View your packets</span></a>
@@ -141,115 +127,116 @@
 
         <!-- Nav Item - User Information -->
         <li class="nav-item dropdown no-arrow">
-          <a href="/network.html" class="btn btn-primary btn-icon-split mr-2">
-                    <span class="icon text-white-50">
-                      <i class="fas fa-arrow-left"></i>
-                    </span>
+          <a href="#" class="btn btn-primary btn-icon-split mr-2">
+            <span class="icon text-white-50">
+              <i class="fas fa-arrow-left"></i>
+            </span>
             <span class="text">Previous</span>
           </a>
+          <a href="#" class="btn btn-success btn-icon-split">
+            <span class="text">Next</span>
+            <span class="icon text-white-50">
+              <i class="fas fa-arrow-right"></i>
+            </span>
+          </a>
+        </li>
       </ul>
     </nav>
     <!-- End of Topbar -->
 
-
-    <!-- Begin Page Content -->
-    <div class="container-fluid">
-
-      <!-- Page Heading -->
-      <h1 class="h3 mb-2 text-gray-800">View your packets</h1>
-
-      <form action="/load_mock_data" method="post">
-        <label for="mockdata">Load Mock Data</label>
-        <input type="submit" name="mockdata" value="Click Me!"/>
-      </form>
-
-
-
-
-      <!-- DataTales Example -->
-      <div class="card shadow mb-4">
-        <div class="card-header py-3">
-          <h6 class="m-0 font-weight-bold text-primary">PCAP Data</h6>
-        </div>
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-              <thead>
-              <tr>
-                <th>Source</th>
-                <th>Destination</th>
-                <th>Domain</th>
-                <th>Location</th>
-                <th>Protocol</th>
-                <th>Size</th>
-                <th>Flagged</th>
-                <th>Frequency</th>
-              </tr>
-              </thead>
-              <tfoot>
-              <tr>
-                <th>Source</th>
-                <th>Destination</th>
-                <th>Domain</th>
-                <th>Location</th>
-                <th>Protocol</th>
-                <th>Size</th>
-                <th>Flagged</th>
-                <th>Frequency</th>
-              </tr>
-              </tfoot>
-              <tbody id="table">
-
-              </tbody>
-            </table>
+    <!-- Main Content -->
+    <div id="content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card shadow mb-4 ml-4 mr-4">
+            <!-- Card Header - Accordion -->
+            <span class="d-block card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Who are you sending to?</h6>
+            </span>
+            <div class="show" style="">
+              <div class="card-body">
+                <ul>
+                  <li><span class="font-weight-bold" id="cdnPackets"></span> packets were
+                    sent to CDNs.
+                  </li>
+                  <li>
+                    <span class="font-weight-bold" id="domainPackets"></span> packets were
+                    sent to domains.
+                  </li>
+                  <li>
+                    <span class="font-weight-bold" id="percentCDN"></span>% of your packets were
+                    sent from CDNs
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="card shadow  ml-lg-4 mb-lg-4">
+            <span class="d-block card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">CDNs visited</h6>
+            </span>
+            <div class="show" style="">
+              <div class="card-body chart-body">
+                <canvas id="cdnChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card shadow mr-lg-4 mb-lg-4">
+          <span class="d-block card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Domains visited</h6>
+            </span>
+            <div class="show">
+              <div class="card-body chart-body">
+                <canvas id="domainChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End of Main Content -->
+
+      <!-- Footer -->
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Made with <i class="fa fa-heart" aria-hidden="true"></i> by Google Interns</span>
+          </div>
+        </div>
+      </footer>
+      <!-- End of Footer -->
 
     </div>
-    <!-- /.container-fluid -->
+    <!-- End of Content Wrapper -->
 
   </div>
-  <!-- End of Main Content -->
+  <!-- End of Page Wrapper -->
 
-</div>
-<!-- End of Content Wrapper -->
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
 
-<!-- Footer -->
-<footer class="sticky-footer bg-white">
-  <div class="container my-auto">
-    <div class="copyright text-center my-auto">
-      <span>Made with <i class="fa fa-heart" aria-hidden="true"></i> by Google Interns</span>
-    </div>
-  </div>
-</footer>
-<!-- End of Footer -->
+  <!-- Bootstrap core JavaScript-->
+  <script src="js/vendor/jquery/jquery.min.js"></script>
+  <script src="js/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
+  <!-- Core plugin JavaScript-->
+  <script src="js/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-</div>
-<!-- End of Page Wrapper -->
+  <!-- Custom scripts for all pages-->
+  <script src="js/sb-admin-2.min.js"></script>
 
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-  <i class="fas fa-angle-up"></i>
-</a>
+  <!-- PAGE LEVEL CUSTOM SCRIPTS -->
+  <script src="js/vendor/chart.js/Chart.min.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/domains.js"></script>
 
-<!-- Bootstrap core JavaScript-->
-<script src="js/vendor/jquery/jquery.min.js"></script>
-<script src="js/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-<!-- Core plugin JavaScript-->
-<script src="js/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-<!-- Custom scripts for all pages-->
-<script src="js/sb-admin-2.min.js"></script>
-
-<!-- Page level plugins -->
-<script src="vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-<script src="js/table.js"></script>
-<script src="vendor/chart.js/Chart.min.js"></script>
-
-<!-- Page level custom scripts -->
 </body>
+
 </html>
