@@ -116,7 +116,7 @@ public class BucketDaoImplTest {
     return comparison;
   }
 
-  /* Ensures IPs are placed into proper IP classes. */
+  /* Checks IPs are placed into proper IP classes with proper enumeration of protocols. */
   @Test
   public void testBuckets() {
     LinkedHashMap<String, int[]> buckets = bucket.getBuckets();
@@ -132,8 +132,7 @@ public class BucketDaoImplTest {
 
   private LinkedHashMap<String, int[]> bucketHelper() {
     LinkedHashMap<String, int[]> comparison = new LinkedHashMap<String, int[]>();
-    
-    // int[UDP, TCP, IPv4, total]
+    // initialize connection countings for [UDP, TCP, IPv4, total]
     int[] classA = new int[]{0, 0, 0, 0};
     int[] classB = new int[]{2, 1, 0, 3};
     int[] classC = new int[]{0, 0, 0, 0};
