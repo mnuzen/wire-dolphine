@@ -29,6 +29,8 @@ import java.net.URL;
 /* Compares file2.pcap's parsed results to hard-coded results. IP1 and IP2 addresses are located in hidden text file and retrieved as a stream. */
 public class FrequencyDaoImplTest {
   private FrequencyDao freq;
+  private ArrayList<PCAPdata> data;
+
   private String PCAPNAME = "files/file2.pcap";
   private String FILENAME = "files/file2.txt";
 
@@ -43,7 +45,6 @@ public class FrequencyDaoImplTest {
     // Parse set IP addresses from hidden text file
     Path path = Paths.get(FILENAME);
     InputStream stream = PCAPParserDaoImplTest.class.getClassLoader().getResourceAsStream(path.toString());
-    System.out.println("Path: " + path.toString());  
     
     String text = IOUtils.toString(stream, StandardCharsets.UTF_8);
     String[] values = text.split(",");
@@ -51,7 +52,7 @@ public class FrequencyDaoImplTest {
     IP2 = values[1];
 
     // Generate frequency information
-    ArrayList<PCAPdata> data = new ArrayList<PCAPdata>();
+    data = new ArrayList<PCAPdata>();
     PCAPdata tempPCAP1 = new PCAPdata(IP1, IP2, "", "", UDP, SIZE, "false", FREQ);
     data.add(tempPCAP1);
 
@@ -65,7 +66,14 @@ public class FrequencyDaoImplTest {
     freq.loadFrequency();
   }
 
-  /* Checks the most recurrent IP address */
+  /* Checks all packets have been put properly. */
+  @Test
+  public void testAllPCAP() {
+    ArrayList<PCAPdata> allPCAP = freq.getAllPCAP();
+    assertEquals(allPCAP, data);
+  }
+
+  /* Checks the most recurrent IP address. */
   @Test
   public void testMyIP() {
     String myip = freq.getMyIP();
@@ -78,7 +86,16 @@ public class FrequencyDaoImplTest {
     HashMap<String, PCAPdata> finalMap = freq.getFinalMap();
     int size = finalMap.size();
     int comparison = SIZE;
-    assertEquals(size, 2); // there should only be 2 unique connections: IP1/IP2 and IP1/IP1
+    assertEquals(size, comparison); // there should only be 2 unique connections: IP1/IP2 and IP1/IP1
+  }
+
+  /* Checks number of final nodes. */
+  @Test
+  public void testFinalNodes() {
+    ArrayList<PCAPdata> finalFreq = freq.getFinalFreq();
+    int size = finalFreq.size();
+    int comparison = SIZE;
+    assertEquals(size, comparison); // there should only be 2 nodes: IP1 and IP2
   }
 
 }

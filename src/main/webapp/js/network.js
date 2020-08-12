@@ -18,7 +18,7 @@ const OVERLAP_CONST = 1;
 
 /** Create visualization network graph based on IPs. */
 function createIPNetwork(){
-  fetch('/PCAP-freq-loader') // retrieve all Datastore data that has "data" label
+  fetch('/PCAP-freq-loader') // retrieve all Datastore data that has proper label
   .then(response => response.json())
   .then((data) => {
   
@@ -93,7 +93,7 @@ function createIPNetwork(){
 
 /** Create visualization network graph based on data in datastore without descriptive labels.*/
 function drawObfusNetwork(){
-  fetch('/PCAP-freq-loader') // retrieve all Datastore data that has "data" label
+  fetch('/PCAP-freq-loader') 
   .then(response => response.json())
   .then((data) => {
   
