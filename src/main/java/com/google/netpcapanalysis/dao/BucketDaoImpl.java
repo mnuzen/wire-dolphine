@@ -35,11 +35,11 @@ public class BucketDaoImpl implements BucketDao {
   private LinkedHashMap<String, int[]> bucketData = new LinkedHashMap<>();
   private String myip = "";
 
-  // int[UDP, TCP, IPv4, TOT]
+  // int[UDP, TCP, IPv4, total]
   private int[] classA = new int[]{0, 0, 0, 0};
   private int[] classB = new int[]{0, 0, 0, 0};
   private int[] classC = new int[]{0, 0, 0, 0};
-  private int[] classDE = new int[]{0, 0, 0, 0};
+  private int[] classDE = new int[]{0, 0, 0, 0}; // combine class D & E
 
   public BucketDaoImpl(ArrayList<PCAPdata> packets) {
     allPCAP = packets; 
@@ -50,7 +50,8 @@ public class BucketDaoImpl implements BucketDao {
   public LinkedHashMap<String, int[]> getBuckets() {
     return bucketData;
   }
-
+ 
+  /* Put packets into MYIP, OUTIP format and order by destination IP (ascending). */
   private void orderIPs(){
     // find local IP 
     findMyIP();
@@ -72,7 +73,6 @@ public class BucketDaoImpl implements BucketDao {
       PCAPdata tempPCAP = new PCAPdata(myip, outip, "", "", packet.protocol, packet.size, packet.flagged, packet.frequency); 
       sortedPCAP.add(tempPCAP);
     }
-
     // sort all packets in order of OUTIP
     sortIPs();
   }
@@ -111,8 +111,8 @@ public class BucketDaoImpl implements BucketDao {
     return myip;
   }
 
+  /* Sort array of PCAPdata objects by destination IP address. */
   private void sortIPs() {
-    // sort by destination ip addresses
     Collections.sort(sortedPCAP, new Comparator<PCAPdata>() {
       @Override
       public int compare(PCAPdata p1, PCAPdata p2) {
@@ -125,6 +125,7 @@ public class BucketDaoImpl implements BucketDao {
     });
   }
 
+  /* Parsing protocols for each class. */
   private void loadBuckets() {
     // loop through sorted IPs 
     for (PCAPdata packet : sortedPCAP) {
@@ -191,8 +192,6 @@ public class BucketDaoImpl implements BucketDao {
           classDE[2] += 1;
         }
       }
-
-       
     } // end of for loop
     
     bucketData.put("Class A", classA);
