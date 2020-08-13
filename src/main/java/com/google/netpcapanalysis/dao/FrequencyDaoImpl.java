@@ -86,7 +86,6 @@ public class FrequencyDaoImpl implements FrequencyDao {
   
   /* Sort IPs by frequency and get most frequent addresses*/
   private void getFrequentIPs(LinkedHashMap<String, Integer> hm) {
-    finalMap = new LinkedHashMap<String, Integer>();
     Set<Map.Entry<String, Integer>> set = hm.entrySet();
     List<Map.Entry<String, Integer>> entries = new ArrayList<Map.Entry<String, Integer>>(set);
     Collections.sort(entries, new Comparator<Map.Entry<String, Integer>>() {
@@ -95,15 +94,22 @@ public class FrequencyDaoImpl implements FrequencyDao {
         return e2.getValue().compareTo(e1.getValue()); // reverse order
       }
     });
-    
-    // add top NUM_NODE frequencies
-    int counter = 0;
-    for(Map.Entry<String, Integer> map : entries){
-      if (counter < NUM_NODES) {
-        finalMap.put(map.getKey(), map.getValue());
-        counter++;
+
+    if (entries.size() < NUM_NODES) {
+      finalMap = hm;
+    }
+    else {
+      finalMap = new LinkedHashMap<String, Integer>();
+      // add top NUM_NODE frequencies
+      int counter = 0;
+      for(Map.Entry<String, Integer> map : entries){
+        if (counter < NUM_NODES) {
+          finalMap.put(map.getKey(), map.getValue());
+          counter++;
+        }
       }
     }
+    
   }
 
   /* Gets all unique outgoing IPs and puts OUTIP as key in hashmap, where value represents frequency */
