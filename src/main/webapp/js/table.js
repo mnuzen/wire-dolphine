@@ -1,5 +1,5 @@
-$(document).ready(function () {
-    $.ajax({
+$(document).ready(async function () {
+    await $.ajax({
         type: 'GET',
         dataType: 'json',
         async: false,
