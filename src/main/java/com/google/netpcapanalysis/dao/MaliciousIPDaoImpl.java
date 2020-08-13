@@ -30,7 +30,7 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
     public MaliciousIPDaoImpl(){
     }
 
-    private PCAPdata isMalicious(PCAPdata data)
+    public PCAPdata isMalicious(PCAPdata data)
     {
         HttpResponse<String> result;
 
