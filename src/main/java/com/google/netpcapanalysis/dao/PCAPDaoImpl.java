@@ -154,7 +154,6 @@ public ArrayList<PCAPdata> getUniqueIPs(ArrayList<PCAPdata> allData){
    
     Entity.setProperty("IP", data.ip);
     Entity.setProperty("Flagged", data.flagged);
-    System.out.println("Object placed in cache");
     datastore.put(Entity);
   }
 
