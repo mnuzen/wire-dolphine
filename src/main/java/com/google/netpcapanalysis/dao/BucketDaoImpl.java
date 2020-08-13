@@ -5,6 +5,7 @@ import com.google.netpcapanalysis.models.PCAPdata;
 import java.util.*; 
 import java.io.*;
 import java.lang.*;
+import java.util.Map.Entry;
 
 import io.pkts.PacketHandler;
 import io.pkts.Pcap;
@@ -32,14 +33,15 @@ import java.nio.file.Paths;
 public class BucketDaoImpl implements BucketDao {
   private ArrayList<PCAPdata> allPCAP; 
   private ArrayList<PCAPdata> sortedPCAP; 
-  private LinkedHashMap<String, int[]> bucketData = new LinkedHashMap<>();
   private String myip = "";
 
-  // int[UDP, TCP, IPv4, total]
-  private int[] classA = new int[]{0, 0, 0, 0};
-  private int[] classB = new int[]{0, 0, 0, 0};
-  private int[] classC = new int[]{0, 0, 0, 0};
-  private int[] classDE = new int[]{0, 0, 0, 0}; // combine class D & E
+  // Map to store <String Class, LinkedHashMap<> of protocols and frequencies >
+  private LinkedHashMap<String, LinkedHashMap<String, Integer>> bucketData;
+  
+  private String classA = "Class A";
+  private String classB = "Class B";
+  private String classC = "Class C";
+  private String classDE = "Class DE";
 
   public BucketDaoImpl(ArrayList<PCAPdata> packets) {
     allPCAP = packets; 
@@ -47,7 +49,7 @@ public class BucketDaoImpl implements BucketDao {
     loadBuckets();    
   }
 
-  public LinkedHashMap<String, int[]> getBuckets() {
+  public LinkedHashMap<String, LinkedHashMap<String, Integer>> getBuckets() {
     return bucketData;
   }
  
@@ -127,6 +129,14 @@ public class BucketDaoImpl implements BucketDao {
 
   /* Parsing protocols for each class. */
   private void loadBuckets() {
+    bucketData = new LinkedHashMap<String, LinkedHashMap<String, Integer>>();
+
+    // Map to store <String Protocol, int Frequency of appearance>
+    LinkedHashMap<String, Integer> protocolA = new LinkedHashMap<String, Integer>();
+    LinkedHashMap<String, Integer> protocolB = new LinkedHashMap<String, Integer>();
+    LinkedHashMap<String, Integer> protocolC = new LinkedHashMap<String, Integer>();
+    LinkedHashMap<String, Integer> protocolDE = new LinkedHashMap<String, Integer>();
+   
     // loop through sorted IPs 
     for (PCAPdata packet : sortedPCAP) {
       String[] ip = packet.destination.split("\\.");
@@ -135,69 +145,85 @@ public class BucketDaoImpl implements BucketDao {
 
       // Class A -- [1.0.0.0, 128.0.0.0)
       if (byteInt < 128) {
-        classA[3] += 1;
-        // int[UDP, TCP, IPv4, TOT]
-        if (packet.protocol.equals("UDP")) {
-          classA[0] += 1;
-        }
-        else if (packet.protocol.equals("TCP")) {
-          classA[1] += 1;
+        // puts protocol into map
+        String proto = packet.protocol;
+        if (protocolA.containsKey(proto)) {
+          protocolA.merge(proto, 1, Integer::sum);
         }
         else {
-          classA[2] += 1;
+          protocolA.put(proto, 1);
         }
       }
 
       // Class B -- [128.0.0.0, 192.0.0.0)
-      else if (byteInt < 192) {
-        // int[UDP, TCP, IPv4, TOT]
-        classB[3] += 1;
-        if (packet.protocol.equals("UDP")) {
-          classB[0] += 1;
-        }
-        else if (packet.protocol.equals("TCP")) {
-          classB[1] += 1;
+      else if (byteInt >= 128 && byteInt < 192) {
+        // puts protocol into map
+        String proto = packet.protocol;
+        if (protocolB.containsKey(proto)) {
+          protocolB.merge(proto, 1, Integer::sum);
         }
         else {
-          classB[2] += 1;
+          protocolB.put(proto, 1);
         }
       }
 
       // Class C -- [192.0.0.0, 224.0.0.0)
-      else if (byteInt < 224) {
-        classC[3] += 1;
-        // int[UDP, TCP, IPv4, TOT]
-        if (packet.protocol.equals("UDP")) {
-          classC[0] += 1;
-        }
-        else if (packet.protocol.equals("TCP")) {
-          classC[1] += 1;
+      else if (byteInt >= 192 && byteInt < 224) {
+        // puts protocol into map
+        String proto = packet.protocol;
+        if (protocolC.containsKey(proto)) {
+          protocolC.merge(proto, 1, Integer::sum);
         }
         else {
-          classC[2] += 1;
+          protocolC.put(proto, 1);
         }
       }
 
       // Class D & E-- [224.0.0.0, 255.0.0.0)
       else {
-        classDE[3] += 1;
-        // int[UDP, TCP, IPv4, TOT]
-        if (packet.protocol.equals("UDP")) {
-          classDE[0] += 1;
-        }
-        else if (packet.protocol.equals("TCP")) {
-          classDE[1] += 1;
+        // puts protocol into map
+        String proto = packet.protocol;
+        if (protocolDE.containsKey(proto)) {
+          protocolDE.merge(proto, 1, Integer::sum);
         }
         else {
-          classDE[2] += 1;
+          protocolDE.put(proto, 1);
         }
       }
+
+      // sort each protocol for graph visual presentation
+      protocolA = sortProtocols(protocolA);
+      protocolB = sortProtocols(protocolB);
+      protocolC = sortProtocols(protocolC);
+      protocolDE = sortProtocols(protocolDE);
+
+      bucketData.put(classA, protocolA);
+      bucketData.put(classB, protocolB);
+      bucketData.put(classC, protocolC);
+      bucketData.put(classDE, protocolDE);
+
     } // end of for loop
-    
-    bucketData.put("Class A", classA);
-    bucketData.put("Class B", classB);
-    bucketData.put("Class C", classC);
-    bucketData.put("Classes D & E", classDE);
+  }
+
+  /* Sorts protocols in alphabetical order for ease of viewing in visualization */
+  private LinkedHashMap<String, Integer> sortProtocols(LinkedHashMap<String, Integer> hm){
+    Set<Map.Entry<String, Integer>> set = hm.entrySet();
+    List<Map.Entry<String, Integer>> entries = new ArrayList<Map.Entry<String, Integer>>(set);
+
+    // sort entries
+    Collections.sort(entries, new Comparator<Map.Entry<String, Integer>>() {
+      @Override
+      public int compare(Entry<String, Integer> e1, Entry<String, Integer> e2) {
+        return e1.getKey().compareTo(e2.getKey()); // sort them in reverse order for visualization 
+      }
+    });
+
+    // put back to HashMap
+    LinkedHashMap<String, Integer> temp = new LinkedHashMap<String, Integer>(); 
+    for (Map.Entry<String, Integer> o : entries) { 
+      temp.put(o.getKey(), o.getValue()); 
+    } 
+    return temp; 
   }
 
   /* Finds longest common prefix between an array of strings in linear time: the algorithm makes log(m) iterations with m*n comparisons 
