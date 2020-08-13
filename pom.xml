@@ -29,6 +29,24 @@
   </dependencyManagement>
 
   <dependencies>
+
+    <!-- https://mvnrepository.com/artifact/com.google.appengine/appengine-testing -->
+    <dependency>
+        <groupId>com.google.appengine</groupId>
+        <artifactId>appengine-testing</artifactId>
+        <version>1.9.81</version>
+        <scope>test</scope>
+    </dependency>
+    
+
+        <dependency>
+        <groupId>com.google.appengine</groupId>
+        <artifactId>appengine-api-stubs</artifactId>
+        <version>1.9.81</version>
+        <scope>test</scope>
+    </dependency>
+
+
     <dependency>
       <groupId>com.mashape.unirest</groupId>
       <artifactId>unirest-java</artifactId>
@@ -96,6 +114,19 @@
           <deploy.projectId>erik-jevin-melba-step-2020</deploy.projectId>
           <deploy.version>1</deploy.version>
         </configuration>
+      </plugin>
+       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>3.0.0-M5</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
     <resources>

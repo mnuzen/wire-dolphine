@@ -38,7 +38,6 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
             data.flagged = Flagged.FALSE;
         }
         else{
-            System.out.println("Else statement");
             try {
                 result = Unirest.get("https://signals.api.auth0.com/badip/" + data.destination)
                         .header("X-Auth-Token", AUTH0_API_KEY)
