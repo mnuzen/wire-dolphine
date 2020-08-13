@@ -44,21 +44,16 @@ public class PCAPDaoImpl implements PCAPDao {
   public ArrayList<PCAPdata> getPCAPObjects(String searchEntity) {
     ArrayList<PCAPdata> dataTable = new ArrayList<>();
 
-    Query query = new Query(searchEntity).addSort("Flagged", SortDirection.DESCENDING);
+    Query query = new Query(searchEntity).addSort("Source", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
     for (Entity entity : results.asIterable()) {
       String source = (String) entity.getProperty("Source");
       String destination = (String) entity.getProperty("Destination");
-      String domain = (String) entity.getProperty("Domain");
-      String location = (String) entity.getProperty("Location");
       String protocol = (String) entity.getProperty("Protocol");
       int size = (int) (long) entity.getProperty("Size");
-      String flagged = (String) entity.getProperty("Flagged");
-      int frequency = (int) (long) entity.getProperty("Frequency");
 
-      PCAPdata temp = new PCAPdata(source, destination, domain, location, 
-          protocol, size, flagged, frequency);
+      PCAPdata temp = new PCAPdata(source, destination, protocol, size);
 
       dataTable.add(temp);
     }
@@ -71,72 +66,10 @@ public class PCAPDaoImpl implements PCAPDao {
 
     pcapEntity.setProperty("Source", data.source);
     pcapEntity.setProperty("Destination", data.destination);
-    pcapEntity.setProperty("Domain", data.domain);
-    pcapEntity.setProperty("Location", data.location);
     pcapEntity.setProperty("Size", data.size);
     pcapEntity.setProperty("Protocol", data.protocol);
-    pcapEntity.setProperty("Flagged", data.flagged);
-    pcapEntity.setProperty("Frequency", data.frequency);
 
     datastore.put(pcapEntity);
-  }
-
-  //Updates all PCAP entities that match Source and Destination IP new String input
-  public void updateFlagged(String searchEntity, PCAPdata oldData, String flagged) {
-    
-    ArrayList<PCAPdata> dataTable = new ArrayList<>();
-  //add inverse for when myip is not source
-    Filter propertyFilter = CompositeFilterOperator.and(
-        FilterOperator.EQUAL.of("Source", oldData.source),
-        FilterOperator.EQUAL.of("Destination", oldData.destination));
-
-    Query query = new Query(searchEntity).setFilter(propertyFilter);
-    PreparedQuery results = datastore.prepare(query);
-
-    for (Entity updatedEntity : results.asIterable()) {
-    
-      updatedEntity.setProperty("Flagged", flagged);
-  
-      datastore.put(updatedEntity);
-    }
-  }
-
-  public void updateDomain(String searchEntity, PCAPdata oldData, String domain) {
-    
-    ArrayList<PCAPdata> dataTable = new ArrayList<>();
-
-    Filter propertyFilter = CompositeFilterOperator.and(
-        FilterOperator.EQUAL.of("Source", oldData.source),
-        FilterOperator.EQUAL.of("Destination", oldData.destination));
-
-    Query query = new Query(searchEntity).setFilter(propertyFilter);
-    PreparedQuery results = datastore.prepare(query);
-
-    for (Entity updatedEntity : results.asIterable()) {
-    
-      updatedEntity.setProperty("Domain", domain);
-  
-      datastore.put(updatedEntity);
-    }
-  }
-
-  public void updateLocation(String searchEntity, PCAPdata oldData, String location) {
-    
-    ArrayList<PCAPdata> dataTable = new ArrayList<>();
-
-    Filter propertyFilter = CompositeFilterOperator.and(
-        FilterOperator.EQUAL.of("Source", oldData.source),
-        FilterOperator.EQUAL.of("Destination", oldData.destination));
-
-    Query query = new Query(searchEntity).setFilter(propertyFilter);
-    PreparedQuery results = datastore.prepare(query);
-
-    for (Entity updatedEntity : results.asIterable()) {
-    
-      updatedEntity.setProperty("Location", location);
-  
-      datastore.put(updatedEntity);
-    }
   }
 
  //Gets most use IP in PCAPdata

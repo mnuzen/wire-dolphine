@@ -18,9 +18,9 @@ $(document).ready(function () {
                 }
 
                 row.innerHTML = "<td>" + data[i].source + "</td> <td>" + data[i].destination +
-                    "</td> <td>" + data[i].domain + "</td> <td>" + data[i].location +
                     "</td> <td>" + data[i].protocol + "</td> <td>" + data[i].size +
-                    "</td> <td>" + data[i].flagged +"</td> <td>" + data[i].frequency + "</td>";
+                    "</td> <td>" + data[i].domain + "</td> <td>" + data[i].location +
+                    "</td> <td>" + data[i].flagged + "</td>";
 
                 table.appendChild(row);
             }

@@ -28,7 +28,7 @@ public class MockDataLoader {
     }
   }
 
-  // Source,Destination,Domain,Location,Protocal,Size,Flagged,Frequency
+  // Source,Destination,Protocal,Size
   public ArrayList<PCAPdata> CSVDataLoader(String csvFile) {
     ArrayList<PCAPdata> data = new ArrayList<PCAPdata>();
     String line = "";
@@ -41,9 +41,8 @@ public class MockDataLoader {
         // use comma as separator
         String[] pcapLine = line.split(cvsSplitBy);
 
-        PCAPdata tempPCAP = new PCAPdata(pcapLine[0], pcapLine[1], pcapLine[2], pcapLine[3],
-            pcapLine[4], Integer.parseInt(pcapLine[5]), pcapLine[6],
-            Integer.parseInt(pcapLine[7]));
+        PCAPdata tempPCAP = new PCAPdata(pcapLine[0], pcapLine[1], pcapLine[2],
+            Integer.parseInt(pcapLine[3]));
 
         data.add(tempPCAP);
       }
