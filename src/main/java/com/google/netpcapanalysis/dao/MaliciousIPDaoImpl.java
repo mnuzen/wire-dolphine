@@ -76,55 +76,7 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
         return data;
     }
     
-    private String isMalicious(String ip)
-    {
-        HttpResponse<String> apiResult;
-        String result;
-
-        String searchDB = ipCache.searchMaliciousDB(ip);
-        if(searchDB.equalsIgnoreCase(Flagged.TRUE))
-        {
-            result = Flagged.TRUE;
-        }
-        else if(searchDB.equalsIgnoreCase(Flagged.FALSE)){
-            result = Flagged.FALSE;
-        }
-        else{
-            try {
-                apiResult = Unirest.get("https://signals.api.auth0.com/badip/" + ip)
-                        .header("X-Auth-Token", AUTH0_API_KEY)
-                        .asString();
-           
-                if(apiResult.getBody().equalsIgnoreCase(FLAGGED_FALSE))
-                {
-                    result = Flagged.FALSE;
-                    MaliciousPacket tempPacket = new MaliciousPacket(ip, result);
-                    ipCache.setMaliciousIPObjects(tempPacket);
-                }
-                else if(apiResult.getBody().equalsIgnoreCase(FLAGGED_TRUE))
-                {
-                    result = Flagged.TRUE; 
-                    MaliciousPacket tempPacket = new MaliciousPacket(ip, result);
-                    ipCache.setMaliciousIPObjects(tempPacket);
-                }
-                else if (apiResult.getBody().contains(REQUEST_LIMIT))
-                {
-                    result = Flagged.UNKNOWN; 
-                }
-                else{
-                    result = Flagged.ERROR; 
-                }
-    
-            } catch (UnirestException e) {
-                result = Flagged.ERROR;
-                e.printStackTrace();
-            }
-        }
-        return result;
-    }
-    
     public ArrayList<PCAPdata> run(ArrayList<PCAPdata> allData){
-        String flaggeValue;
 
         for(PCAPdata packet : allData){
             packet = isMalicious(packet);
