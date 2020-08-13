@@ -34,7 +34,7 @@ public class MaliciousIPIT {
         MaliciousIPDao = new MaliciousIPDaoImpl();
         ipCache = new PCAPDaoImpl();
         flag = Flagged.TRUE;
-        data = new PCAPdata("myip","210.48.204.118","blank",4,"blank","blank","blank",true);
+        data = new PCAPdata("blank","210.48.204.118","blank","blank","blank",4,Flagged.UNKNOWN,4);
     }
 
       @After

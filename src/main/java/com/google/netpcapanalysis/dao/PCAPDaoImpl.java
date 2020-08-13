@@ -74,7 +74,6 @@ public class PCAPDaoImpl implements PCAPDao {
     pcapEntity.setProperty("Destination", packet.destination);
     pcapEntity.setProperty("Size", packet.size);
     pcapEntity.setProperty("Protocol", packet.protocol);
-    pcapEntity.setProperty("Outbound", packet.outbound);
 
     pcapEntityAll.add(pcapEntity);
     }

@@ -136,7 +136,7 @@ public class PCAPParserDaoImpl implements PCAPParserDao {
 
     for(PCAPdata packet : allPCAP)
     {
-      if(packet.source.equals(myip))
+      if(packet.source == myip)
       {
         packet.outbound = true;
       }
