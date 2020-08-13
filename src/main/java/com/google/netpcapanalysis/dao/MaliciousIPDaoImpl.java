@@ -34,7 +34,18 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
     {
         HttpResponse<String> result;
 
-        String searchDB = ipCache.searchMaliciousDB(data.destination);
+        String lookupIP;
+        if(data.outbound == true)
+        {
+            lookupIP = data.destination;
+        }
+        else{
+            lookupIP = data.source;
+        }
+
+
+        String searchDB = ipCache.searchMaliciousDB(lookupIP);
+
         if(searchDB.equalsIgnoreCase(Flagged.TRUE))
         {
             data.flagged = Flagged.TRUE;
@@ -44,20 +55,20 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
         }
         else{
             try {
-                result = Unirest.get("https://signals.api.auth0.com/badip/" + data.destination)
+                result = Unirest.get("https://signals.api.auth0.com/badip/" + lookupIP)
                         .header("X-Auth-Token", AUTH0_API_KEY)
                         .asString();
            
                 if(result.getBody().equalsIgnoreCase(FLAGGED_FALSE))
                 {
                     data.flagged = Flagged.FALSE;
-                    MaliciousPacket tempPacket = new MaliciousPacket(data.destination,data.flagged);
+                    MaliciousPacket tempPacket = new MaliciousPacket(lookupIP,data.flagged);
                     ipCache.setMaliciousIPObjects(tempPacket);
                 }
                 else if(result.getBody().equalsIgnoreCase(FLAGGED_TRUE))
                 {
                     data.flagged = Flagged.TRUE; 
-                    MaliciousPacket tempPacket = new MaliciousPacket(data.destination,data.flagged);
+                    MaliciousPacket tempPacket = new MaliciousPacket(lookupIP,data.flagged);
                     ipCache.setMaliciousIPObjects(tempPacket);
                 }
                 else if (result.getBody().contains(REQUEST_LIMIT))
