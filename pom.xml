@@ -46,6 +46,15 @@
         <scope>test</scope>
     </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.google.cloud/google-cloud-datastore -->
+    <dependency>
+      <groupId>com.google.cloud</groupId>
+      <artifactId>google-cloud-datastore</artifactId>
+      <version>1.104.0</version>
+    </dependency>
+
+
+
 
     <dependency>
       <groupId>com.mashape.unirest</groupId>

@@ -9,21 +9,21 @@ public final class PCAPdata {
   public String protocol;
   public int size;
   public String flagged;
-  public int frequency;
+  public boolean outbound;
 
   public PCAPdata() {
-    this(null, null, null, null, null, 0, null, 0);
+    this(null, null, null, null, null, 0, null, false);
   }
 
   public PCAPdata(
       String source,
       String destination,
-      String domain,
-      String location,
       String protocol,
       int size,
+      String location,
+      String domain,
       String flagged,
-      int frequency
+      boolean outbound
   ) {
     this.source = source;
     this.destination = destination;
@@ -32,7 +32,7 @@ public final class PCAPdata {
     this.protocol = protocol;
     this.size = size;
     this.flagged = flagged;
-    this.frequency = frequency;
+    this.outbound = outbound;
   }
 
   public PCAPdata(
@@ -46,13 +46,4 @@ public final class PCAPdata {
   this.protocol = protocol;
   this.size = size;
 }
-
-  public int getFrequency() {
-    return this.frequency;
-  }
-
-  public void incrementFrequency() {
-    this.frequency++;
-  }
-
 }

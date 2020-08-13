@@ -105,7 +105,7 @@ public class FrequencyDaoImpl implements FrequencyDao {
         currPCAP.incrementFrequency();
       }
       else {
-        PCAPdata tempPCAP = new PCAPdata(myip, outip, "", "", packet.protocol, packet.size, packet.flagged, packet.frequency); 
+        PCAPdata tempPCAP = new PCAPdata(myip, outip,packet.protocol, packet.size); 
         finalMap.put(outip, tempPCAP);
       }
     }

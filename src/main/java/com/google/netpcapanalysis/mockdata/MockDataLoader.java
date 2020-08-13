@@ -23,9 +23,7 @@ public class MockDataLoader {
   public void LoadData(ArrayList<PCAPdata> dataTable) { // uploads to datastore
     PCAPDao dataBase = new PCAPDaoImpl();
 
-    for (PCAPdata PCAP : dataTable) {
-      dataBase.setPCAPObjects(PCAP, FILE_NAME);
-    }
+    dataBase.setPCAPObjects(dataTable, FILE_NAME);
   }
 
   // Source,Destination,Protocal,Size

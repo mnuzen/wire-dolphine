@@ -37,8 +37,8 @@ import java.nio.file.Paths;
    * Hard-coded the source IP address (myip) -- need to find a way to retrieve myip (look at first packet, ask user, use Whatsmyip?)
 */
 public class PCAPParserDaoImpl implements PCAPParserDao {
-  private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   private ArrayList<PCAPdata> allPCAP = new ArrayList<PCAPdata>(); 
+  private PCAPDao datastore = new PCAPDaoImpl();
   //private HashMap<String, PCAPdata> finalPCAP = new HashMap<String, PCAPdata>();
 
   private String filename;
@@ -71,7 +71,7 @@ public class PCAPParserDaoImpl implements PCAPParserDao {
         String protocol = getProtocol(ip); 
 
         // PCAPdata takes in (source, destination, domain, location, protocol, size, flagged, frequency) 
-        PCAPdata rawPCAP = new PCAPdata(srcip, dstip, "", "", protocol, size, Flagged.UNKNOWN, 1);
+        PCAPdata rawPCAP = new PCAPdata(srcip, dstip,protocol, size);
         allPCAP.add(rawPCAP);
       }
       return true;
@@ -124,11 +124,26 @@ public class PCAPParserDaoImpl implements PCAPParserDao {
  
   /* Adds all raw packets to datastore through GenericPCAPDao*/
   public void putDatastore(){
-    for (PCAPdata packet : allPCAP) {
-      PCAPDao data = new PCAPDaoImpl();
-      data.setPCAPObjects(packet, filename);
-    }
+    allPCAP = addDirection(allPCAP);
+
+    //run directions indicator
+    datastore.setPCAPObjects(allPCAP, filename);
   } 
+
+  private ArrayList<PCAPdata> addDirection(ArrayList<PCAPdata> allPCAP) {
+
+    String myip = datastore.findMyIP(allPCAP);
+
+    for(PCAPdata packet : allPCAP)
+    {
+      if(packet.source == myip)
+      {
+        packet.outbound = true;
+      }
+    }
+
+    return allPCAP;
+  }
 
   /* Access elements for testing. */
   public ArrayList<PCAPdata> getAllPCAP() {

@@ -31,6 +31,8 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.CompositeFilter;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
+import com.google.appengine.api.datastore.Transaction;
+
 
 public class PCAPDaoImpl implements PCAPDao {
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -60,20 +62,28 @@ public class PCAPDaoImpl implements PCAPDao {
     return dataTable;
   }
 
-  //uploades a given databack to datastore under the given name 
-  public void setPCAPObjects(PCAPdata data, String searchEntity) {
-    Entity pcapEntity = new Entity(searchEntity);
+  //uploades a given dataobject list to datastore under the given name searchEntity
+  public void setPCAPObjects(ArrayList<PCAPdata> data, String searchEntity) {
+    Entity entity = new Entity(searchEntity);
+    List<Entity> pcapEntityAll = new ArrayList<Entity>();
 
-    pcapEntity.setProperty("Source", data.source);
-    pcapEntity.setProperty("Destination", data.destination);
-    pcapEntity.setProperty("Size", data.size);
-    pcapEntity.setProperty("Protocol", data.protocol);
+    for (PCAPdata packet : data) {
+    Entity pcapEntity = new Entity(entity.getKey());
 
-    datastore.put(pcapEntity);
+    pcapEntity.setProperty("Source", packet.source);
+    pcapEntity.setProperty("Destination", packet.destination);
+    pcapEntity.setProperty("Size", packet.size);
+    pcapEntity.setProperty("Protocol", packet.protocol);
+
+    pcapEntityAll.add(pcapEntity);
+    }
+
+    datastore.put(pcapEntityAll);
+
   }
 
  //Gets most use IP in PCAPdata
- private String findMyIP(ArrayList<PCAPdata> allData) {
+ public String findMyIP(ArrayList<PCAPdata> allData) {
   String myip = "";
   HashMap<String, Integer> hm = new HashMap<String, Integer>();
   for (PCAPdata packet : allData) {
@@ -117,7 +127,7 @@ public ArrayList<PCAPdata> getUniqueIPs(ArrayList<PCAPdata> allData){
     
     //puts data into map if not already there
     if (!finalMap.containsKey(outip)){
-      PCAPdata tempPCAP = new PCAPdata(myip, outip, "", "", packet.protocol, packet.size, packet.flagged, packet.frequency); 
+      PCAPdata tempPCAP = new PCAPdata(myip, outip, packet.protocol, packet.size); 
       finalMap.put(outip, tempPCAP);
     }
   }
