@@ -5,9 +5,7 @@ import java.util.*;
 import java.io.*;
 
 public interface FrequencyDao {
-    public void loadFrequency();
     public ArrayList<PCAPdata> getAllPCAP();
-    public HashMap<String, PCAPdata> getFinalMap();
-    public ArrayList<PCAPdata> getFinalFreq();
+    public LinkedHashMap<String, Integer> getFinalMap();
     public String getMyIP();
 }
