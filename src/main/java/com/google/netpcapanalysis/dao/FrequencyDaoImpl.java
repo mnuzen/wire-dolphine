@@ -3,6 +3,8 @@ package com.google.netpcapanalysis.dao;
 import com.google.netpcapanalysis.models.Flagged;
 import com.google.netpcapanalysis.models.PCAPdata;
 import java.util.*; 
+import java.util.Map.Entry;
+
 import java.io.*;
 import java.lang.*;
 
@@ -31,8 +33,7 @@ import java.nio.file.Paths;
 
 public class FrequencyDaoImpl implements FrequencyDao {
   private ArrayList<PCAPdata> allPCAP; 
-  private ArrayList<PCAPdata> finalFreq;
-  private HashMap<String, PCAPdata> finalMap;
+  private LinkedHashMap<String, Integer> finalMap;
 
   private String myip = "";
   private boolean first = true;
@@ -40,20 +41,15 @@ public class FrequencyDaoImpl implements FrequencyDao {
 
   public FrequencyDaoImpl(ArrayList<PCAPdata> packets) {
     allPCAP = packets; 
-  }
-
-  /* Retrieve all necessary entities, processes, and puts into final arraylist */
-  public void loadFrequency() {
     findMyIP();
     processData();
-    putFinalFreq();
   }
 
   public ArrayList<PCAPdata> getAllPCAP() {
     return allPCAP;
   }
 
-  /* Find local ip address based on highest recurring IP address */
+  /* Find local IP address based on highest recurring IP address */
   private void findMyIP() {
     HashMap<String, Integer> hm = new HashMap<String, Integer>();
     for (PCAPdata packet : allPCAP) {
@@ -84,11 +80,38 @@ public class FrequencyDaoImpl implements FrequencyDao {
 
   /* Fills out finalMap with frequencies based on IP address only (not protocol). */
   private void processData(){
-    finalMap = new HashMap<String, PCAPdata>();
+    LinkedHashMap<String, Integer> hm = getUniqueOutIPs();
+    getFrequentIPs(hm);
+  } 
+  
+  /* Sort IPs by frequency and get most frequent addresses*/
+  private void getFrequentIPs(LinkedHashMap<String, Integer> hm) {
+    finalMap = new LinkedHashMap<String, Integer>();
+    Set<Map.Entry<String, Integer>> set = hm.entrySet();
+    List<Map.Entry<String, Integer>> entries = new ArrayList<Map.Entry<String, Integer>>(set);
+    Collections.sort(entries, new Comparator<Map.Entry<String, Integer>>() {
+      @Override
+      public int compare(Entry<String, Integer> e1, Entry<String, Integer> e2) {
+        return e2.getValue().compareTo(e1.getValue()); // reverse order
+      }
+    });
+    
+    // add top NUM_NODE frequencies
+    int counter = 0;
+    for(Map.Entry<String, Integer> map : entries){
+      if (counter < NUM_NODES) {
+        finalMap.put(map.getKey(), map.getValue());
+        counter++;
+      }
+    }
+  }
+
+  /* Gets all unique outgoing IPs and puts OUTIP as key in hashmap, where value represents frequency */
+  private LinkedHashMap<String, Integer> getUniqueOutIPs() {
+    LinkedHashMap<String, Integer> hm = new LinkedHashMap<String, Integer>();
     for (PCAPdata packet : allPCAP) {
       String srcip = packet.source;
       String dstip = packet.destination;
-      String protocol = "";
       String outip = "";
 
       if (srcip.equals(myip)) {
@@ -98,51 +121,19 @@ public class FrequencyDaoImpl implements FrequencyDao {
         outip = srcip;
       }
       
-      // PCAPdata takes in (source, destination, domain, location, protocol, size, flagged, frequency) 
-      if (finalMap.containsKey(outip)){
+      if (hm.containsKey(outip)){
         // retrieve current value with outip and increments frequency
-        PCAPdata currPCAP = finalMap.get(outip);
-        currPCAP.incrementFrequency();
+        hm.merge(outip, 1, Integer::sum);
       }
       else {
-        PCAPdata tempPCAP = new PCAPdata(myip, outip, "", "", packet.protocol, packet.size, packet.flagged, packet.frequency); 
-        finalMap.put(outip, tempPCAP);
+        hm.put(outip, 1);
       }
     }
+    return hm;
   }
 
-  public HashMap<String, PCAPdata> getFinalMap() {
+  public LinkedHashMap<String, Integer> getFinalMap() {
     return finalMap;
-  }
-
-  /* Transfers all unique connections to an arraylist for return. */
-  private void putFinalFreq() {
-    finalFreq = new ArrayList<PCAPdata>();
-    ArrayList<PCAPdata> allValues = new ArrayList<PCAPdata>();
-
-    for (PCAPdata packet : finalMap.values()) {
-      allValues.add(packet);
-    }
-    // sort frequencies
-    Collections.sort(allValues, new Comparator<PCAPdata>() {
-      @Override
-      public int compare(PCAPdata p1, PCAPdata p2) {
-        Integer freq1 = p1.frequency;
-        Integer freq2 = p2.frequency;
-        return freq2.compareTo(freq1); // sorted frequencies in reverse (largest numbers first)
-      }
-    });
-
-    // add top NUM_NODE frequencies
-    for (int i = 0; i < NUM_NODES; i++) {
-      if (i < allValues.size()){
-        finalFreq.add(allValues.get(i));
-      }
-    }
-  }
-
-  public ArrayList<PCAPdata> getFinalFreq() {
-    return finalFreq;
   }
 
 }
