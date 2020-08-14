@@ -2,7 +2,7 @@ package com.google.netpcapanalysis.dao;
 
 import com.google.netpcapanalysis.models.Flagged;
 import com.google.netpcapanalysis.models.PCAPdata;
-import java.util.*; 
+import java.util.*;
 import java.io.*;
 import java.lang.*;
 
@@ -30,7 +30,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class FrequencyDaoImpl implements FrequencyDao {
-  private ArrayList<PCAPdata> allPCAP; 
+
+  private ArrayList<PCAPdata> allPCAP;
   private ArrayList<PCAPdata> finalFreq;
   private HashMap<String, PCAPdata> finalMap;
 
@@ -39,7 +40,7 @@ public class FrequencyDaoImpl implements FrequencyDao {
   private int NUM_NODES = 15;
 
   public FrequencyDaoImpl(ArrayList<PCAPdata> packets) {
-    allPCAP = packets; 
+    allPCAP = packets;
   }
 
   /* Retrieve all necessary entities, processes, and puts into final arraylist */
@@ -58,19 +59,17 @@ public class FrequencyDaoImpl implements FrequencyDao {
     HashMap<String, Integer> hm = new HashMap<String, Integer>();
     for (PCAPdata packet : allPCAP) {
       // source
-      if (hm.containsKey(packet.source)) { 
+      if (hm.containsKey(packet.source)) {
         // if IP already exists, increment
         hm.merge(packet.source, 1, Integer::sum);
-      }
-      else {
+      } else {
         hm.put(packet.source, 1);
       }
       // destination
-      if (hm.containsKey(packet.destination)) { 
+      if (hm.containsKey(packet.destination)) {
         // if IP already exists, increment
         hm.merge(packet.destination, 1, Integer::sum);
-      }
-      else {
+      } else {
         hm.put(packet.destination, 1);
       }
     }
@@ -83,7 +82,7 @@ public class FrequencyDaoImpl implements FrequencyDao {
   }
 
   /* Fills out finalMap with frequencies based on IP address only (not protocol). */
-  private void processData(){
+  private void processData() {
     finalMap = new HashMap<String, PCAPdata>();
     for (PCAPdata packet : allPCAP) {
       String srcip = packet.source;
@@ -93,19 +92,18 @@ public class FrequencyDaoImpl implements FrequencyDao {
 
       if (srcip.equals(myip)) {
         outip = dstip;
-      }
-      else {
+      } else {
         outip = srcip;
       }
-      
+
       // PCAPdata takes in (source, destination, domain, location, protocol, size, flagged, frequency) 
-      if (finalMap.containsKey(outip)){
+      if (finalMap.containsKey(outip)) {
         // retrieve current value with outip and increments frequency
         PCAPdata currPCAP = finalMap.get(outip);
         currPCAP.incrementFrequency();
-      }
-      else {
-        PCAPdata tempPCAP = new PCAPdata(myip, outip, "", "", packet.protocol, packet.size, packet.flagged, packet.frequency); 
+      } else {
+        PCAPdata tempPCAP = new PCAPdata(myip, outip, "", "", packet.protocol, packet.size,
+            packet.flagged, packet.frequency);
         finalMap.put(outip, tempPCAP);
       }
     }
@@ -135,7 +133,7 @@ public class FrequencyDaoImpl implements FrequencyDao {
 
     // add top NUM_NODE frequencies
     for (int i = 0; i < NUM_NODES; i++) {
-      if (i < allValues.size()){
+      if (i < allValues.size()) {
         finalFreq.add(allValues.get(i));
       }
     }

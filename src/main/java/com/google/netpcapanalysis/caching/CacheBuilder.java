@@ -5,7 +5,7 @@ import com.google.netpcapanalysis.interfaces.caching.Cache;
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
-public class CacheBuilder<T extends Serializable> {
+public class CacheBuilder<K, V extends Serializable> {
 
   public enum CacheType {
     MEMORY, DATASTORE
@@ -16,6 +16,8 @@ public class CacheBuilder<T extends Serializable> {
   private int expiration;
   private int maxItems;
 
+  public CacheBuilder() {}
+
   public CacheBuilder(CacheType type, String cacheName, int expiration, int maxItems) {
     this.type = type;
     this.cacheName = cacheName;
@@ -23,28 +25,28 @@ public class CacheBuilder<T extends Serializable> {
     this.maxItems = maxItems;
   }
 
-  public CacheBuilder<T> setType(CacheType type) {
+  public CacheBuilder<K, V> setType(CacheType type) {
     this.type = type;
     return this;
   }
 
-  public CacheBuilder<T> setCacheName(String cacheName) {
+  public CacheBuilder<K, V> setCacheName(String cacheName) {
     this.cacheName = cacheName;
     return this;
   }
 
-  public CacheBuilder<T> setExpiration(int expiration) {
+  public CacheBuilder<K, V> setExpiration(int expiration) {
     this.expiration = expiration;
     return this;
   }
 
-  public CacheBuilder<T> setMaxItems(int maxItems) {
+  public CacheBuilder<K, V> setMaxItems(int maxItems) {
     this.maxItems = maxItems;
     return this;
   }
 
-  public Cache<T> build() {
-    Cache<T> cache;
+  public Cache<K, V> build() {
+    Cache<K, V> cache;
     if (type == CacheType.MEMORY) {
       cache = new MemoryCache<>(Caffeine.newBuilder()
           .expireAfterWrite(expiration, TimeUnit.MILLISECONDS)

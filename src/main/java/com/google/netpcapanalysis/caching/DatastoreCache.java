@@ -1,17 +1,13 @@
 package com.google.netpcapanalysis.caching;
 
-import com.fasterxml.jackson.databind.ser.PropertyFilter;
-import com.google.appengine.api.datastore.AdminDatastoreService.KeyBuilder;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
-import com.google.appengine.api.datastore.QueryResultIterable;
 import com.google.appengine.api.datastore.Transaction;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -19,7 +15,7 @@ import com.google.netpcapanalysis.interfaces.caching.Cache;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 
-public class DatastoreCache<T extends Serializable> implements Cache<T> {
+public class DatastoreCache<K ,V extends Serializable> implements Cache<K, V> {
 
   private static class DSCacheObject<T> {
     public String id;
@@ -36,7 +32,7 @@ public class DatastoreCache<T extends Serializable> implements Cache<T> {
   private static final String EXPIRATION_PROP = "expiration";
   private static final String CACHED_PROP = "cached";
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-  private final Type jsonType = new TypeToken<T>(){}.getType();
+  private final Type jsonType = new TypeToken<V>(){}.getType();
   private final Gson gson = new Gson();
   private final String objectName;
   private final int cacheDuration;
@@ -49,7 +45,7 @@ public class DatastoreCache<T extends Serializable> implements Cache<T> {
   }
 
   @Override
-  public void putCache(String key, T data) {
+  public void putCache(K key, V data) {
     if (Math.random() * cacheDuration  < 1) {
       // kinda hacky solution but since counting # of items in cache is expensive, we want to call
       // it as infrequently as possible, so we want to garbage collect approximately every `maxItems`
@@ -60,15 +56,15 @@ public class DatastoreCache<T extends Serializable> implements Cache<T> {
       // on the same model, maxItems limit will approximately be followed
       this.garbageCollect();
     }
-    Entity entity = new Entity(objectName, key);
+    Entity entity = new Entity(objectName, key.toString());
     entity.setProperty(CACHED_PROP, data);
     entity.setProperty(EXPIRATION_PROP, System.currentTimeMillis() + cacheDuration);
     datastore.put(entity);
   }
 
   @Override
-  public T getCache(String key) {
-    DSCacheObject<T> res = getFromDatastore(key);
+  public V get(K key) {
+    DSCacheObject<V> res = getFromDatastore(key.toString());
 
     if (res == null || res.expiration < System.currentTimeMillis()) {
       return null;
@@ -77,16 +73,16 @@ public class DatastoreCache<T extends Serializable> implements Cache<T> {
     return res.data;
   }
 
-  public DSCacheObject<T> getFromDatastore(String key) {
+  public DSCacheObject<V> getFromDatastore(String key) {
     try {
       Entity entity = datastore.get(KeyFactory.createKey(objectName, key));
       String jsonEncoded = (String) entity.getProperty(CACHED_PROP);
 
       String id = (String) entity.getProperty("id");
       long expiration = (long) entity.getProperty(EXPIRATION_PROP);
-      T data = gson.fromJson(jsonEncoded, jsonType);
+      V data = gson.fromJson(jsonEncoded, jsonType);
 
-      return new DSCacheObject<T>(id, data, expiration);
+      return new DSCacheObject<>(id, data, expiration);
     } catch (EntityNotFoundException e) {
       return null;
     }

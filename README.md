@@ -24,7 +24,20 @@ Reviewers: arunkaly@, promanov@
 2. Put in repo under `resources/GeoLite2-City.mmdb`.
 
 ## MaxmindDB perf: 
-Averaged 14572 ms for 1000000 requests, 68623.19 rps on i7-9750H single core.
+
+On random dataset:
+- Averaged 14572 ms for 1000000 requests, 68623.19 rps on i7-9750H single core.
+- Cached averaged 17256 ms for 1000000 requests, 57951.98 rps on i7-9750H single core
+
+On uneven dataset (10K uniques) : 
+- Averaged 14262 ms for 1000000 requests, 70114.75 rps, 68623.19 rps on i7-9750H single core.
+- Cached 100% unique: averaged 13403 ms for 1000000 requests, 74612.02 rps on i7-9750H single core.
+
+Uneven dataset (1k uniques): 
+- Cached averaged 12312 ms for 1000000 requests, 81221.57 rps
+
+Uneven dataset (100 uniques):
+- Cached averaged 447 ms for 1000000 requests, 2238805.97 rps
 
 ## API limitations: 
 1. [Auth0 Signal API](https://auth0.com/signals/docs/)
