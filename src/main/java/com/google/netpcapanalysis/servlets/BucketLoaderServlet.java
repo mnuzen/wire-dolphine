@@ -61,7 +61,7 @@ public class BucketLoaderServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     BucketDao bucket = new BucketDaoImpl(data.getPCAPObjects(filename));
-    LinkedHashMap<String, LinkedHashMap<String, Integer>> bucketData = bucket.getBuckets();
+    LinkedHashMap<String, HashMap<String, Integer>> bucketData = bucket.getBuckets();
     String json = convertToJsonUsingGson(bucketData);
     response.setContentType("application/json;");
     response.getWriter().println(json); 
@@ -73,7 +73,7 @@ public class BucketLoaderServlet extends HttpServlet {
     response.sendRedirect("/bucket.html");
   }
 
-  private String convertToJsonUsingGson(LinkedHashMap<String, LinkedHashMap<String, Integer>> data) {
+  private String convertToJsonUsingGson(LinkedHashMap<String, HashMap<String, Integer>> data) {
     Gson gson = new Gson();
     String json = gson.toJson(data);
     return json;

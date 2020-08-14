@@ -35,13 +35,13 @@ public class BucketDaoImpl implements BucketDao {
   private ArrayList<PCAPdata> sortedPCAP; 
   private String myip = "";
 
-  // Map to store <String Class, LinkedHashMap<> of protocols and frequencies >
-  private LinkedHashMap<String, LinkedHashMap<String, Integer>> bucketData;
+  // Map to store <String Class, HashMap<> of protocols and frequencies >
+  private LinkedHashMap<String, HashMap<String, Integer>> bucketData;
   
   private String classA = "Class A";
   private String classB = "Class B";
   private String classC = "Class C";
-  private String classDE = "Class DE";
+  private String classDE = "Class D & E";
 
   public BucketDaoImpl(ArrayList<PCAPdata> packets) {
     allPCAP = packets; 
@@ -49,7 +49,7 @@ public class BucketDaoImpl implements BucketDao {
     loadBuckets();    
   }
 
-  public LinkedHashMap<String, LinkedHashMap<String, Integer>> getBuckets() {
+  public LinkedHashMap<String, HashMap<String, Integer>> getBuckets() {
     return bucketData;
   }
  
@@ -129,13 +129,13 @@ public class BucketDaoImpl implements BucketDao {
 
   /* Parsing protocols for each class. */
   private void loadBuckets() {
-    bucketData = new LinkedHashMap<String, LinkedHashMap<String, Integer>>();
+    bucketData = new LinkedHashMap<String, HashMap<String, Integer>>();
 
     // Map to store <String Protocol, int Frequency of appearance>
-    LinkedHashMap<String, Integer> protocolA = new LinkedHashMap<String, Integer>();
-    LinkedHashMap<String, Integer> protocolB = new LinkedHashMap<String, Integer>();
-    LinkedHashMap<String, Integer> protocolC = new LinkedHashMap<String, Integer>();
-    LinkedHashMap<String, Integer> protocolDE = new LinkedHashMap<String, Integer>();
+    HashMap<String, Integer> protocolA = new HashMap<String, Integer>();
+    HashMap<String, Integer> protocolB = new HashMap<String, Integer>();
+    HashMap<String, Integer> protocolC = new HashMap<String, Integer>();
+    HashMap<String, Integer> protocolDE = new HashMap<String, Integer>();
    
     // loop through sorted IPs 
     for (PCAPdata packet : sortedPCAP) {
@@ -191,33 +191,12 @@ public class BucketDaoImpl implements BucketDao {
         }
       }
     } // end of for loop
-    
+
     bucketData.put(classA, protocolA);
     bucketData.put(classB, protocolB);
     bucketData.put(classC, protocolC);
     bucketData.put(classDE, protocolDE);
   }
-
-  /* Sorts protocols in alphabetical order for ease of viewing in visualization */
-  /*private LinkedHashMap<String, Integer> sortProtocols(LinkedHashMap<String, Integer> hm){
-    Set<Map.Entry<String, Integer>> set = hm.entrySet();
-    List<Map.Entry<String, Integer>> entries = new ArrayList<Map.Entry<String, Integer>>(set);
-
-    // sort entries
-    Collections.sort(entries, new Comparator<Map.Entry<String, Integer>>() {
-      @Override
-      public int compare(Entry<String, Integer> e1, Entry<String, Integer> e2) {
-        return e1.getKey().compareTo(e2.getKey()); // sort them in reverse order for visualization 
-      }
-    });
-
-    // put back to HashMap
-    LinkedHashMap<String, Integer> temp = new LinkedHashMap<String, Integer>(); 
-    for (Map.Entry<String, Integer> o : entries) { 
-      temp.put(o.getKey(), o.getValue()); 
-    } 
-    return temp; 
-  }*/
 
   /* Finds longest common prefix between an array of strings in linear time: the algorithm makes log(m) iterations with m*n comparisons 
      each time, meaning our complexity would be O(s*log(m)) where S = sum of all chars in strings, n = number of strings, m = length of strings*/

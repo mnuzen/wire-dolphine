@@ -117,34 +117,40 @@ public class BucketDaoImplTest {
   }
 
   /* Checks IPs are placed into proper IP classes with proper enumeration of protocols. */
-  //LinkedHashMap<String, LinkedHashMap<String, Integer>>
-  /*@Test
+  @Test
   public void testBuckets() {
-    LinkedHashMap<String, int[]> buckets = bucket.getBuckets();
-    LinkedHashMap<String, int[]> comparison = bucketHelper();
+    LinkedHashMap<String, HashMap<String, Integer>> buckets = bucket.getBuckets();
+    LinkedHashMap<String, HashMap<String, Integer>> comparison = bucketHelper();
      // check sizes are the same
     assertEquals(buckets.size(), comparison.size());
 
-    // checks all classes are correctly filled out 
-    for (String key : buckets.keySet()) {
-      Assert.assertArrayEquals(buckets.get(key), comparison.get(key));
+    for (String className : buckets.keySet()) {
+      // checks all classes are correctly filled out 
+      HashMap<String, Integer> classMap = buckets.get(className);
+      for (String key : classMap.keySet()) {
+        assertEquals(classMap.get(key), classMap.get(key));
+      }
     }
   }
 
-  private LinkedHashMap<String, int[]> bucketHelper() {
-    LinkedHashMap<String, int[]> comparison = new LinkedHashMap<String, int[]>();
-    // initialize connection countings for [UDP, TCP, IPv4, total]
-    int[] classA = new int[]{0, 0, 0, 0};
-    int[] classB = new int[]{2, 1, 0, 3};
-    int[] classC = new int[]{0, 0, 0, 0};
-    int[] classDE = new int[]{0, 0, 0, 0}; // combine class D & E
+  private LinkedHashMap<String, HashMap<String, Integer>> bucketHelper() {
+    LinkedHashMap<String, HashMap<String, Integer>> comparison = new LinkedHashMap<String, HashMap<String, Integer>>();
+    // initialize connection countings for UDP and TCP connections
+    HashMap<String, Integer> protocolA = new HashMap<String, Integer>();
+    HashMap<String, Integer> protocolB = new HashMap<String, Integer>();
+    HashMap<String, Integer> protocolC = new HashMap<String, Integer>();
+    HashMap<String, Integer> protocolDE = new HashMap<String, Integer>();
 
-    comparison.put("Class A", classA);
-    comparison.put("Class B", classB);
-    comparison.put("Class C", classC);
-    comparison.put("Classes D & E", classDE);
+    protocolB.put("UDP", 2);
+    protocolB.put("TCP", 1);
+    protocolB.put("Total", 3);
+   
+    comparison.put("Class A", protocolA);
+    comparison.put("Class B", protocolB);
+    comparison.put("Class C", protocolC);
+    comparison.put("Classes D & E", protocolDE);
 
     return comparison;
-  }*/
+  }
 
 }
