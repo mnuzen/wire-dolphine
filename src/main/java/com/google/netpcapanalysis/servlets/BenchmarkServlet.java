@@ -111,7 +111,7 @@ public class BenchmarkServlet extends HttpServlet {
         if (cache.get(ips[i]) == null) {
           CityResponse response = reader.city(ips[i]);
           if (ips[i] != null && response != null && response.getCountry().getName() != null) {
-            cache.putCache(ips[i], response.getCountry().getName());
+            cache.put(ips[i], response.getCountry().getName());
           }
         }
       } catch (AddressNotFoundException e) {

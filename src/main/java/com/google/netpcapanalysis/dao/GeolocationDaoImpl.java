@@ -46,7 +46,7 @@ public class GeolocationDaoImpl implements GeolocationDao {
       CityResponse response = reader.city(ipAddress);
 
       Country country = response.getCountry();
-      cache.putCache(ip, country.getName());
+      cache.put(ip, country.getName());
       return country.getName();
     } catch (Exception e) {
       return "unknown";

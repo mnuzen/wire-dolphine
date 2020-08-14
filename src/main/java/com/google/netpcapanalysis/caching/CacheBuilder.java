@@ -12,11 +12,19 @@ public class CacheBuilder<K, V extends Serializable> {
   }
 
   private CacheType type;
+
+  // right now used only for datastore - sets name of datastore object
   private String cacheName;
-  private int expiration;
+
+  private int expiration; // ms
   private int maxItems;
 
-  public CacheBuilder() {}
+  public CacheBuilder() {
+    this.type = CacheType.MEMORY;
+    this.cacheName = null;
+    this.expiration = 0;
+    this.maxItems = 0;
+  }
 
   public CacheBuilder(CacheType type, String cacheName, int expiration, int maxItems) {
     this.type = type;
@@ -48,15 +56,23 @@ public class CacheBuilder<K, V extends Serializable> {
   public Cache<K, V> build() {
     Cache<K, V> cache;
     if (type == CacheType.MEMORY) {
-      cache = new MemoryCache<>(Caffeine.newBuilder()
-          .expireAfterWrite(expiration, TimeUnit.MILLISECONDS)
-          .maximumSize(maxItems)
-          .build());
+      cache = buildMemoryCache();
     } else if (type == CacheType.DATASTORE) {
       cache = new DatastoreCache<>(cacheName, expiration, maxItems);
     } else {
       throw new Error("No cache type specified");
     }
     return cache;
+  }
+
+  private Cache<K, V> buildMemoryCache() {
+    Caffeine<Object, Object> builder = Caffeine.newBuilder();
+    if (expiration > 0) {
+      builder.expireAfterWrite(expiration, TimeUnit.MILLISECONDS);
+    }
+    if (maxItems > 0) {
+      builder.maximumSize(maxItems);
+    }
+    return (Cache<K, V>) builder.build();
   }
 }
