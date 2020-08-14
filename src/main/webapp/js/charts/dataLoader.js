@@ -55,46 +55,46 @@ async function loadData() {
 
         //malicious Counter
         if (data[i].flagged.toLowerCase() === "true") {
-          window.maliciousCount.Bad++;
-        } else if (data[i].flagged.toLowerCase() === "false") {
-          window.maliciousCount.Good++;
-        } else {
-          window.maliciousCount.Unknown++;
+          maliciousCount.Bad++;
+        } else if (data[i].flagged.toLowerCase() === "unknown" ||
+         data[i].flagged.toLowerCase() === "error") {
+          maliciousCount.Unknown++;
         }
 
         //outbound
         if (data[i].outbound == true) {
-          window.trafficCount.Outgoing++;
-        } else {
-          window.trafficCount.Incoming++;
+          trafficCount.Outgoing++;
         }
 
         //protocol
         switch (data[i].protocol.toLowerCase()) {
           case "http":
-            window.protocolCount.HTTP++;
+            protocolCount.HTTP++;
             break;
 
           case "https":
-            window.protocolCount.HTTPS++;
+            protocolCount.HTTPS++;
             break;
 
           case "udp":
-            window.protocolCount.UDP++;
+            protocolCount.UDP++;
             break;
 
           case "tcp":
-            window.protocolCount.TCP++;
+            protocolCount.TCP++;
             break;
 
           case "dns":
-            window.protocolCount.DNS++;
+            protocolCount.DNS++;
             break;
 
           default:
-            window.protocolCount.OTHER++;
+            protocolCount.OTHER++;
         }
       }
+
+      trafficCount.Incoming = data.length - trafficCount.Outgoing;
+      maliciousCount.Good = data.length - (maliciousCount.Unknown + maliciousCount.Bad);
     });
 
     return await [maliciousCount, trafficCount, protocolCount]
