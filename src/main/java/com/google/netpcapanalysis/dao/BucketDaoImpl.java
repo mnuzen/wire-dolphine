@@ -190,23 +190,16 @@ public class BucketDaoImpl implements BucketDao {
           protocolDE.put(proto, 1);
         }
       }
-
-      // sort each protocol for graph visual presentation
-      protocolA = sortProtocols(protocolA);
-      protocolB = sortProtocols(protocolB);
-      protocolC = sortProtocols(protocolC);
-      protocolDE = sortProtocols(protocolDE);
-
-      bucketData.put(classA, protocolA);
-      bucketData.put(classB, protocolB);
-      bucketData.put(classC, protocolC);
-      bucketData.put(classDE, protocolDE);
-
     } // end of for loop
+    
+    bucketData.put(classA, protocolA);
+    bucketData.put(classB, protocolB);
+    bucketData.put(classC, protocolC);
+    bucketData.put(classDE, protocolDE);
   }
 
   /* Sorts protocols in alphabetical order for ease of viewing in visualization */
-  private LinkedHashMap<String, Integer> sortProtocols(LinkedHashMap<String, Integer> hm){
+  /*private LinkedHashMap<String, Integer> sortProtocols(LinkedHashMap<String, Integer> hm){
     Set<Map.Entry<String, Integer>> set = hm.entrySet();
     List<Map.Entry<String, Integer>> entries = new ArrayList<Map.Entry<String, Integer>>(set);
 
@@ -224,7 +217,7 @@ public class BucketDaoImpl implements BucketDao {
       temp.put(o.getKey(), o.getValue()); 
     } 
     return temp; 
-  }
+  }*/
 
   /* Finds longest common prefix between an array of strings in linear time: the algorithm makes log(m) iterations with m*n comparisons 
      each time, meaning our complexity would be O(s*log(m)) where S = sum of all chars in strings, n = number of strings, m = length of strings*/

@@ -11,48 +11,65 @@ function drawVisualization() {
     
     // Declare protocols set
     let protocols = new Set();
-
-    // Loop through all four classes
-    for (var i = 0; i < NUM_CLASSES; i++) {
-      Object.keys(bucketData[i]).forEach(key => {
-        //protocols.add(key); // add all possible protocols
-      });
-      protocols.add(i);
-      console.log(bucketData[i]);
-    }
+    parseProtocols();
 
      // Add columns
     data.addColumn('string', 'IP Class');
     protocols.forEach(protocol => {
       data.addColumn('number', protocol);
     });
+    data.addColumn('number', 'Total');
 
-    // Loop through all four classes
-    Object.keys(bucketData).forEach(className => {
-      var row = [];
-      row.push(className); // add Class
+    // Add rows
+    addRows();
+    
+    // Set up chart
+    var graphSize = parseInt(protocols.size-1);
+    console.log(graphSize);
 
-      // add protocols in correct order
-      protocols.forEach(protocol => {
-        if (protocol in bucketData[className]) {
-          row.push(bucketData[className][protocol]); 
-        }
-        else {
-          row.push(0);
-        }
-      });
-      data.addRow(row);
-    });
-
-    var options = {
+    var tableOptions = {
       title : 'Number of Connections per Protocol by IP Class',
       vAxis: {title: 'Number of Connections'},
       hAxis: {title: 'IP Class'},
       seriesType: 'bars',
-      series: {2: {type: 'line'}}        
+      series: {3: {type: 'line'}}        
     };
 
+    // Draw chart
     var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
-    chart.draw(data, options);
+    chart.draw(data, tableOptions);
+
+    /** Functions */
+    function parseProtocols() {
+      // Loop through all four classes
+      Object.keys(bucketData).forEach(className =>  {
+        Object.keys(bucketData[className]).forEach(key => {
+          protocols.add(key); // add all possible protocols
+        });
+      });
+    }
+
+    // Iterate through all Classes and parser protocol frequencies
+    function addRows() {
+      Object.keys(bucketData).forEach(className => {
+        var row = [];
+        var total = 0;
+        row.push(className); // add Class
+
+        // add protocols in correct order
+        protocols.forEach(protocol => {
+          if (protocol in bucketData[className]) {
+            row.push(bucketData[className][protocol]);
+            total += bucketData[className][protocol]; 
+          }
+          else {
+            row.push(0);
+          }
+        });
+
+        row.push(total);
+        data.addRow(row);
+      });
+    }
   });
 }
