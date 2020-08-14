@@ -18,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.net.URL;
 
 @WebServlet("/bench")
 public class BenchmarkServlet extends HttpServlet {
@@ -27,18 +28,18 @@ public class BenchmarkServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     try {
-      File database = new File("./resources/GeoLite2-City.mmdb");
-
+      URL geoDBUrl = BenchmarkServlet.class.getClassLoader().getResource("GeoLite2-City.mmdb");
+      File database = new File(geoDBUrl.toURI());
       DatabaseReader reader = new DatabaseReader.Builder(database).build();
 
       int reqs = (int) 1e6;
       int trials = 3;
       double result = averagedBenchmark(reader, reqs, trials);
       response.getWriter()
-          .printf("averaged %.0f ms for %d requests, %.2f rps", result, reqs, reqs / result * 1000);
+          .printf("averaged %.0f ms for %d requests, %.2f rps\n", result, reqs, reqs / result * 1000);
       double result3 = averagedCachedBenchmark(reader, reqs, trials);
       response.getWriter()
-          .printf("averaged cached %.0f ms for %d requests, %.2f rps", result3, reqs,
+          .printf("averaged cached %.0f ms for %d requests, %.2f rps\n", result3, reqs,
               reqs / result3 * 1000);
     } catch (Exception e) {
       e.printStackTrace();
@@ -98,7 +99,7 @@ public class BenchmarkServlet extends HttpServlet {
         .setCacheName("geolocation")
         .setExpiration(600000) // 10 min
         .setMaxItems(1000)
-        .setType(CacheType.MEMORY)
+        .setType(CacheType.DATASTORE)
         .build();
 
     InetAddress[] ips = genIPsUneven(requests);

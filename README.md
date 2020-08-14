@@ -39,6 +39,10 @@ Uneven dataset (1k uniques):
 Uneven dataset (100 uniques):
 - Cached averaged 447 ms for 1000000 requests, 2238805.97 rps
 
+On GCP Shell: 
+- averaged 121 ms for 1000 requests, 8241.76 rps
+- averaged cached 222 ms w/ datashell for 1000 requests, 4504.50 rps
+
 ## API limitations: 
 1. [Auth0 Signal API](https://auth0.com/signals/docs/)
     - 40,000 requests per day

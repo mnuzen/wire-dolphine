@@ -57,7 +57,7 @@ public class DatastoreCache<K ,V extends Serializable> implements Cache<K, V> {
       this.garbageCollect();
     }
     Entity entity = new Entity(objectName, key.toString());
-    entity.setProperty(CACHED_PROP, data);
+    entity.setProperty(CACHED_PROP, gson.toJson(data));
     entity.setProperty(EXPIRATION_PROP, System.currentTimeMillis() + cacheDuration);
     datastore.put(entity);
   }
@@ -77,7 +77,7 @@ public class DatastoreCache<K ,V extends Serializable> implements Cache<K, V> {
     try {
       Entity entity = datastore.get(KeyFactory.createKey(objectName, key));
       String jsonEncoded = (String) entity.getProperty(CACHED_PROP);
-
+    
       String id = (String) entity.getProperty("id");
       long expiration = (long) entity.getProperty(EXPIRATION_PROP);
       V data = gson.fromJson(jsonEncoded, jsonType);
