@@ -22,6 +22,7 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
+import com.google.netpcapanalysis.interfaces.dao.UtilityPCAPDao;
 import com.google.netpcapanalysis.interfaces.dao.PCAPParserDao;
 
 import java.nio.file.Path;
@@ -39,6 +40,7 @@ import java.nio.file.Paths;
 public class PCAPParserDaoImpl implements PCAPParserDao {
   private ArrayList<PCAPdata> allPCAP = new ArrayList<PCAPdata>(); 
   private PCAPDao datastore = new PCAPDaoImpl();
+  private UtilityPCAPDao pcapUtility = new UtilityPCAPDaoImpl();
   //private HashMap<String, PCAPdata> finalPCAP = new HashMap<String, PCAPdata>();
 
   private String filename;
@@ -132,7 +134,7 @@ public class PCAPParserDaoImpl implements PCAPParserDao {
 
   public ArrayList<PCAPdata> addDirection(ArrayList<PCAPdata> allPCAP) {
 
-    String myip = datastore.findMyIP(allPCAP);
+    String myip = pcapUtility.findMyIP(allPCAP);
 
     for(PCAPdata packet : allPCAP)
     {
