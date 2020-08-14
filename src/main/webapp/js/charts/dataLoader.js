@@ -29,14 +29,14 @@ async function loadCharts() {
 async function loadData() {
   
   maliciousCount = {
-    Bad: 0,
     Good: 0,
+    Bad: 0,
     Unknown: 0
   };
 
   trafficCount = {
-    Incoming: 1,
-    Outgoing: 1
+    Incoming: 0,
+    Outgoing: 0
   };
 
   protocolCount = {
@@ -55,11 +55,18 @@ async function loadData() {
 
         //malicious Counter
         if (data[i].flagged.toLowerCase() === "true") {
-          window.maliciousCount.true++;
+          window.maliciousCount.Bad++;
         } else if (data[i].flagged.toLowerCase() === "false") {
-          window.maliciousCount.false++;
+          window.maliciousCount.Good++;
         } else {
-          window.maliciousCount.unknown++;
+          window.maliciousCount.Unknown++;
+        }
+
+        //outbound
+        if (data[i].outbound == true) {
+          window.trafficCount.Outgoing++;
+        } else {
+          window.trafficCount.Incoming++;
         }
 
         //protocol

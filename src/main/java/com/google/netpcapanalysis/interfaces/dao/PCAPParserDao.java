@@ -8,4 +8,5 @@ public interface PCAPParserDao {
     public void parseRaw() throws IOException;
     public void putDatastore();
     public ArrayList<PCAPdata> getAllPCAP();
+    public ArrayList<PCAPdata> addDirection(ArrayList<PCAPdata> allPCAP);
 }

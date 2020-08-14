@@ -4,15 +4,15 @@ public final class PCAPdata {
 
   public String source;
   public String destination;
-  public String domain;
-  public String location;
   public String protocol;
   public int size;
+  public String location;
+  public String domain;
   public String flagged;
   public boolean outbound;
 
   public PCAPdata() {
-    this(null, null, null, null, null, 0, null, false);
+    this(null, null, null, 0, null, null, null, false);
   }
 
   public PCAPdata(
@@ -45,5 +45,19 @@ public final class PCAPdata {
   this.destination = destination;
   this.protocol = protocol;
   this.size = size;
+}
+
+public PCAPdata(
+    String source,
+    String destination,
+    String protocol,
+    int size,
+    boolean outbound
+) {
+  this.source = source;
+  this.destination = destination;
+  this.protocol = protocol;
+  this.size = size;
+  this.outbound = outbound;
 }
 }

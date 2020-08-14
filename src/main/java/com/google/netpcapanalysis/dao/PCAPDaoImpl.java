@@ -54,8 +54,9 @@ public class PCAPDaoImpl implements PCAPDao {
       String destination = (String) entity.getProperty("Destination");
       String protocol = (String) entity.getProperty("Protocol");
       int size = (int) (long) entity.getProperty("Size");
+      boolean outbound = (Boolean) entity.getProperty("Outbound");
 
-      PCAPdata temp = new PCAPdata(source, destination, protocol, size);
+      PCAPdata temp = new PCAPdata(source, destination, protocol, size, outbound);
 
       dataTable.add(temp);
     }
@@ -74,6 +75,7 @@ public class PCAPDaoImpl implements PCAPDao {
     pcapEntity.setProperty("Destination", packet.destination);
     pcapEntity.setProperty("Size", packet.size);
     pcapEntity.setProperty("Protocol", packet.protocol);
+    pcapEntity.setProperty("Outbound", packet.outbound);
 
     pcapEntityAll.add(pcapEntity);
     }

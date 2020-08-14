@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import com.google.netpcapanalysis.models.PCAPdata;
 import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
+import com.google.netpcapanalysis.dao.PCAPParserDaoImpl;
+import com.google.netpcapanalysis.interfaces.dao.PCAPParserDao;
 
 public class MockDataLoader {
 
@@ -22,6 +24,8 @@ public class MockDataLoader {
 
   public void LoadData(ArrayList<PCAPdata> dataTable) { // uploads to datastore
     PCAPDao dataBase = new PCAPDaoImpl();
+    PCAPParserDao parser = new PCAPParserDaoImpl("null");
+    dataTable = parser.addDirection(dataTable);
 
     dataBase.setPCAPObjects(dataTable, FILE_NAME);
   }

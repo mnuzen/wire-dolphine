@@ -18,8 +18,8 @@ import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 
 public class  MaliciousIPDaoImpl implements MaliciousIPDao{
 
-    //private KeystoreDao keystoreDao = new KeystoreDaoImpl();
-    private final String AUTH0_API_KEY = " ";//keystoreDao.getKeystore().getAuth0APIKey(); //null pointer error if keystore fails to load
+    private KeystoreDao keystoreDao = new KeystoreDaoImpl();
+    private final String AUTH0_API_KEY = keystoreDao.getKeystore().getAuth0APIKey(); //null pointer error if keystore fails to load
 
     private static final String FLAGGED_FALSE = "Resource not found";
     private static final String FLAGGED_TRUE = "200: OK";
@@ -35,7 +35,7 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
         HttpResponse<String> result;
 
         String lookupIP;
-        if(data.outbound == true)
+        if(data.outbound)
         {
             lookupIP = data.destination;
         }
@@ -43,9 +43,7 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
             lookupIP = data.source;
         }
 
-
         String searchDB = ipCache.searchMaliciousDB(lookupIP);
-
         if(searchDB.equalsIgnoreCase(Flagged.TRUE))
         {
             data.flagged = Flagged.TRUE;
