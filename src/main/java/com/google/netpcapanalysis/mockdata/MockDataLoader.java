@@ -7,7 +7,10 @@ import java.util.ArrayList;
 
 import com.google.netpcapanalysis.models.PCAPdata;
 import com.google.netpcapanalysis.dao.PCAPDaoImpl;
+import com.google.netpcapanalysis.dao.UtilityPCAPDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
+import com.google.netpcapanalysis.interfaces.dao.UtilityPCAPDao;
+import com.google.netpcapanalysis.models.FileAttribute;
 
 public class MockDataLoader {
 
@@ -22,10 +25,13 @@ public class MockDataLoader {
 
   public void LoadData(ArrayList<PCAPdata> dataTable) { // uploads to datastore
     PCAPDao dataBase = new PCAPDaoImpl();
+    UtilityPCAPDao pcapUtility = new UtilityPCAPDaoImpl();
 
-    for (PCAPdata PCAP : dataTable) {
-      dataBase.setPCAPObjects(PCAP, FILE_NAME);
-    }
+    dataBase.setPCAPObjects(dataTable, FILE_NAME);
+    String myip = pcapUtility.findMyIP(dataTable);
+
+    FileAttribute data = new FileAttribute(FILE_NAME, FILE_NAME, myip);
+    dataBase.setFileAttribute(data);
   }
 
   // Source,Destination,Protocal,Size

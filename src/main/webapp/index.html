@@ -32,8 +32,8 @@
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-      <div class="sidebar-brand-icon rotate-n-15">
-        <i class="fas fa-laugh-wink"></i>
+      <div class="sidebar-brand-icon">
+        <i class="fas fa-network-wired"></i>
       </div>
       <div class="sidebar-brand-text mx-3">PCAP Analyzer</div>
     </a>
@@ -77,7 +77,7 @@
     <!-- Nav Item - Charts -->
     <li class="nav-item">
       <a class="nav-link" href="charts.html">
-        <i class="fas fa-fw fa-chart-area"></i>
+        <i class="fas fa-fw fa-chart-pie"></i>
         <span>Charts</span></a>
     </li>
     <!-- Nav Item - Table -->
@@ -147,26 +147,65 @@
     </nav>
     <!-- End of Topbar -->
 
-    <!-- Main Content -->
-    <div id="content">
-      <div class="jumbotron">
-        <h1 class="display-4">Welcome!</h1>
-        <p class="lead">This is our capstone web-app project, a tool designed to help every day
-          computer users understand the basic fundamentals of how
-          information can be transferred from one machine to another.</p>
-        <hr class="my-4">
-        <p>The structure of the internet relies on computers communicating through packets and
-          networks. The way these packets are stored and examined are in PCAP files, where PCAP
-          stands for packet capture. Our goal is to help you understand the components of a PCAP
-          file and understand how a PCAP file can tell you about your internet footprint and the
-          websites
-          you navigate to.</p>
-        <p>To get started on visualizing packet movement and network communications, click on the
-          Start button in the top right-hand corner.</p>
-        <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+      <!-- Main Content -->
+      <div id="content" class="container-fluid">
+
+        <div class="jumbotron">
+          <!-- Welcome-->
+          <div>
+            <h1 class="display-4, text-center">Welcome!</h1>
+            <p class="lead">
+              PCAP Analyzer is the culmination of our twelve week summer internship with Google. Our project focused on designing
+              a tool to help everyday computer users understand the basic fundamentals of how data is shared across the
+              Internet.</p>
+          </div>
+          <hr class="my-4">
+
+          <!-- About the project-->
+          <div>
+            <h4>Getting Started</h4>
+            <p>
+              Our project analyzed packets which are stored in PCAP (packet capture) files. By analyzing PCAP file you
+              can tell a lot about your internet footprint. You can learn more about internet fundamentals below 
+              or view PCAP Visualization by click on the Start button in the top right-hand corner
+            </p>
+          </div>
+          <hr class="my-4">
+
+          <!-- How does the Internet Work -->
+          <div>
+            <h4>How does the Internet Work?</h4>
+            <p>When you load something on the internet, its content is split into tiny fragments called packets.
+              These packets are sent over WIFI and network cabling via different types of protocols. What protocols is
+              used determines how the packet is to be transported and interpreted by the receiving device. Once the
+              packet
+              is routed from one device to another, they packets are rebuild into the content originally requested.
+            </p>
+
+            Some Common protocols:
+            <ul>
+              <li><a href="https://en.wikipedia.org/wiki/Transmission_Control_Protocol">
+                  TCP: Core internet protocol with build in retransmission of lost packets</a></li>
+              <li><a href="https://en.wikipedia.org/wiki/User_Datagram_Protocol">
+                  UDP: A faster core protocol then TCP without the lost packet ditection</a></li>
+              <li><a href="https://en.wikipedia.org/wiki/Internet_Message_Access_Protocol">
+                  DNS: The phonebook of the Internet,
+                  it converts IP address into domain names (TCP/UDP)</a></li>
+              <li><a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">
+                  HTTP/S: protocol used to transmit Webpages (TCP/UDP)</a></li>
+              <li><a href="https://en.wikipedia.org/wiki/Internet_Message_Access_Protocol">
+                  IMAP/POP: protocol used to transmit Email (TCP)</a></li>
+            </ul>
+          </div>
+        
+
+
+      
+
+        </div>
+
       </div>
-    </div>
-    <!-- End of Main Content -->
+      <!-- End of Main Content -->
 
     <!-- Footer -->
     <footer class="sticky-footer bg-white">

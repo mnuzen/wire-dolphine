@@ -37,7 +37,7 @@ import java.nio.file.Paths;
    * Hard-coded the source IP address (myip) -- need to find a way to retrieve myip (look at first packet, ask user, use Whatsmyip?)
 */
 public class PCAPParserDaoImpl implements PCAPParserDao {
-  private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+  private final PCAPDao datastore = new PCAPDaoImpl();
   private ArrayList<PCAPdata> allPCAP = new ArrayList<PCAPdata>(); 
   //private HashMap<String, PCAPdata> finalPCAP = new HashMap<String, PCAPdata>();
 
@@ -124,10 +124,7 @@ public class PCAPParserDaoImpl implements PCAPParserDao {
  
   /* Adds all raw packets to datastore through GenericPCAPDao*/
   public void putDatastore(){
-    for (PCAPdata packet : allPCAP) {
-      PCAPDao data = new PCAPDaoImpl();
-      data.setPCAPObjects(packet, filename);
-    }
+    datastore.setPCAPObjects(allPCAP, filename);
   } 
 
   /* Access elements for testing. */
