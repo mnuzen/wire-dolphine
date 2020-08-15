@@ -63,7 +63,6 @@ public class FrequencyDaoImplTest {
     data.add(tempPCAP3);
 
     freq = new FrequencyDaoImpl(data);
-    freq.loadFrequency();
   }
 
   /* Checks all packets have been put properly. */
@@ -83,19 +82,19 @@ public class FrequencyDaoImplTest {
   /* Checks number of unique packets. */
   @Test
   public void testDuplicates() {
-    HashMap<String, PCAPdata> finalMap = freq.getFinalMap();
+    LinkedHashMap<String, Integer> finalMap = freq.getFinalMap();
     int size = finalMap.size();
     int comparison = SIZE;
     assertEquals(size, comparison); // there should only be 2 unique connections: IP1/IP2 and IP1/IP1
   }
 
-  /* Checks number of final nodes. */
-  @Test
-  public void testFinalNodes() {
-    ArrayList<PCAPdata> finalFreq = freq.getFinalFreq();
-    int size = finalFreq.size();
-    int comparison = SIZE;
-    assertEquals(size, comparison); // there should only be 2 nodes: IP1 and IP2
+  /* Checks frequencies of packets. */
+  @Test 
+  public void checkFrequentIPs() {
+    LinkedHashMap<String, Integer> finalMap = freq.getFinalMap();
+    int frequency = finalMap.get(IP2);
+    int comparison = FREQ;
+    assertEquals(frequency, comparison);
   }
 
 }

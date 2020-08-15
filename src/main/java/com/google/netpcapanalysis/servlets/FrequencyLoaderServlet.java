@@ -61,8 +61,7 @@ public class FrequencyLoaderServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     FrequencyDao freq = new FrequencyDaoImpl(data.getPCAPObjects(filename));
-    freq.loadFrequency();
-    ArrayList<PCAPdata> finalFrequencies = freq.getFinalFreq(); 
+    LinkedHashMap<String, Integer> finalFrequencies = freq.getFinalMap(); 
 
     String json = convertToJsonUsingGson(finalFrequencies);
     response.setContentType("application/json;");
@@ -75,7 +74,7 @@ public class FrequencyLoaderServlet extends HttpServlet {
     response.sendRedirect("/network.html");
   }
 
-  private String convertToJsonUsingGson(ArrayList<PCAPdata> data) {
+  private String convertToJsonUsingGson(LinkedHashMap<String, Integer> data) {
     Gson gson = new Gson();
     String json = gson.toJson(data);
     return json;
