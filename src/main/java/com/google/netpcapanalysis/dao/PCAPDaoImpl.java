@@ -44,6 +44,78 @@ public class PCAPDaoImpl implements PCAPDao {
 
   }
 
+ //gets all PCAP data under a given entity from datastore
+  public ArrayList<PCAPdata> getPCAPObjects(String searchEntity) {
+    ArrayList<PCAPdata> dataTable = new ArrayList<>();
+
+    Query query = new Query(searchEntity).addSort("Source", SortDirection.DESCENDING);
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      String source = (String) entity.getProperty("Source");
+      String destination = (String) entity.getProperty("Destination");
+      String protocol = (String) entity.getProperty("Protocol");
+      int size = (int) (long) entity.getProperty("Size");
+
+      PCAPdata temp = new PCAPdata(source, destination, protocol, size);
+
+      dataTable.add(temp);
+    }
+    return dataTable;
+  }
+
+  public void setPCAPObjects(ArrayList<PCAPdata> data, String searchEntity) {
+    Entity entity = new Entity(searchEntity);
+    List<Entity> pcapEntityAll = new ArrayList<Entity>();
+
+    for (PCAPdata packet : data) {
+      Entity pcapEntity = new Entity(entity.getKey());
+
+      pcapEntity.setProperty("Source", packet.source);
+      pcapEntity.setProperty("Destination", packet.destination);
+      pcapEntity.setProperty("Size", packet.size);
+      pcapEntity.setProperty("Protocol", packet.protocol);
+
+      pcapEntityAll.add(pcapEntity);
+    }
+
+    datastore.put(pcapEntityAll);
+
+  }
+
+  public String searchMaliciousDB(String searchIP) {
+   
+    Filter propertyFilter =
+    new FilterPredicate("IP", FilterOperator.EQUAL, searchIP);
+    Query q = new Query(cacheEntity).setFilter(propertyFilter);
+    PreparedQuery pq = datastore.prepare(q);
+    List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(1));
+
+    if(result.size() > 0){
+      String value = (String) result.get(0).getProperty("Flagged");
+
+      if(value.equalsIgnoreCase(Flagged.TRUE)){
+        return Flagged.TRUE;
+      }
+      else
+      {
+        return Flagged.FALSE;
+      }
+    }
+    else
+    {
+      return Flagged.UNKNOWN;
+    }
+  }
+
+  public void setMaliciousIPObjects(MaliciousPacket data) {
+    Entity Entity = new Entity(cacheEntity);
+   
+    Entity.setProperty("IP", data.ip);
+    Entity.setProperty("Flagged", data.flagged);
+    datastore.put(Entity);
+  }
+
   private boolean searchFileAttribute(String searchEntity)
   {
     FileAttribute temp = new FileAttribute();;
@@ -116,131 +188,6 @@ public class PCAPDaoImpl implements PCAPDao {
       prevEntity.setProperty("Upload_Date", data.uploadDate);
       datastore.put(prevEntity);
     }
-  }
-
- //gets all PCAP data under a given entity from datastore
-  public ArrayList<PCAPdata> getPCAPObjects(String searchEntity) {
-    ArrayList<PCAPdata> dataTable = new ArrayList<>();
-
-    Query query = new Query(searchEntity).addSort("Source", SortDirection.DESCENDING);
-    PreparedQuery results = datastore.prepare(query);
-
-    for (Entity entity : results.asIterable()) {
-      String source = (String) entity.getProperty("Source");
-      String destination = (String) entity.getProperty("Destination");
-      String protocol = (String) entity.getProperty("Protocol");
-      int size = (int) (long) entity.getProperty("Size");
-
-      PCAPdata temp = new PCAPdata(source, destination, protocol, size);
-
-      dataTable.add(temp);
-    }
-    return dataTable;
-  }
-
-  public void setPCAPObjects(ArrayList<PCAPdata> data, String searchEntity) {
-    Entity entity = new Entity(searchEntity);
-    List<Entity> pcapEntityAll = new ArrayList<Entity>();
-
-    for (PCAPdata packet : data) {
-      Entity pcapEntity = new Entity(entity.getKey());
-
-      pcapEntity.setProperty("Source", packet.source);
-      pcapEntity.setProperty("Destination", packet.destination);
-      pcapEntity.setProperty("Size", packet.size);
-      pcapEntity.setProperty("Protocol", packet.protocol);
-
-      pcapEntityAll.add(pcapEntity);
-    }
-
-    datastore.put(pcapEntityAll);
-
-  }
-
-
- //Gets most use IP in PCAPdata
- private String findMyIP(ArrayList<PCAPdata> allData) {
-  String myip = "";
-  HashMap<String, Integer> hm = new HashMap<String, Integer>();
-  for (PCAPdata packet : allData) {
-    // source
-    if (hm.containsKey(packet.source)) { 
-      // if IP already exists, increment
-      hm.merge(packet.source, 1, Integer::sum);
-    }
-    else {
-      hm.put(packet.source, 1);
-    }
-    // destination
-    if (hm.containsKey(packet.destination)) { 
-      // if IP already exists, increment
-      hm.merge(packet.destination, 1, Integer::sum);
-    }
-    else {
-      hm.put(packet.destination, 1);
-    }
-  }
-  // find largest recurrence
-  myip = Collections.max(hm.entrySet(), Map.Entry.comparingByValue()).getKey();
-  return myip;
-}
-
-//Finds all unique IPs and sets myip to source
-public ArrayList<PCAPdata> getUniqueIPs(ArrayList<PCAPdata> allData){
-  HashMap<String, PCAPdata> finalMap = new HashMap<String, PCAPdata>();
-  String myip = findMyIP(allData);;
-  String outip = "";
-
-  for (PCAPdata packet : allData) {
-
-    //swaps packet order based on myip
-    if (packet.source.equals(myip)) {
-      outip = packet.destination;
-    }
-    else {
-      outip = packet.source;
-    }
-    
-    //puts data into map if not already there
-    if (!finalMap.containsKey(outip)){
-      PCAPdata tempPCAP = new PCAPdata(myip, outip, "", "", packet.protocol, packet.size, packet.flagged, packet.frequency); 
-      finalMap.put(outip, tempPCAP);
-    }
-  }
-  return (new ArrayList<PCAPdata>(finalMap.values()));
-}
-
-  public String searchMaliciousDB(String searchIP) {
-   
-    Filter propertyFilter =
-    new FilterPredicate("IP", FilterOperator.EQUAL, searchIP);
-    Query q = new Query(cacheEntity).setFilter(propertyFilter);
-    PreparedQuery pq = datastore.prepare(q);
-    List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(1));
-
-    if(result.size() > 0){
-      String value = (String) result.get(0).getProperty("Flagged");
-
-      if(value.equalsIgnoreCase(Flagged.TRUE)){
-        return Flagged.TRUE;
-      }
-      else
-      {
-        return Flagged.FALSE;
-      }
-    }
-    else
-    {
-      return Flagged.UNKNOWN;
-    }
-  }
-
-  public void setMaliciousIPObjects(MaliciousPacket data) {
-    Entity Entity = new Entity(cacheEntity);
-   
-    Entity.setProperty("IP", data.ip);
-    Entity.setProperty("Flagged", data.flagged);
-    datastore.put(Entity);
   }
 
 }

@@ -10,16 +10,20 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.netpcapanalysis.dao.UtilityPCAPDaoImpl;
+import com.google.netpcapanalysis.interfaces.dao.UtilityPCAPDao;
 
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
   private static final String FILE_NAME = "file_1";
   private PCAPDao datastore = new PCAPDaoImpl();
+  private UtilityPCAPDao pcapUtility = new UtilityPCAPDaoImpl();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String json = convertToJsonUsingGson(datastore.getPCAPObjects(FILE_NAME));
+    String entityName = pcapUtility.hashText(FILE_NAME);
+    String json = convertToJsonUsingGson(datastore.getPCAPObjects(entityName));
     response.setContentType("application/json;");
     response.getWriter().println(json);
   }

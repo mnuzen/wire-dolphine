@@ -6,9 +6,9 @@ import java.io.BufferedReader;
 import java.util.ArrayList;
 
 import com.google.netpcapanalysis.models.PCAPdata;
+import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.dao.UtilityPCAPDaoImpl;
-import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.interfaces.dao.UtilityPCAPDao;
 import com.google.netpcapanalysis.models.FileAttribute;
 
@@ -27,10 +27,12 @@ public class MockDataLoader {
     PCAPDao dataBase = new PCAPDaoImpl();
     UtilityPCAPDao pcapUtility = new UtilityPCAPDaoImpl();
 
-    dataBase.setPCAPObjects(dataTable, FILE_NAME);
+    String entityName = pcapUtility.hashText(FILE_NAME);
+
+    dataBase.setPCAPObjects(dataTable, entityName);
     String myip = pcapUtility.findMyIP(dataTable);
 
-    FileAttribute data = new FileAttribute(FILE_NAME, FILE_NAME, myip);
+    FileAttribute data = new FileAttribute(entityName, FILE_NAME, myip);
     dataBase.setFileAttribute(data);
   }
 
