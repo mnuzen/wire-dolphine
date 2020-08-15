@@ -2,6 +2,7 @@ const SOURCE = 0;
 const SHAPE = "dot"
 const SHAPE_SIZE = 16;
 const EDGE_LIMIT = 20; // limit the number of edges on visualization 
+const NODE_LIMIT = 20;
 
 const GROUP1 = 1;
 const GROUP2 = 2;
@@ -35,15 +36,19 @@ function createIPNetwork(){
     nodes[n] = {id: n, label: title, group: n};  
     n++;
 
+    var limit = 0;
     // put all addresses onto graph
     Object.keys(data).forEach(key => {
-      var normaled = normalize(data[key]);
-      nodes[n] = {id: n, label: key + "\n" + data[key] + " Connections", group: n}; // maybe coloring by class?
-      for (var m = 0; m < normaled; m++) {
-        edges[edge] = {from: n, to: SOURCE};
-        edge++;
+      if (limit < NODE_LIMIT) {
+        var normaled = normalize(data[key]);
+        nodes[n] = {id: n, label: key + "\n" + data[key] + " Connections", group: n}; // maybe coloring by class?
+        for (var m = 0; m < normaled; m++) {
+            edges[edge] = {from: n, to: SOURCE};
+            edge++;
+        }
+        n++;
       }
-      n++;
+      limit++;
     });
     
     createNetwork();
@@ -114,15 +119,19 @@ function drawObfusNetwork(){
     nodes[n] = {id: n, label: title, group: n}; 
     n++;
 
+    var limit = 0;
     // put all addresses onto graph
     Object.keys(data).forEach(key => {
-      var normaled = normalize(data[key]);
-      nodes[n] = {id: n, label: "Node " + n + "\n" + data[key] + " Connections", group: n};
-      for (var m = 0; m < normaled; m++) {
-        edges[edge] = {from: n, to: SOURCE};
-        edge++;
+      if (limit < NODE_LIMIT) {
+        var normaled = normalize(data[key]);
+        nodes[n] = {id: n, label: key + "\n" + data[key] + " Connections", group: n}; // maybe coloring by class?
+        for (var m = 0; m < normaled; m++) {
+            edges[edge] = {from: n, to: SOURCE};
+            edge++;
+        }
+        n++;
       }
-      n++;
+      limit++;
     });
     
     createNetwork();

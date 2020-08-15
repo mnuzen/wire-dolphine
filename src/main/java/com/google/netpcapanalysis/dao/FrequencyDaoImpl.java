@@ -37,7 +37,6 @@ public class FrequencyDaoImpl implements FrequencyDao {
 
   private String myip = "";
   private boolean first = true;
-  private int NUM_NODES = 15;
 
   public FrequencyDaoImpl(ArrayList<PCAPdata> packets) {
     allPCAP = packets; 
@@ -80,8 +79,8 @@ public class FrequencyDaoImpl implements FrequencyDao {
 
   /* Fills out finalMap with frequencies based on IP address only (not protocol). */
   private void processData(){
-    LinkedHashMap<String, Integer> hm = getUniqueOutIPs();
-    getFrequentIPs(hm);
+    //LinkedHashMap<String, Integer> hm = getUniqueOutIPs();
+    getFrequentIPs(getUniqueOutIPs());
   } 
   
   /* Sort IPs by frequency and get most frequent addresses*/
@@ -95,21 +94,11 @@ public class FrequencyDaoImpl implements FrequencyDao {
       }
     });
 
-    if (entries.size() < NUM_NODES) {
-      finalMap = hm;
+    finalMap = new LinkedHashMap<String, Integer>();
+    for(Map.Entry<String, Integer> map : entries){
+      finalMap.put(map.getKey(), map.getValue());
     }
-    else {
-      finalMap = new LinkedHashMap<String, Integer>();
-      // add top NUM_NODE frequencies
-      int counter = 0;
-      for(Map.Entry<String, Integer> map : entries){
-        if (counter < NUM_NODES) {
-          finalMap.put(map.getKey(), map.getValue());
-          counter++;
-        }
-      }
-    }
-    
+
   }
 
   /* Gets all unique outgoing IPs and puts OUTIP as key in hashmap, where value represents frequency */
