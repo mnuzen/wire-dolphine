@@ -8,9 +8,13 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.google.netpcapanalysis.models.Flagged;
+import java.util.ArrayList;
 
 import com.google.netpcapanalysis.dao.KeystoreDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.KeystoreDao;
+
+import com.google.netpcapanalysis.dao.PCAPDaoImpl;
+import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 
 public class  MaliciousIPDaoImpl implements MaliciousIPDao{
 
@@ -25,6 +29,7 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
 
     public MaliciousIPDaoImpl(){
     }
+
     public PCAPdata isMalicious(PCAPdata data)
     {
         HttpResponse<String> result;
@@ -38,7 +43,6 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
             data.flagged = Flagged.FALSE;
         }
         else{
-            System.out.println("Else statement");
             try {
                 result = Unirest.get("https://signals.api.auth0.com/badip/" + data.destination)
                         .header("X-Auth-Token", AUTH0_API_KEY)
@@ -65,12 +69,19 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
                 }
     
             } catch (UnirestException e) {
-                System.out.println("IP lookup failed");
-                // TODO Auto-generated catch block
+                data.flagged = Flagged.ERROR; 
                 e.printStackTrace();
             }
         }
         return data;
     }
     
+    public ArrayList<PCAPdata> run(ArrayList<PCAPdata> allData){
+
+        for(PCAPdata packet : allData){
+            packet = isMalicious(packet);
+        }
+
+        return allData;
+    }
 }

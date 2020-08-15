@@ -16,15 +16,15 @@ import com.google.netpcapanalysis.interfaces.dao.BucketDao;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.ArrayList;
 import java.util.Arrays;
-
-import java.io.*;
-import java.lang.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.io.InputStream;
+import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
 import java.nio.charset.StandardCharsets;
@@ -49,7 +49,7 @@ public class BucketDaoImplTest {
   public void setup() throws IOException {
     // Parse set IP addresses from hidden text file
     Path path = Paths.get(FILENAME);
-    InputStream stream = PCAPParserDaoImplTest.class.getClassLoader().getResourceAsStream(path.toString());
+    InputStream stream = BucketDaoImplTest.class.getClassLoader().getResourceAsStream(path.toString());
     
     String text = IOUtils.toString(stream, StandardCharsets.UTF_8);
     String[] values = text.split(",");

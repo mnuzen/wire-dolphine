@@ -1,13 +1,14 @@
 package com.google.netpcapanalysis.interfaces.dao;
 
 import com.google.netpcapanalysis.models.PCAPdata;
-import java.util.*; 
-import java.io.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+
+import java.io.InputStream;
+import java.io.IOException;
 
 public interface FrequencyDao {
-    public void loadFrequency();
     public ArrayList<PCAPdata> getAllPCAP();
-    public HashMap<String, PCAPdata> getFinalMap();
-    public ArrayList<PCAPdata> getFinalFreq();
+    public LinkedHashMap<String, Integer> getFinalMap();
     public String getMyIP();
 }

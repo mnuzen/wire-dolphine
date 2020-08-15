@@ -35,6 +35,18 @@ public final class PCAPdata {
     this.frequency = frequency;
   }
 
+  public PCAPdata(
+    String source,
+    String destination,
+    String protocol,
+    int size
+) {
+  this.source = source;
+  this.destination = destination;
+  this.protocol = protocol;
+  this.size = size;
+}
+
   public int getFrequency() {
     return this.frequency;
   }

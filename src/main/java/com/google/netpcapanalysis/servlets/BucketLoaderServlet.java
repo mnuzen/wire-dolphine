@@ -19,9 +19,6 @@ import com.google.netpcapanalysis.models.PCAPdata;
 import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 
-import com.google.netpcapanalysis.dao.PCAPParserDaoImpl;
-import com.google.netpcapanalysis.interfaces.dao.PCAPParserDao;
-
 import com.google.netpcapanalysis.dao.BucketDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.BucketDao;
 
@@ -46,11 +43,14 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 
-import java.util.*; 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.io.InputStream;
 import java.io.IOException;
-import java.io.*;
 
 /** Servlet that retrieves and returns frequencies. */
 @WebServlet("/PCAP-bucket")
@@ -91,4 +91,4 @@ public class BucketLoaderServlet extends HttpServlet {
     return value;
   }
 
-} // end of PacketParserServlet class
+} // end of BucketLoaderServlet class
