@@ -168,6 +168,25 @@ public class PCAPDaoImpl implements PCAPDao {
    return temp;
   }
 
+  public ArrayList<FileAttribute> getFileAttributes(String searchEntity) {
+    ArrayList<FileAttribute> fileList = new ArrayList<>();
+
+    Query query = new Query(searchEntity);
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      String pcapEntity = (String) entity.getProperty("PCAP_Entity");
+      String fileName = (String) entity.getProperty("File_Name");
+      String myIP = (String) entity.getProperty("My_IP");
+      Date uploadDate = (Date) entity.getProperty("Upload_Date");
+
+      FileAttribute temp = new FileAttribute(pcapEntity, fileName, myIP, uploadDate);
+
+      fileList.add(temp);
+    }
+    return fileList;
+  }
+
   public void setFileAttribute(FileAttribute data){
     
     if(!searchFileAttribute(data.pcapEntity))

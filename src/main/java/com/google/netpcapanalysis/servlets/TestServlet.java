@@ -34,13 +34,12 @@ public class TestServlet extends HttpServlet {
 
       PCAPDao dataBase = new PCAPDaoImpl();
 
-      String entityName = pcapUtility.hashText(FILE_NAME);
+      for(int i =1;i<5;i++){
 
-      FileAttribute temp = dataBase.getFileAttribute(entityName);
-      System.out.println(temp.fileName);
-      System.out.println(temp.pcapEntity);
-      System.out.println(temp.myIP);
-      System.out.println(temp.uploadDate);
+        FileAttribute data = new FileAttribute("Hashed_Name_" + String.valueOf(i) 
+        , "/File_" + String.valueOf(i), "192.168.1." + String.valueOf(i));
+        dataBase.setFileAttribute(data);
+      }
 
         response.sendRedirect("/index.html");
     }

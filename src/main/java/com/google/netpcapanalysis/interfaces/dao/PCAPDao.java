@@ -8,6 +8,7 @@ import com.google.netpcapanalysis.models.FileAttribute;
 public interface PCAPDao {
 
     public FileAttribute getFileAttribute(String searchEntity);
+    public ArrayList<FileAttribute> getFileAttributes(String searchEntity);
     public void setFileAttribute(FileAttribute data);
 
     public ArrayList<PCAPdata> getPCAPObjects(String searchEntity);
