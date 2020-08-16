@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data-table")
 public class TableServlet extends HttpServlet {
 
-  private static final String FILE_NAME = "file_1";
   private UtilityPCAPDao pcapUtility = new UtilityPCAPDaoImpl();
   private PCAPDao datastore = new PCAPDaoImpl();
   private MaliciousIPDao maliciousLookup = new MaliciousIPDaoImpl();
@@ -26,20 +25,15 @@ public class TableServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
-    String entityName = pcapUtility.hashText(FILE_NAME);
+
+    String entityName = pcapUtility.getSessionEntity(request);
 
     //will need to run lookups for Domain/location to display for datatable
     dataTable = maliciousLookup.run(datastore.getPCAPObjects(entityName));
 
-    String json = convertToJsonUsingGson(dataTable);
+    String json = pcapUtility.convertPCAPdataToJson(dataTable);
     response.setContentType("application/json;");
     response.getWriter().println(json);
   }
 
-  private String convertToJsonUsingGson(ArrayList<PCAPdata> data) {
-    Gson gson = new Gson();
-    String json = gson.toJson(data);
-    return json;
-  }
 }

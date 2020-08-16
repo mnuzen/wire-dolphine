@@ -48,18 +48,23 @@ public class PCAPDaoImpl implements PCAPDao {
   public ArrayList<PCAPdata> getPCAPObjects(String searchEntity) {
     ArrayList<PCAPdata> dataTable = new ArrayList<>();
 
-    Query query = new Query(searchEntity).addSort("Source", SortDirection.DESCENDING);
-    PreparedQuery results = datastore.prepare(query);
+    try{
+      Query query = new Query(searchEntity).addSort("Source", SortDirection.DESCENDING);
+      PreparedQuery results = datastore.prepare(query);
 
-    for (Entity entity : results.asIterable()) {
-      String source = (String) entity.getProperty("Source");
-      String destination = (String) entity.getProperty("Destination");
-      String protocol = (String) entity.getProperty("Protocol");
-      int size = (int) (long) entity.getProperty("Size");
+      for (Entity entity : results.asIterable()) {
+        String source = (String) entity.getProperty("Source");
+        String destination = (String) entity.getProperty("Destination");
+        String protocol = (String) entity.getProperty("Protocol");
+        int size = (int) (long) entity.getProperty("Size");
 
-      PCAPdata temp = new PCAPdata(source, destination, protocol, size);
+        PCAPdata temp = new PCAPdata(source, destination, protocol, size);
 
-      dataTable.add(temp);
+        dataTable.add(temp);
+      }
+    }catch(Exception e)
+    {
+      
     }
     return dataTable;
   }

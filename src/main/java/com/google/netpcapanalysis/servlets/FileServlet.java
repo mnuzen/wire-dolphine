@@ -5,6 +5,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Cookie;
 import com.google.gson.Gson;
 
 import com.google.netpcapanalysis.dao.PCAPDaoImpl;
@@ -17,39 +18,33 @@ import java.util.ArrayList;
 
 
 
-@WebServlet("/files")
+@WebServlet("/list-of-files")
 public class FileServlet extends HttpServlet {
   private static final String fileEntity= "File_Attributes";
   private UtilityPCAPDao pcapUtility = new UtilityPCAPDaoImpl();
-  private PCAPDao datastore = new PCAPDaoImpl();
-  ArrayList<FileAttribute> fileList = new ArrayList<>();
   
-  
-
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      ArrayList<FileAttribute> fileList = new ArrayList<>();
+      PCAPDao datastore = new PCAPDaoImpl();
 
       fileList = datastore.getFileAttributes(fileEntity);
   
-      String json = convertToJsonUsingGson(fileList);
+      String json = pcapUtility.convertFileToJson(fileList);
       response.setContentType("application/json;");
       response.getWriter().println(json);
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      // Retrieve user input to determine file name.
       String file = request.getParameter("file");
-     
 
-      response.sendRedirect("/");
-    }
-  
-  
-    private String convertToJsonUsingGson(ArrayList<FileAttribute> data) {
-      Gson gson = new Gson();
-      String json = gson.toJson(data);
-      return json;
+      pcapUtility.setSessionEntity(request, file);
+
+      Cookie ck=new Cookie("uname", file);//creating cookie object  
+      response.addCookie(ck);//adding cookie in the response  
+
+      response.sendRedirect("/test");
     }
 
 }
