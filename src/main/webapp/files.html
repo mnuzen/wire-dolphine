@@ -19,9 +19,31 @@
 
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
-  
-  <!-- Custom styles for this page -->
+
+  <!-- Custom styles for this page-->
   <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+  <style>
+    .table-row {
+      cursor: pointer;
+    }
+
+    #file-form {
+      display: none;
+    }
+
+    tr:hover {
+      background-color: rgb(226, 226, 226);
+    }
+
+    thead tr:hover {
+      background-color: white;
+    }
+
+    tfoot tr:hover {
+      background-color: white;
+    }
+  </style>
 
 </head>
 
@@ -160,57 +182,51 @@
       <!-- Main Content -->
       <div id="content" class="container-fluid">
 
-        <form action="/list-of-files" method="POST">
-
-          <p>Choose a file:</p>
-          <textarea name="file">Enter Entity Name</textarea>
-          <br /><br />
-
-          <input type="submit" />
-        </form>
-
-        <hr class="my-4">
-
         <form action="/load_mock_data" method="POST">
-
-          <p>Choose a file:</p>
-          <textarea name="file">data.csv</textarea>
-          <br /><br />
-
-          <input type="submit" />
+          <label for="file">Select a file:</label>
+          <select name="file">
+            <option value="data.csv">data.csv</option>
+            <option value="data2.csv">data2.csv</option>
+            <option value="data3.csv">data3.csv</option>
+          </select>
+          <input type="submit">
         </form>
 
         <!-- DataTales Example -->
-      <div class="card shadow mb-4">
-        <div class="card-header py-3">
-          <h6 class="m-0 font-weight-bold text-primary">PCAP Files</h6>
-        </div>
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-              <thead>
-              <tr>
-                <th>Entity</th>
-                <th>File Name</th>
-                <th>My IP</th>
-                <th>Date</th>
-              </tr>
-              </thead>
-              <tfoot>
-              <tr>
-                <th>Entity</th>
-                <th>File Name</th>
-                <th>My IP</th>
-                <th>Date</th>
-              </tr>
-              </tfoot>
-              <tbody id="table">
+        <p>Remove Entity name from table and maybe myIP. Add description field to datastore?
+          On click of row POST /list-of-files with Entity name</p>
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Click a PCAP file</h6>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th>Entity</th>
+                    <th>File Name</th>
+                    <th>My IP</th>
+                    <th>Date</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <th>Entity</th>
+                    <th>File Name</th>
+                    <th>My IP</th>
+                    <th>Date</th>
+                    <th></th>
+                  </tr>
+                </tfoot>
+                <tbody id="table">
 
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
 
       </div>
       <!-- End of Main Content -->

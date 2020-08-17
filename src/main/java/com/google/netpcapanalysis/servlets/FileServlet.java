@@ -37,6 +37,7 @@ public class FileServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      
       String file = request.getParameter("file");
 
       pcapUtility.setSessionEntity(request, file);
@@ -44,7 +45,7 @@ public class FileServlet extends HttpServlet {
       Cookie ck=new Cookie("uname", file);//creating cookie object  
       response.addCookie(ck);//adding cookie in the response  
 
-      response.sendRedirect("/test");
+      response.sendRedirect("/");
     }
 
 }
