@@ -1,4 +1,4 @@
-package com.google.netpcapanalysis.dao;
+package com.google.netpcapanalysis.utils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -7,7 +7,6 @@ import javax.servlet.http.Cookie;
 import com.google.gson.Gson;
 import com.google.netpcapanalysis.models.PCAPdata;
 import com.google.netpcapanalysis.models.FileAttribute;
-import com.google.netpcapanalysis.interfaces.dao.UtilityPCAPDao;
 import com.google.netpcapanalysis.models.Flagged;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -19,26 +18,25 @@ import java.math.BigInteger;
 import java.security.MessageDigest; 
 import java.security.NoSuchAlgorithmException; 
 
-public class UtilityPCAPDaoImpl implements UtilityPCAPDao {
+public class UtilityPCAP{
 
-  public UtilityPCAPDaoImpl() {
+  private UtilityPCAP() {
 
   }
 
-
-  public String convertPCAPdataToJson(ArrayList<PCAPdata> data) {
+  static public String convertPCAPdataToJson(ArrayList<PCAPdata> data) {
     Gson gson = new Gson();
     String json = gson.toJson(data);
     return json;
   }
 
-  public String convertFileToJson(ArrayList<FileAttribute> data) {
+  static public String convertFileToJson(ArrayList<FileAttribute> data) {
     Gson gson = new Gson();
     String json = gson.toJson(data);
     return json;
   }
 
-  public String hashText(String text){
+  static public String hashText(String text){
     try { 
       MessageDigest md = MessageDigest.getInstance("MD5"); 
       byte[] messageDigest = md.digest(text.getBytes()); 
@@ -59,7 +57,7 @@ public class UtilityPCAPDaoImpl implements UtilityPCAPDao {
   }
 
  //Gets most use IP in PCAPdata
- public String findMyIP(ArrayList<PCAPdata> allData) {
+ static public String findMyIP(ArrayList<PCAPdata> allData) {
   String myip = "";
   HashMap<String, Integer> hm = new HashMap<String, Integer>();
   for (PCAPdata packet : allData) {
@@ -86,7 +84,7 @@ public class UtilityPCAPDaoImpl implements UtilityPCAPDao {
 }
 
 //Finds all unique IPs and sets myip to source
-public ArrayList<PCAPdata> getUniqueIPs(ArrayList<PCAPdata> allData){
+static public ArrayList<PCAPdata> getUniqueIPs(ArrayList<PCAPdata> allData){
   HashMap<String, PCAPdata> finalMap = new HashMap<String, PCAPdata>();
   String myip = findMyIP(allData);;
   String outip = "";

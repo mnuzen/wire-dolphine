@@ -11,18 +11,16 @@ import com.google.gson.Gson;
 import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.models.PCAPdata;
-import com.google.netpcapanalysis.dao.UtilityPCAPDaoImpl;
-import com.google.netpcapanalysis.interfaces.dao.UtilityPCAPDao;
 import com.google.netpcapanalysis.models.FileAttribute;
 import java.util.ArrayList;
 import com.google.netpcapanalysis.utils.SessionManager;
+import com.google.netpcapanalysis.utils.UtilityPCAP;
 
 
 
 @WebServlet("/list-of-files")
 public class FileServlet extends HttpServlet {
   private static final String fileEntity= "File_Attributes";
-  private UtilityPCAPDao pcapUtility = new UtilityPCAPDaoImpl();
   
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -31,7 +29,7 @@ public class FileServlet extends HttpServlet {
 
       fileList = datastore.getFileAttributes(fileEntity);
   
-      String json = pcapUtility.convertFileToJson(fileList);
+      String json = UtilityPCAP.convertFileToJson(fileList);
       response.setContentType("application/json;");
       response.getWriter().println(json);
     }
