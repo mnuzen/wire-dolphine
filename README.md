@@ -45,3 +45,20 @@ Averaged 14572 ms for 1000000 requests, 68623.19 rps on i7-9750H single core.
 
 ## Keystore
 For privileged keys that need to be publicly accessible, use the KeystoreDao. 
+
+## Datastore
+The Entity Properties for the two data objects stored:
+
+1. File Attributes
+
+    | Key | ID | File_Name | PCAP_Entity | My_IP | Upload_Date |
+    |-----|----|-----------|-------------|-------|------------|
+    |     |    | String    | String      | String| Long       |
+
+2. PCAP File
+
+    | Key | ID | Sources | Desination | Protocol | Size |
+    |-----|----|---------|------------|----------|------|
+    |     |    | String  | String     | String   | Long |
+
+
