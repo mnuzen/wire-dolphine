@@ -4,7 +4,6 @@ import com.google.netpcapanalysis.models.Flagged;
 import com.google.netpcapanalysis.models.PCAPdata;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
@@ -17,28 +16,17 @@ import java.util.List;
 import java.io.InputStream;
 import java.io.IOException;
 
-import io.pkts.PacketHandler;
 import io.pkts.Pcap;
-import io.pkts.buffer.Buffer;
 import io.pkts.packet.Packet;
-import io.pkts.packet.TCPPacket;
-import io.pkts.packet.UDPPacket;
-import io.pkts.packet.IPPacket;
 import io.pkts.protocol.Protocol;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.SortDirection;
 
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.interfaces.dao.PCAPParserDao;
 import com.google.netpcapanalysis.interfaces.dao.BucketDao;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class BucketDaoImpl implements BucketDao {
   private static final int IP_SIZE = 4; // size of full IP address
@@ -75,21 +63,18 @@ public class BucketDaoImpl implements BucketDao {
   private void orderIPs(){
     // find local IP 
     findMyIP();
-
     // sort all packets such that MYIP, OUTIP is the formatting
     sortedPCAP = new ArrayList<PCAPdata>(); 
     for (PCAPdata packet : allPCAP) {
       String srcip = packet.source;
       String dstip = packet.destination;
       String outip = "";
-
       if (srcip.equals(myip)) {
         outip = dstip;
       }
       else {
         outip = srcip;
       }
-      
       PCAPdata tempPCAP = new PCAPdata(myip, outip, "", "", packet.protocol, packet.size, packet.flagged, packet.frequency); 
       sortedPCAP.add(tempPCAP);
     }
@@ -188,8 +173,7 @@ public class BucketDaoImpl implements BucketDao {
     }
   }
 
-  /* Retrieves and condenses IP addresses based on first 8 bits */
-  private void condenseByteOne() {
+  private HashMap<String, ArrayList<PCAPdata>> extractFirstByte() {
     HashMap<String, ArrayList<PCAPdata>> bytes = new HashMap<String, ArrayList<PCAPdata>>();
     // extract all unique first bytes
     for (PCAPdata packet : sortedPCAP) {
@@ -205,6 +189,12 @@ public class BucketDaoImpl implements BucketDao {
         bytes.put(firstByte, arr);
       }
     }
+    return bytes;
+  }
+
+  /* Retrieves and condenses IP addresses based on first 8 bits */
+  private void condenseByteOne() {
+    HashMap<String, ArrayList<PCAPdata>> bytes = extractFirstByte();
 
     LinkedHashMap<String, Integer> prefixMap = new LinkedHashMap<String, Integer>();
       // put all unique first bytes into map with longest common prefixes as destinations
@@ -230,7 +220,6 @@ public class BucketDaoImpl implements BucketDao {
         prefixMap.put(prefix, dests.length);
       }
     }
-
     sortIPMap(prefixMap);
   } 
 
