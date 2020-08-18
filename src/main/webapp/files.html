@@ -8,8 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-
-  <title>SET YOUR TITLE :))</title>
+  <title>PCAP Selector</title>
 
   <!-- Custom fonts for this template-->
   <link href="js/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -189,6 +188,8 @@
             <option value="data2.csv">data2.csv</option>
             <option value="data3.csv">data3.csv</option>
           </select>
+          <label for="description">description:</label><br>
+          <input type="text" id="description" name="description" maxlength="280"><br>
           <input type="submit">
         </form>
 
@@ -204,19 +205,17 @@
               <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                   <tr>
-                    <th>Entity</th>
-                    <th>File Name</th>
-                    <th>My IP</th>
+                    <th>Name</th>
                     <th>Date</th>
+                    <th>Description</th>
                     <th></th>
                   </tr>
                 </thead>
                 <tfoot>
                   <tr>
-                    <th>Entity</th>
-                    <th>File Name</th>
-                    <th>My IP</th>
+                    <th>Name</th>
                     <th>Date</th>
+                    <th>Description</th>
                     <th></th>
                   </tr>
                 </tfoot>

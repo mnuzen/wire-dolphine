@@ -29,7 +29,7 @@ public class MockDataLoader {
     dataBase.setPCAPObjects(dataTable, entityName);
     String myip = pcapUtility.findMyIP(dataTable);
 
-    FileAttribute data = new FileAttribute(entityName, csvFile, myip);
+    FileAttribute data = new FileAttribute(entityName, csvFile, myip, "Description Text");
     dataBase.setFileAttribute(data);
   }
 

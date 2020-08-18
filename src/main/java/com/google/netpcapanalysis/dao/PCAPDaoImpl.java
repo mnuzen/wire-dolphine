@@ -166,8 +166,9 @@ public class PCAPDaoImpl implements PCAPDao {
       String pcapEntity = (String) result.get(0).getProperty("PCAP_Entity");
       String fileName = (String) result.get(0).getProperty("File_Name");
       String myIP = (String) result.get(0).getProperty("My_IP");
+      String description = (String) result.get(0).getProperty("Description");
       Date uploadDate = (Date) result.get(0).getProperty("Upload_Date");
-       temp = new FileAttribute(pcapEntity, fileName, myIP, uploadDate);
+       temp = new FileAttribute(pcapEntity, fileName, myIP, description, uploadDate);
     }
     
    return temp;
@@ -183,9 +184,10 @@ public class PCAPDaoImpl implements PCAPDao {
       String pcapEntity = (String) entity.getProperty("PCAP_Entity");
       String fileName = (String) entity.getProperty("File_Name");
       String myIP = (String) entity.getProperty("My_IP");
+      String description = (String) entity.getProperty("Description");
       Date uploadDate = (Date) entity.getProperty("Upload_Date");
 
-      FileAttribute temp = new FileAttribute(pcapEntity, fileName, myIP, uploadDate);
+      FileAttribute temp = new FileAttribute(pcapEntity, fileName, myIP, description, uploadDate);
 
       fileList.add(temp);
     }
@@ -201,6 +203,7 @@ public class PCAPDaoImpl implements PCAPDao {
       newEntity.setProperty("PCAP_Entity", data.pcapEntity);
       newEntity.setProperty("File_Name", data.fileName);
       newEntity.setProperty("My_IP", data.myIP);
+      newEntity.setProperty("Description", data.description);
       newEntity.setProperty("Upload_Date", data.uploadDate);
       datastore.put(newEntity);
     }
@@ -208,6 +211,7 @@ public class PCAPDaoImpl implements PCAPDao {
     else{
       Entity prevEntity = getEntityAttribute(data.pcapEntity);
 
+      prevEntity.setProperty("Description", data.description);
       prevEntity.setProperty("My_IP", data.myIP);
       prevEntity.setProperty("Upload_Date", data.uploadDate);
       datastore.put(prevEntity);

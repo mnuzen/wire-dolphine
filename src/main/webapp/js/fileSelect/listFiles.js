@@ -12,11 +12,10 @@ $(document).ready(async function () {
         row.classList.add("table-row");
 
         row.innerHTML =
-        "<td>" + data[i].fileName + "</td>" +
-        "<td>" + data[i].myIP + "</td>" +
-        "<td>" + data[i].uploadDate + "</td>" +
-        "<td>" + "Some Description" + "</td>" +
-        "<td>" + form(data[i].pcapEntity) + "</td>";
+        "<td style='width: 15%'>" + data[i].fileName + "</td>" +
+        "<td style='width: 15%'>" + data[i].uploadDate + "</td>" +
+        "<td style='width: 70%'>" + data[i].description + "</td>" +
+        "<td style='width: 0%'>" + form(data[i].pcapEntity) + "</td>";
 
         table.appendChild(row);
       }
