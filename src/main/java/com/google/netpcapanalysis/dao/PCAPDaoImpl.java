@@ -121,24 +121,6 @@ public class PCAPDaoImpl implements PCAPDao {
     datastore.put(Entity);
   }
 
-  private boolean searchFileAttribute(String searchEntity)
-  {
-    FileAttribute temp = new FileAttribute();;
-    Filter propertyFilter = 
-    new FilterPredicate("PCAP_Entity", FilterOperator.EQUAL, searchEntity);
-    Query q = new Query(fileEntity).setFilter(propertyFilter);
-    PreparedQuery pq = datastore.prepare(q);
-
-    List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(1));
-
-    if(result.size() > 0){
-      return true;
-    }
-    else{
-      return false;
-    }
-  }
-
   private Entity getEntityAttribute(String searchEntity)
   {
     FileAttribute temp = new FileAttribute();;
@@ -148,8 +130,11 @@ public class PCAPDaoImpl implements PCAPDao {
     PreparedQuery pq = datastore.prepare(q);
 
     List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(1));
+    if(result.size() > 0){
+      return result.get(0);
+    }
 
-    return result.get(0);
+    return null;
   }
 
   public FileAttribute getFileAttribute(String searchEntity)
@@ -196,7 +181,9 @@ public class PCAPDaoImpl implements PCAPDao {
 
   public void setFileAttribute(FileAttribute data){
     
-    if(!searchFileAttribute(data.pcapEntity))
+    Entity prevEntity = getEntityAttribute(data.pcapEntity);
+
+    if(prevEntity == null) //.equals(null)? |.equals(new Enity())  | .toString() is null
     {
       Entity newEntity = new Entity(fileEntity);
    
@@ -209,8 +196,6 @@ public class PCAPDaoImpl implements PCAPDao {
     }
     //if file already uploaded then update fields
     else{
-      Entity prevEntity = getEntityAttribute(data.pcapEntity);
-
       prevEntity.setProperty("Description", data.description);
       prevEntity.setProperty("My_IP", data.myIP);
       prevEntity.setProperty("Upload_Date", data.uploadDate);
