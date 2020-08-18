@@ -127,8 +127,9 @@ public class BucketDaoImplTest {
     for (String className : buckets.keySet()) {
       // checks all classes are correctly filled out 
       HashMap<String, Integer> classMap = buckets.get(className);
+      HashMap<String, Integer> compareMap = comparison.get(className);
       for (String key : classMap.keySet()) {
-        assertEquals(classMap.get(key), classMap.get(key));
+        assertEquals(classMap.get(key), compareMap.get(key));
       }
     }
   }
@@ -153,4 +154,24 @@ public class BucketDaoImplTest {
     return comparison;
   }
 
+  /* Checks IP addresses are put correctly into final map */
+  @Test
+  public void checkFinalMap() {
+    LinkedHashMap<String, Integer> finalMap = bucket.getFinalMap();
+    LinkedHashMap<String, Integer> comparison = finalMapHelper();
+     // check sizes are the same
+    assertEquals(finalMap.size(), comparison.size());
+
+    for (String ip : finalMap.keySet()) {
+      // checks all ips have the same frequencies
+      assertEquals(finalMap.get(ip), comparison.get(ip));
+    }
+  }
+
+  private LinkedHashMap<String, Integer> finalMapHelper() {
+    LinkedHashMap<String, Integer> helperMap = new LinkedHashMap<String, Integer>();
+    helperMap.put(IP1, FREQ-1);    
+    helperMap.put(IP2, FREQ);
+    return helperMap;
+  }
 }

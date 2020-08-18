@@ -51,7 +51,6 @@ public class BucketDaoImpl implements BucketDao {
   // Map to store <IP, frequency> regardless of protocol
   private LinkedHashMap<String, Integer> finalMap;
 
-
   public BucketDaoImpl(ArrayList<PCAPdata> packets) {
     allPCAP = packets; 
     orderIPs();
