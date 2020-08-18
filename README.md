@@ -53,7 +53,7 @@ The Entity Properties for the two data objects stored:
 
     | Key | ID | File_Name | PCAP_Entity | My_IP | Upload_Date |
     |-----|----|-----------|-------------|-------|------------|
-    |     |    | String    | String      | String| Long       |
+    |     |    | String    | String      | String| Date       |
 
 2. PCAP File
 
