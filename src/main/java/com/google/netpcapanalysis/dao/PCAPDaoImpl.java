@@ -11,7 +11,10 @@ package com.google.netpcapanalysis.dao;
 import com.google.netpcapanalysis.models.PCAPdata;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.models.Flagged;
+import com.google.netpcapanalysis.models.FileAttribute;
 import com.google.netpcapanalysis.models.MaliciousPacket;
+
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.LinkedHashSet;
@@ -34,6 +37,7 @@ import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 
 public class PCAPDaoImpl implements PCAPDao {
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+  private final String fileEntity= "File_Attributes";
   private final String cacheEntity= "Malicious_IP_Cache";
 
   public PCAPDaoImpl() {
@@ -44,85 +48,45 @@ public class PCAPDaoImpl implements PCAPDao {
   public ArrayList<PCAPdata> getPCAPObjects(String searchEntity) {
     ArrayList<PCAPdata> dataTable = new ArrayList<>();
 
-    Query query = new Query(searchEntity).addSort("Source", SortDirection.DESCENDING);
-    PreparedQuery results = datastore.prepare(query);
+    try{
+      Query query = new Query(searchEntity).addSort("Source", SortDirection.DESCENDING);
+      PreparedQuery results = datastore.prepare(query);
 
-    for (Entity entity : results.asIterable()) {
-      String source = (String) entity.getProperty("Source");
-      String destination = (String) entity.getProperty("Destination");
-      String protocol = (String) entity.getProperty("Protocol");
-      int size = (int) (long) entity.getProperty("Size");
+      for (Entity entity : results.asIterable()) {
+        String source = (String) entity.getProperty("Source");
+        String destination = (String) entity.getProperty("Destination");
+        String protocol = (String) entity.getProperty("Protocol");
+        int size = (int) (long) entity.getProperty("Size");
 
-      PCAPdata temp = new PCAPdata(source, destination, protocol, size);
+        PCAPdata temp = new PCAPdata(source, destination, protocol, size);
 
-      dataTable.add(temp);
+        dataTable.add(temp);
+      }
+    }catch(Exception e)
+    {
+      
     }
     return dataTable;
   }
 
-  //uploades a given databack to datastore under the given name 
-  public void setPCAPObjects(PCAPdata data, String searchEntity) {
-    Entity pcapEntity = new Entity(searchEntity);
+  public void setPCAPObjects(ArrayList<PCAPdata> data, String searchEntity) {
+    Entity entity = new Entity(searchEntity);
+    List<Entity> pcapEntityAll = new ArrayList<Entity>();
 
-    pcapEntity.setProperty("Source", data.source);
-    pcapEntity.setProperty("Destination", data.destination);
-    pcapEntity.setProperty("Size", data.size);
-    pcapEntity.setProperty("Protocol", data.protocol);
+    for (PCAPdata packet : data) {
+      Entity pcapEntity = new Entity(entity.getKey());
 
-    datastore.put(pcapEntity);
+      pcapEntity.setProperty("Source", packet.source);
+      pcapEntity.setProperty("Destination", packet.destination);
+      pcapEntity.setProperty("Size", packet.size);
+      pcapEntity.setProperty("Protocol", packet.protocol);
+
+      pcapEntityAll.add(pcapEntity);
+    }
+
+    datastore.put(pcapEntityAll);
+
   }
-
- //Gets most use IP in PCAPdata
- private String findMyIP(ArrayList<PCAPdata> allData) {
-  String myip = "";
-  HashMap<String, Integer> hm = new HashMap<String, Integer>();
-  for (PCAPdata packet : allData) {
-    // source
-    if (hm.containsKey(packet.source)) { 
-      // if IP already exists, increment
-      hm.merge(packet.source, 1, Integer::sum);
-    }
-    else {
-      hm.put(packet.source, 1);
-    }
-    // destination
-    if (hm.containsKey(packet.destination)) { 
-      // if IP already exists, increment
-      hm.merge(packet.destination, 1, Integer::sum);
-    }
-    else {
-      hm.put(packet.destination, 1);
-    }
-  }
-  // find largest recurrence
-  myip = Collections.max(hm.entrySet(), Map.Entry.comparingByValue()).getKey();
-  return myip;
-}
-
-//Finds all unique IPs and sets myip to source
-public ArrayList<PCAPdata> getUniqueIPs(ArrayList<PCAPdata> allData){
-  HashMap<String, PCAPdata> finalMap = new HashMap<String, PCAPdata>();
-  String myip = findMyIP(allData);;
-  String outip = "";
-
-  for (PCAPdata packet : allData) {
-
-    //swaps packet order based on myip
-    if (packet.source.equals(myip)) {
-      outip = packet.destination;
-    }
-    else {
-      outip = packet.source;
-    }
-    
-    //puts data into map if not already there
-    if (!finalMap.containsKey(outip)){
-      PCAPdata tempPCAP = new PCAPdata(myip, outip, "", "", packet.protocol, packet.size, packet.flagged, packet.frequency); 
-      finalMap.put(outip, tempPCAP);
-    }
-  }
-  return (new ArrayList<PCAPdata>(finalMap.values()));
-}
 
   public String searchMaliciousDB(String searchIP) {
    
@@ -155,6 +119,88 @@ public ArrayList<PCAPdata> getUniqueIPs(ArrayList<PCAPdata> allData){
     Entity.setProperty("IP", data.ip);
     Entity.setProperty("Flagged", data.flagged);
     datastore.put(Entity);
+  }
+
+  private Entity getEntityAttribute(String searchEntity)
+  {
+    FileAttribute temp = new FileAttribute();;
+    Filter propertyFilter = 
+    new FilterPredicate("PCAP_Entity", FilterOperator.EQUAL, searchEntity);
+    Query q = new Query(fileEntity).setFilter(propertyFilter);
+    PreparedQuery pq = datastore.prepare(q);
+
+    List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(1));
+    if(result.size() > 0){
+      return result.get(0);
+    }
+
+    return null;
+  }
+
+  public FileAttribute getFileAttribute(String searchEntity)
+  {
+    FileAttribute temp = new FileAttribute();;
+    Filter propertyFilter = 
+    new FilterPredicate("PCAP_Entity", FilterOperator.EQUAL, searchEntity);
+    Query q = new Query(fileEntity).setFilter(propertyFilter);
+    PreparedQuery pq = datastore.prepare(q);
+
+    List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(1));
+
+    if(result.size() > 0){
+      String pcapEntity = (String) result.get(0).getProperty("PCAP_Entity");
+      String fileName = (String) result.get(0).getProperty("File_Name");
+      String myIP = (String) result.get(0).getProperty("My_IP");
+      String description = (String) result.get(0).getProperty("Description");
+      Date uploadDate = (Date) result.get(0).getProperty("Upload_Date");
+       temp = new FileAttribute(pcapEntity, fileName, myIP, description, uploadDate);
+    }
+    
+   return temp;
+  }
+
+  public ArrayList<FileAttribute> getFileAttributes(String searchEntity) {
+    ArrayList<FileAttribute> fileList = new ArrayList<>();
+
+    Query query = new Query(searchEntity);
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      String pcapEntity = (String) entity.getProperty("PCAP_Entity");
+      String fileName = (String) entity.getProperty("File_Name");
+      String myIP = (String) entity.getProperty("My_IP");
+      String description = (String) entity.getProperty("Description");
+      Date uploadDate = (Date) entity.getProperty("Upload_Date");
+
+      FileAttribute temp = new FileAttribute(pcapEntity, fileName, myIP, description, uploadDate);
+
+      fileList.add(temp);
+    }
+    return fileList;
+  }
+
+  public void setFileAttribute(FileAttribute data){
+    
+    Entity prevEntity = getEntityAttribute(data.pcapEntity);
+
+    if(prevEntity == null) //.equals(null)? |.equals(new Enity())  | .toString() is null
+    {
+      Entity newEntity = new Entity(fileEntity);
+   
+      newEntity.setProperty("PCAP_Entity", data.pcapEntity);
+      newEntity.setProperty("File_Name", data.fileName);
+      newEntity.setProperty("My_IP", data.myIP);
+      newEntity.setProperty("Description", data.description);
+      newEntity.setProperty("Upload_Date", data.uploadDate);
+      datastore.put(newEntity);
+    }
+    //if file already uploaded then update fields
+    else{
+      prevEntity.setProperty("Description", data.description);
+      prevEntity.setProperty("My_IP", data.myIP);
+      prevEntity.setProperty("Upload_Date", data.uploadDate);
+      datastore.put(prevEntity);
+    }
   }
 
 }
