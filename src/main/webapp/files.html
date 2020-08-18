@@ -8,8 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-
-  <title>PCAP Viewer</title>
+  <title>PCAP Selector</title>
 
   <!-- Custom fonts for this template-->
   <link href="js/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -20,20 +19,31 @@
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
-  <!-- Custom styles for this page -->
+  <!-- Custom styles for this page-->
   <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
   <style>
-    #flagged {
-      background-color: #e74a3b;
-      color: #fff
+    .table-row {
+      cursor: pointer;
     }
 
-    #warning {
-      background-color: #f6c23e;
-      color: #fff
+    #file-form {
+      display: none;
+    }
+
+    tr:hover {
+      background-color: rgb(226, 226, 226);
+    }
+
+    thead tr:hover {
+      background-color: white;
+    }
+
+    tfoot tr:hover {
+      background-color: white;
     }
   </style>
+
 </head>
 
 <body id="page-top">
@@ -149,57 +159,64 @@
 
           <!-- Nav Item - User Information -->
           <li class="nav-item dropdown no-arrow">
-            <a href="/network.html" class="btn btn-primary btn-icon-split mr-2">
+            <a href="#" class="btn btn-primary btn-icon-split mr-2">
               <span class="icon text-white-50">
                 <i class="fas fa-arrow-left"></i>
               </span>
               <span class="text">Previous</span>
             </a>
+            <a href="#" class="btn btn-success btn-icon-split">
+              <span class="text">Next</span>
+
+              <span class="icon text-white-50">
+                <i class="fas fa-arrow-right"></i>
+              </span>
+            </a>
+          </li>
         </ul>
       </nav>
       <!-- End of Topbar -->
 
 
-      <!-- Begin Page Content -->
-      <div class="container-fluid">
+      <!-- Main Content -->
+      <div id="content" class="container-fluid">
 
-        <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">View your packets</h1>
-
-        <form action="/load_mock_data" method="post">
-          <label for="mockdata">Load Mock Data</label>
-          <input type="submit" name="mockdata" value="Click Me!" />
+        <form action="/load_mock_data" method="POST">
+          <label for="file">Select a file:</label>
+          <select name="file">
+            <option value="data.csv">data.csv</option>
+            <option value="data2.csv">data2.csv</option>
+            <option value="data3.csv">data3.csv</option>
+          </select>
+          <label for="description">description:</label><br>
+          <input type="text" id="description" name="description" maxlength="280"><br>
+          <input type="submit">
         </form>
 
-
         <!-- DataTales Example -->
+        <p>Remove Entity name from table and maybe myIP. Add description field to datastore?
+          On click of row POST /list-of-files with Entity name</p>
         <div class="card shadow mb-4">
           <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">PCAP Data</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Click a PCAP file</h6>
           </div>
           <div class="card-body">
             <div class="table-responsive">
               <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                   <tr>
-                    <th>Source</th>
-                    <th>Destination</th>
-                    <th>Protocol</th>
-                    <th>Size</th>
-                    <th>Domain</th>
-                    <th>Location</th>
-                    <th>Flagged</th>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tfoot>
                   <tr>
-                    <th>Source</th>
-                    <th>Destination</th>
-                    <th>Protocol</th>
-                    <th>Size</th>
-                    <th>Domain</th>
-                    <th>Location</th>
-                    <th>Flagged</th>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th></th>
                   </tr>
                 </tfoot>
                 <tbody id="table">
@@ -211,24 +228,20 @@
         </div>
 
       </div>
-      <!-- /.container-fluid -->
+      <!-- End of Main Content -->
+
+      <!-- Footer -->
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Made with <i class="fa fa-heart" aria-hidden="true"></i> by Google Interns</span>
+          </div>
+        </div>
+      </footer>
+      <!-- End of Footer -->
 
     </div>
-    <!-- End of Main Content -->
-
-  </div>
-  <!-- End of Content Wrapper -->
-
-  <!-- Footer -->
-  <footer class="sticky-footer bg-white">
-    <div class="container my-auto">
-      <div class="copyright text-center my-auto">
-        <span>Made with <i class="fa fa-heart" aria-hidden="true"></i> by Google Interns</span>
-      </div>
-    </div>
-  </footer>
-  <!-- End of Footer -->
-
+    <!-- End of Content Wrapper -->
 
   </div>
   <!-- End of Page Wrapper -->
@@ -252,10 +265,8 @@
   <script src="js/common.js"></script>
   <script src="vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-  <script src="js/table.js"></script>
-  <script src="vendor/chart.js/Chart.min.js"></script>
+  <script src="js/fileSelect/listFiles.js"></script>
 
-  <!-- Page level custom scripts -->
 </body>
 
 </html>

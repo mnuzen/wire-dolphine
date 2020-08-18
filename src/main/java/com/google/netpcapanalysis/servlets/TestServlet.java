@@ -5,6 +5,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Cookie;
+
 import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.dao.MaliciousIPDaoImpl;
@@ -32,17 +34,6 @@ public class TestServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-      PCAPDao dataBase = new PCAPDaoImpl();
-
-      String entityName = pcapUtility.hashText(FILE_NAME);
-
-      FileAttribute temp = dataBase.getFileAttribute(entityName);
-      System.out.println(temp.fileName);
-      System.out.println(temp.pcapEntity);
-      System.out.println(temp.myIP);
-      System.out.println(temp.uploadDate);
-
         response.sendRedirect("/index.html");
     }
-
 }

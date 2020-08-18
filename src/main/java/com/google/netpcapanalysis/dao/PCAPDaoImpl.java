@@ -48,18 +48,23 @@ public class PCAPDaoImpl implements PCAPDao {
   public ArrayList<PCAPdata> getPCAPObjects(String searchEntity) {
     ArrayList<PCAPdata> dataTable = new ArrayList<>();
 
-    Query query = new Query(searchEntity).addSort("Source", SortDirection.DESCENDING);
-    PreparedQuery results = datastore.prepare(query);
+    try{
+      Query query = new Query(searchEntity).addSort("Source", SortDirection.DESCENDING);
+      PreparedQuery results = datastore.prepare(query);
 
-    for (Entity entity : results.asIterable()) {
-      String source = (String) entity.getProperty("Source");
-      String destination = (String) entity.getProperty("Destination");
-      String protocol = (String) entity.getProperty("Protocol");
-      int size = (int) (long) entity.getProperty("Size");
+      for (Entity entity : results.asIterable()) {
+        String source = (String) entity.getProperty("Source");
+        String destination = (String) entity.getProperty("Destination");
+        String protocol = (String) entity.getProperty("Protocol");
+        int size = (int) (long) entity.getProperty("Size");
 
-      PCAPdata temp = new PCAPdata(source, destination, protocol, size);
+        PCAPdata temp = new PCAPdata(source, destination, protocol, size);
 
-      dataTable.add(temp);
+        dataTable.add(temp);
+      }
+    }catch(Exception e)
+    {
+      
     }
     return dataTable;
   }
@@ -161,11 +166,32 @@ public class PCAPDaoImpl implements PCAPDao {
       String pcapEntity = (String) result.get(0).getProperty("PCAP_Entity");
       String fileName = (String) result.get(0).getProperty("File_Name");
       String myIP = (String) result.get(0).getProperty("My_IP");
+      String description = (String) result.get(0).getProperty("Description");
       Date uploadDate = (Date) result.get(0).getProperty("Upload_Date");
-       temp = new FileAttribute(pcapEntity, fileName, myIP, uploadDate);
+       temp = new FileAttribute(pcapEntity, fileName, myIP, description, uploadDate);
     }
     
    return temp;
+  }
+
+  public ArrayList<FileAttribute> getFileAttributes(String searchEntity) {
+    ArrayList<FileAttribute> fileList = new ArrayList<>();
+
+    Query query = new Query(searchEntity);
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      String pcapEntity = (String) entity.getProperty("PCAP_Entity");
+      String fileName = (String) entity.getProperty("File_Name");
+      String myIP = (String) entity.getProperty("My_IP");
+      String description = (String) entity.getProperty("Description");
+      Date uploadDate = (Date) entity.getProperty("Upload_Date");
+
+      FileAttribute temp = new FileAttribute(pcapEntity, fileName, myIP, description, uploadDate);
+
+      fileList.add(temp);
+    }
+    return fileList;
   }
 
   public void setFileAttribute(FileAttribute data){
@@ -177,6 +203,7 @@ public class PCAPDaoImpl implements PCAPDao {
       newEntity.setProperty("PCAP_Entity", data.pcapEntity);
       newEntity.setProperty("File_Name", data.fileName);
       newEntity.setProperty("My_IP", data.myIP);
+      newEntity.setProperty("Description", data.description);
       newEntity.setProperty("Upload_Date", data.uploadDate);
       datastore.put(newEntity);
     }
@@ -184,6 +211,7 @@ public class PCAPDaoImpl implements PCAPDao {
     else{
       Entity prevEntity = getEntityAttribute(data.pcapEntity);
 
+      prevEntity.setProperty("Description", data.description);
       prevEntity.setProperty("My_IP", data.myIP);
       prevEntity.setProperty("Upload_Date", data.uploadDate);
       datastore.put(prevEntity);

@@ -13,26 +13,23 @@ import com.google.netpcapanalysis.interfaces.dao.UtilityPCAPDao;
 import com.google.netpcapanalysis.models.FileAttribute;
 
 public class MockDataLoader {
-
-  private static final String FILE_NAME = "file_1";
   // CSV format:
   // Source,Destination,Domain,Location,Protocal,Size,Flagged,Frequency
-  private String CSV_FILE = "data.csv"; // CSV located in project dir /webapp
 
   public MockDataLoader() {
 
   }
 
-  public void LoadData(ArrayList<PCAPdata> dataTable) { // uploads to datastore
+  public void LoadData(ArrayList<PCAPdata> dataTable, String csvFile) { // uploads to datastore
     PCAPDao dataBase = new PCAPDaoImpl();
     UtilityPCAPDao pcapUtility = new UtilityPCAPDaoImpl();
 
-    String entityName = pcapUtility.hashText(FILE_NAME);
+    String entityName = pcapUtility.hashText(csvFile);
 
     dataBase.setPCAPObjects(dataTable, entityName);
     String myip = pcapUtility.findMyIP(dataTable);
 
-    FileAttribute data = new FileAttribute(entityName, FILE_NAME, myip);
+    FileAttribute data = new FileAttribute(entityName, csvFile, myip, "Description Text");
     dataBase.setFileAttribute(data);
   }
 
@@ -62,8 +59,8 @@ public class MockDataLoader {
     return data;
   }
 
-  public void CSVDataUpload() {
-    LoadData(CSVDataLoader(CSV_FILE));
+  public void CSVDataUpload(String csvFile) {
+    LoadData(CSVDataLoader(csvFile), csvFile);
   }
 
 }

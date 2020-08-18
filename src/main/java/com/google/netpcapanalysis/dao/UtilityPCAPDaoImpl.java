@@ -1,6 +1,12 @@
 package com.google.netpcapanalysis.dao;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.Cookie;
+import com.google.gson.Gson;
 import com.google.netpcapanalysis.models.PCAPdata;
+import com.google.netpcapanalysis.models.FileAttribute;
 import com.google.netpcapanalysis.interfaces.dao.UtilityPCAPDao;
 import com.google.netpcapanalysis.models.Flagged;
 import java.util.ArrayList;
@@ -17,6 +23,19 @@ public class UtilityPCAPDaoImpl implements UtilityPCAPDao {
 
   public UtilityPCAPDaoImpl() {
 
+  }
+
+
+  public String convertPCAPdataToJson(ArrayList<PCAPdata> data) {
+    Gson gson = new Gson();
+    String json = gson.toJson(data);
+    return json;
+  }
+
+  public String convertFileToJson(ArrayList<FileAttribute> data) {
+    Gson gson = new Gson();
+    String json = gson.toJson(data);
+    return json;
   }
 
   public String hashText(String text){
