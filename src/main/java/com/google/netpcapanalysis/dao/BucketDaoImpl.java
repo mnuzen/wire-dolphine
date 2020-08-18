@@ -33,17 +33,20 @@ public class BucketDaoImpl implements BucketDao {
   
   private ArrayList<PCAPdata> allPCAP; 
   private ArrayList<PCAPdata> sortedPCAP; 
+
   private String myip = "";
-  
   private String classA = "Class A";
   private String classB = "Class B";
   private String classC = "Class C";
   private String classDE = "Class D & E";
 
-  private HashMap<String, Integer> protocolsA;
-  private HashMap<String, Integer> protocolsB;
-  private HashMap<String, Integer> protocolsC;
-  private HashMap<String, Integer> protocolsDE;
+  private String[] classes = new String[]{classA, classB, classC, classDE};
+  private ArrayList<HashMap<String, Integer>> mapList;
+
+  private static final int INDEX_A = 0;
+  private static final int INDEX_B = 1;
+  private static final int INDEX_C = 2;
+  private static final int INDEX_DE = 3;
 
   // Map to store <String Class, HashMap<> of protocols and frequencies 
   private LinkedHashMap<String, HashMap<String, Integer>> bucketData;
@@ -124,42 +127,62 @@ public class BucketDaoImpl implements BucketDao {
   /* Parsing protocols for each class. */
   private void loadBuckets() {
     bucketData = new LinkedHashMap<String, HashMap<String, Integer>>();
-    // Maps to store <String Protocol, int Frequency of appearance>
-    protocolsA = new HashMap<String, Integer>();
-    protocolsB = new HashMap<String, Integer>();
-    protocolsC = new HashMap<String, Integer>();
-    protocolsDE = new HashMap<String, Integer>();
-   
+    initializeMapList();
+
     // loop through sorted IPs 
     for (PCAPdata packet : sortedPCAP) {
       String[] ip = packet.destination.split("\\.");
       int byteInt = Integer.parseInt(ip[0]);
       getIPClass(byteInt, packet);
     } 
+    
+    // put data into bucketData
+    for (String className : classes) {
+      int index = getClassIndex(className);
+      bucketData.put(className, mapList.get(index));
+    }
+  }
 
-    bucketData.put(classA, protocolsA);
-    bucketData.put(classB, protocolsB);
-    bucketData.put(classC, protocolsC);
-    bucketData.put(classDE, protocolsDE);
+  private int getClassIndex(String className) {
+    if (className == classA) {
+      return INDEX_A;
+    }
+    else if (className == classB) {
+      return INDEX_B;
+    }
+    else if (className == classC) {
+      return INDEX_C;
+    }
+    else {
+      return INDEX_DE;
+    }
+  }
+
+  private void initializeMapList(){
+    mapList = new ArrayList<HashMap<String, Integer>>();
+    for (String className : classes) {
+      HashMap<String, Integer> map = new HashMap<String, Integer>();
+      mapList.add(map);
+    }
   }
 
   private void getIPClass(int byteInt, PCAPdata packet) {
     // Class A -- [1.0.0.0, 128.0.0.0)
     if (byteInt < 128) {
       // puts protocol into map
-      putProtocolMap(protocolsA, packet.protocol);
+      putProtocolMap(mapList.get(INDEX_A), packet.protocol);
     }
     // Class B -- [128.0.0.0, 192.0.0.0)
     else if (byteInt >= 128 && byteInt < 192) {
-      putProtocolMap(protocolsB, packet.protocol);
+      putProtocolMap(mapList.get(INDEX_B), packet.protocol);
     }
     // Class C -- [192.0.0.0, 224.0.0.0)
     else if (byteInt >= 192 && byteInt < 224) {
-      putProtocolMap(protocolsA, packet.protocol);
+      putProtocolMap(mapList.get(INDEX_C), packet.protocol);
     }
     // Class D & E-- [224.0.0.0, 255.0.0.0)
     else {
-      putProtocolMap(protocolsDE, packet.protocol);
+      putProtocolMap(mapList.get(INDEX_DE), packet.protocol);
     }
   }
 
@@ -194,7 +217,6 @@ public class BucketDaoImpl implements BucketDao {
   /* Retrieves and condenses IP addresses based on first 8 bits */
   private void condenseByteOne() {
     HashMap<String, ArrayList<PCAPdata>> bytes = extractFirstByte();
-
     LinkedHashMap<String, Integer> prefixMap = new LinkedHashMap<String, Integer>();
       // put all unique first bytes into map with longest common prefixes as destinations
     for (String key : bytes.keySet()) {
