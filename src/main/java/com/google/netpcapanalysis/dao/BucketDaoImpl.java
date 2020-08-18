@@ -283,7 +283,7 @@ public class BucketDaoImpl implements BucketDao {
 
   /* Finds longest common prefix between an array of strings in linear time: the algorithm makes log(m) iterations with m*n comparisons 
      each time, meaning our complexity would be O(s*log(m)) where S = sum of all chars in strings, n = number of strings, m = length of strings*/
-  private String longestCommonPrefix(String[] strs) {
+  public String longestCommonPrefix(String[] strs) {
     if (strs == null || strs.length == 0)
       return "";
     int minLen = Integer.MAX_VALUE;

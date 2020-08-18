@@ -174,4 +174,14 @@ public class BucketDaoImplTest {
     helperMap.put(IP2, FREQ);
     return helperMap;
   }
+
+  /* Ensures that common prefix parsing works correctly */
+  @Test
+  public void checkCommonPrefix() {
+    String[] ips = new String[]{IP1, IP2};
+    String prefix = bucket.longestCommonPrefix(ips);
+    String comparison = "1";
+    assertEquals(prefix, comparison);
+  }
+
 }
