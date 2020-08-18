@@ -52,17 +52,17 @@ import java.util.LinkedHashMap;
 import java.io.InputStream;
 import java.io.IOException;
 
-/** Servlet that retrieves and returns frequencies. */
-@WebServlet("/PCAP-bucket")
-public class BucketLoaderServlet extends HttpServlet {
+/** Servlet that retrieves and returns IP addresses. */
+@WebServlet("/PCAP-IP")
+public class IPLoaderServlet extends HttpServlet {
   private String filename;
   private PCAPDao data = new PCAPDaoImpl();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     BucketDao bucket = new BucketDaoImpl(data.getPCAPObjects(filename));
-    LinkedHashMap<String, HashMap<String, Integer>> bucketData = bucket.getFinalBuckets();
-    String json = convertToJsonUsingGson(bucketData);
+    LinkedHashMap<String, Integer> finalFreq = bucket.getFinalMap();
+    String json = convertToJsonUsingGson(finalFreq);
     response.setContentType("application/json;");
     response.getWriter().println(json); 
   }
@@ -73,13 +73,7 @@ public class BucketLoaderServlet extends HttpServlet {
     response.sendRedirect("/bucket.html");
   }
 
-  private String convertToJsonUsingGson(LinkedHashMap<String, HashMap<String, Integer>> data) {
-    Gson gson = new Gson();
-    String json = gson.toJson(data);
-    return json;
-  }
-
-  private String convertToJsonUsingGson2(LinkedHashMap<String, Integer> data) {
+  private String convertToJsonUsingGson(LinkedHashMap<String, Integer> data) {
     Gson gson = new Gson();
     String json = gson.toJson(data);
     return json;

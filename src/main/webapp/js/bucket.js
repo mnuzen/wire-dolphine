@@ -2,6 +2,11 @@ google.charts.load('current', {'packages':['corechart']});
 var NUM_CLASSES = 4;
 
 function drawVisualization() {
+  drawClassVisualization();
+  drawIPVisualization();    
+}
+
+function drawClassVisualization() {
   fetch('/PCAP-bucket')
   .then(response => response.json())
   .then((bucketData) => {
@@ -32,11 +37,11 @@ function drawVisualization() {
       vAxis: {title: 'Number of Connections'},
       hAxis: {title: 'IP Class'},
       seriesType: 'bars',
-      series: {3: {type: 'line'}}        
+      series: {graphSize: {type: 'line'}}        
     };
 
     // Draw chart
-    var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+    var chart = new google.visualization.ComboChart(document.getElementById('chart_class_div'));
     chart.draw(data, tableOptions);
 
     /** Functions */
@@ -72,4 +77,45 @@ function drawVisualization() {
       });
     }
   });
-}
+} // end class visualization
+
+
+function drawIPVisualization() {
+  fetch('/PCAP-IP')
+  .then(response => response.json())
+  .then((bucketData) => {
+
+    google.charts.load('current', {'packages':['corechart']});
+    var data = new google.visualization.DataTable();
+    
+     // Add columns
+    data.addColumn('string', 'IP Class');
+    data.addColumn('number', 'Total');
+
+    // Add rows
+    addRows();
+    
+    // Set up chart
+    //console.log();
+
+    var tableOptions = {
+      title : 'Number of Connections Grouped by Prefix',
+      vAxis: {title: 'Number of Connections'},
+      hAxis: {title: 'Prefix'},
+      seriesType: 'bars',
+      series: {1: {type: 'line'}}        
+    };
+
+    // Draw chart
+    var chart = new google.visualization.ComboChart(document.getElementById('chart_dist_div'));
+    chart.draw(data, tableOptions);
+
+    // Iterate through all Classes and parser protocol frequencies
+    function addRows() {
+      Object.keys(bucketData).forEach(addr => {
+        data.addRow([addr, bucketData[addr]]);
+        console.log("Address and Frequency: " + addr + bucketData[addr]);
+      });
+    }
+  });
+} // end class visualization

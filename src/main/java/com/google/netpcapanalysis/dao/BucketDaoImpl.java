@@ -11,6 +11,8 @@ import java.util.Map.Entry;
 import java.util.Map;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Set;
+import java.util.List;
 
 import java.io.InputStream;
 import java.io.IOException;
@@ -39,26 +41,34 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class BucketDaoImpl implements BucketDao {
+  private static final int IP_SIZE = 4; // size of full IP address
+  
   private ArrayList<PCAPdata> allPCAP; 
   private ArrayList<PCAPdata> sortedPCAP; 
   private String myip = "";
-
-  // Map to store <String Class, HashMap<> of protocols and frequencies >
-  private LinkedHashMap<String, HashMap<String, Integer>> bucketData;
   
   private String classA = "Class A";
   private String classB = "Class B";
   private String classC = "Class C";
   private String classDE = "Class D & E";
 
+  private HashMap<String, Integer> protocolsA;
+  private HashMap<String, Integer> protocolsB;
+  private HashMap<String, Integer> protocolsC;
+  private HashMap<String, Integer> protocolsDE;
+
+  // Map to store <String Class, HashMap<> of protocols and frequencies 
+  private LinkedHashMap<String, HashMap<String, Integer>> bucketData;
+  
+  // Map to store <IP, frequency> regardless of protocol
+  private LinkedHashMap<String, Integer> finalMap;
+
+
   public BucketDaoImpl(ArrayList<PCAPdata> packets) {
     allPCAP = packets; 
     orderIPs();
+    condenseByteOne();
     loadBuckets();    
-  }
-
-  public LinkedHashMap<String, HashMap<String, Integer>> getBuckets() {
-    return bucketData;
   }
  
   /* Put packets into MYIP, OUTIP format and order by destination IP (ascending). */
@@ -84,11 +94,7 @@ public class BucketDaoImpl implements BucketDao {
       sortedPCAP.add(tempPCAP);
     }
     // sort all packets in order of OUTIP
-    sortIPs();
-  }
-
-  public ArrayList<PCAPdata> getSortedPCAP(){
-    return sortedPCAP;
+    sortIPList();
   }
 
   /* Find local ip address based on highest recurring IP address */  
@@ -117,12 +123,8 @@ public class BucketDaoImpl implements BucketDao {
     myip = Collections.max(hm.entrySet(), Map.Entry.comparingByValue()).getKey();
   }
 
-  public String getMyIP() {
-    return myip;
-  }
-
   /* Sort array of PCAPdata objects by destination IP address. */
-  private void sortIPs() {
+  private void sortIPList() {
     Collections.sort(sortedPCAP, new Comparator<PCAPdata>() {
       @Override
       public int compare(PCAPdata p1, PCAPdata p2) {
@@ -138,72 +140,157 @@ public class BucketDaoImpl implements BucketDao {
   /* Parsing protocols for each class. */
   private void loadBuckets() {
     bucketData = new LinkedHashMap<String, HashMap<String, Integer>>();
-
-    // Map to store <String Protocol, int Frequency of appearance>
-    HashMap<String, Integer> protocolA = new HashMap<String, Integer>();
-    HashMap<String, Integer> protocolB = new HashMap<String, Integer>();
-    HashMap<String, Integer> protocolC = new HashMap<String, Integer>();
-    HashMap<String, Integer> protocolDE = new HashMap<String, Integer>();
+    // Maps to store <String Protocol, int Frequency of appearance>
+    protocolsA = new HashMap<String, Integer>();
+    protocolsB = new HashMap<String, Integer>();
+    protocolsC = new HashMap<String, Integer>();
+    protocolsDE = new HashMap<String, Integer>();
    
     // loop through sorted IPs 
     for (PCAPdata packet : sortedPCAP) {
       String[] ip = packet.destination.split("\\.");
-      String byteStr = ip[0];
-      int byteInt = Integer.parseInt(byteStr);
+      int byteInt = Integer.parseInt(ip[0]);
+      getIPClass(byteInt, packet);
+    } 
 
-      // Class A -- [1.0.0.0, 128.0.0.0)
-      if (byteInt < 128) {
-        // puts protocol into map
-        String proto = packet.protocol;
-        if (protocolA.containsKey(proto)) {
-          protocolA.merge(proto, 1, Integer::sum);
-        }
-        else {
-          protocolA.put(proto, 1);
-        }
+    bucketData.put(classA, protocolsA);
+    bucketData.put(classB, protocolsB);
+    bucketData.put(classC, protocolsC);
+    bucketData.put(classDE, protocolsDE);
+  }
+
+  private void getIPClass(int byteInt, PCAPdata packet) {
+    // Class A -- [1.0.0.0, 128.0.0.0)
+    if (byteInt < 128) {
+      // puts protocol into map
+      putProtocolMap(protocolsA, packet.protocol);
+    }
+    // Class B -- [128.0.0.0, 192.0.0.0)
+    else if (byteInt >= 128 && byteInt < 192) {
+      putProtocolMap(protocolsB, packet.protocol);
+    }
+    // Class C -- [192.0.0.0, 224.0.0.0)
+    else if (byteInt >= 192 && byteInt < 224) {
+      putProtocolMap(protocolsA, packet.protocol);
+    }
+    // Class D & E-- [224.0.0.0, 255.0.0.0)
+    else {
+      putProtocolMap(protocolsDE, packet.protocol);
+    }
+  }
+
+  private void putProtocolMap(HashMap<String, Integer> protocolMap, String proto) {
+    if (protocolMap.containsKey(proto)) {
+      protocolMap.merge(proto, 1, Integer::sum);
+    }
+    else {
+      protocolMap.put(proto, 1);
+    }
+  }
+
+  /* Retrieves and condenses IP addresses based on first 8 bits */
+  private void condenseByteOne() {
+    HashMap<String, ArrayList<PCAPdata>> bytes = new HashMap<String, ArrayList<PCAPdata>>();
+    // extract all unique first bytes
+    for (PCAPdata packet : sortedPCAP) {
+      String[] ip = packet.destination.split("\\.");
+      String firstByte = ip[0];
+      if (bytes.containsKey(firstByte)) {
+        ArrayList<PCAPdata> arr = bytes.get(firstByte);
+        arr.add(packet);
       }
-
-      // Class B -- [128.0.0.0, 192.0.0.0)
-      else if (byteInt >= 128 && byteInt < 192) {
-        // puts protocol into map
-        String proto = packet.protocol;
-        if (protocolB.containsKey(proto)) {
-          protocolB.merge(proto, 1, Integer::sum);
-        }
-        else {
-          protocolB.put(proto, 1);
-        }
-      }
-
-      // Class C -- [192.0.0.0, 224.0.0.0)
-      else if (byteInt >= 192 && byteInt < 224) {
-        // puts protocol into map
-        String proto = packet.protocol;
-        if (protocolC.containsKey(proto)) {
-          protocolC.merge(proto, 1, Integer::sum);
-        }
-        else {
-          protocolC.put(proto, 1);
-        }
-      }
-
-      // Class D & E-- [224.0.0.0, 255.0.0.0)
       else {
-        // puts protocol into map
-        String proto = packet.protocol;
-        if (protocolDE.containsKey(proto)) {
-          protocolDE.merge(proto, 1, Integer::sum);
-        }
-        else {
-          protocolDE.put(proto, 1);
-        }
+        ArrayList<PCAPdata> arr = new ArrayList<PCAPdata>();
+        arr.add(packet);
+        bytes.put(firstByte, arr);
       }
-    } // end of for loop
+    }
 
-    bucketData.put(classA, protocolA);
-    bucketData.put(classB, protocolB);
-    bucketData.put(classC, protocolC);
-    bucketData.put(classDE, protocolDE);
+    LinkedHashMap<String, Integer> prefixMap = new LinkedHashMap<String, Integer>();
+      // put all unique first bytes into map with longest common prefixes as destinations
+    for (String key : bytes.keySet()) {
+      ArrayList<PCAPdata> arr = bytes.get(key);
+      // if size is 1, just put that packet in
+      if (arr.size() == 1) {
+        PCAPdata temp = arr.get(0);
+        prefixMap.put(temp.destination, 1);
+      }
+      // sum up all frequencies in that byte
+      else {
+        int freq = 0;
+        String[] dests = new String[arr.size()];
+        int i = 0;
+        for (PCAPdata packet : arr) {
+          freq += packet.frequency;
+          dests[i] = packet.destination;
+          i++;
+        }
+        // longest common prefix
+        String prefix = longestCommonPrefix(dests);
+        prefixMap.put(prefix, dests.length);
+      }
+    }
+
+    sortIPMap(prefixMap);
+  } 
+
+  /* Sorts a Map of addresses based on first byte */
+  private void sortIPMap(LinkedHashMap<String, Integer> prefixMap) {
+    // sort ips based on first byte
+    Set<Map.Entry<String, Integer>> set = prefixMap.entrySet();
+    List<Map.Entry<String, Integer>> entries = new ArrayList<Map.Entry<String, Integer>>(set);
+    Collections.sort(entries, new Comparator<Map.Entry<String, Integer>>() {
+      @Override
+      public int compare(Entry<String, Integer> p1, Entry<String, Integer> p2) {
+        String[] byte1 = p1.getKey().split("\\.");
+        Integer b1 = Integer.parseInt(byte1[0]);
+        String[] byte2 = p2.getKey().split("\\.");
+        Integer b2 = Integer.parseInt(byte2[0]);
+        return b1.compareTo(b2); // increasing order
+      }
+    });
+
+    finalMap = new LinkedHashMap<String, Integer>();
+    for(Map.Entry<String, Integer> map : entries){
+      String key = parsePrefix(map.getKey());
+      finalMap.put(key, map.getValue());
+    }
+  }
+
+  /* Retrieves proper prefix namings */
+  private String parsePrefix(String ip) {
+    String[] ips = ip.split("\\.");
+    int len = ips.length;
+    String ret = "";
+    if (len == IP_SIZE) { // full IP address is returned
+      ret = ip;
+    }
+    else if (len == IP_SIZE-1) {
+      ret = ips[0] + "." + ips[1] + "." + ips[2] + ".0/16";
+    }
+    else if (len == IP_SIZE-2) {
+      ret = ips[0] + "." + ips[1] + ".0.0/16";
+    }
+    else {
+      ret = ips[0] + ".0.0.0/8";
+    }
+    return ret;
+  }
+
+  public String getMyIP() {
+    return myip;
+  }
+
+  public ArrayList<PCAPdata> getSortedPCAP(){
+    return sortedPCAP;
+  }
+
+  public LinkedHashMap<String, HashMap<String, Integer>> getFinalBuckets() {
+    return bucketData;
+  }
+
+  public LinkedHashMap<String, Integer> getFinalMap() {
+    return finalMap;
   }
 
   /* Finds longest common prefix between an array of strings in linear time: the algorithm makes log(m) iterations with m*n comparisons 

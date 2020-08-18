@@ -119,7 +119,7 @@ public class BucketDaoImplTest {
   /* Checks IPs are placed into proper IP classes with proper enumeration of protocols. */
   @Test
   public void testBuckets() {
-    LinkedHashMap<String, HashMap<String, Integer>> buckets = bucket.getBuckets();
+    LinkedHashMap<String, HashMap<String, Integer>> buckets = bucket.getFinalBuckets();
     LinkedHashMap<String, HashMap<String, Integer>> comparison = bucketHelper();
      // check sizes are the same
     assertEquals(buckets.size(), comparison.size());

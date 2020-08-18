@@ -141,21 +141,29 @@
         <!-- Page Heading -->
         <h1>Bucket Visualizations</h1>
 
-          <p class="mb-4">Bucket visualization.</p>
+          <p class="mb-4">Take a look at your file data.</p>
           <form action="/PCAP-bucket" method="POST">
-            <p>Choose a file to view:</p>
+            <p>Choose a file to view IP classes:</p>
             <textarea name="file-input">files/file1.pcap</textarea>
             <br/>
-            <input type="submit" />
+            <input type="submit"/>
           </form>
           <br/><br/>
 
-          <button onclick="drawVisualization()">Visualize Packet Info</button>
+          <form action="/PCAP-IP" method="POST">
+            <p>Choose a file to view IP distribution:</p>
+            <textarea name="file-input">files/file1.pcap</textarea>
+            <br/>
+            <input type="submit"/>
+          </form>
           <br/><br/>
-          <div style="height: 100vh", id="chart_div"></div>
-          
+
+          <button onclick="drawVisualization()">Visualize Packet Class and Distribution</button>
+          <br/><br/>
+          <div style="height: 100vh", id="chart_class_div"></div>
+          <div style="height: 100vh", id="chart_dist_div"></div>
     </div>
-    <!-- End of Main Content google.setOnLoadCallback(drawVisualization) -->
+    <!-- End of Main Content -->
 
     <!-- Footer -->
     <footer class="sticky-footer bg-white">

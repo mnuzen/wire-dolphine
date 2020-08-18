@@ -1,11 +1,13 @@
 package com.google.netpcapanalysis.interfaces.dao;
 
 import com.google.netpcapanalysis.models.PCAPdata;
-import java.util.*; 
-import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public interface BucketDao {
-    public LinkedHashMap<String, HashMap<String, Integer>> getBuckets();
     public String getMyIP();
     public ArrayList<PCAPdata> getSortedPCAP();
+    public LinkedHashMap<String, HashMap<String, Integer>> getFinalBuckets();
+    public LinkedHashMap<String, Integer> getFinalMap();
 }
