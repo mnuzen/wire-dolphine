@@ -9,8 +9,6 @@ import java.util.ArrayList;
 
 public interface UtilityPCAPDao {
 
-    public void setSessionEntity(HttpServletRequest request, String text);
-    public String getSessionEntity(HttpServletRequest request);
     public String convertPCAPdataToJson(ArrayList<PCAPdata> data);
     public String convertFileToJson(ArrayList<FileAttribute> data);
     public ArrayList<PCAPdata> getUniqueIPs(ArrayList<PCAPdata> allData);

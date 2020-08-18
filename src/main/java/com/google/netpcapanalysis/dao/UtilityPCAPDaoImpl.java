@@ -25,22 +25,6 @@ public class UtilityPCAPDaoImpl implements UtilityPCAPDao {
 
   }
 
-  public String getSessionEntity(HttpServletRequest request) {
-    HttpSession session = request.getSession(false);
-    try{  
-      String n = (String)session.getAttribute("entityName");  
-      return n;
-       }
-      catch(Exception e)
-       {
-          return null;
-        }
-  }
-
-  public void setSessionEntity(HttpServletRequest request, String text) {
-    HttpSession session = request.getSession();  
-    session.setAttribute("entityName",text);  
-  }
 
   public String convertPCAPdataToJson(ArrayList<PCAPdata> data) {
     Gson gson = new Gson();

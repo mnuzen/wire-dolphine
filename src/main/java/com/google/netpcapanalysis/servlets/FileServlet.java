@@ -15,6 +15,7 @@ import com.google.netpcapanalysis.dao.UtilityPCAPDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.UtilityPCAPDao;
 import com.google.netpcapanalysis.models.FileAttribute;
 import java.util.ArrayList;
+import com.google.netpcapanalysis.utils.SessionManager;
 
 
 
@@ -40,7 +41,7 @@ public class FileServlet extends HttpServlet {
       
       String file = request.getParameter("file");
 
-      pcapUtility.setSessionEntity(request, file);
+      SessionManager.setSessionEntity(request, file);
 
       Cookie ck=new Cookie("uname", file);//creating cookie object  
       response.addCookie(ck);//adding cookie in the response  

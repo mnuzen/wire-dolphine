@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.netpcapanalysis.utils.SessionManager;
 
 @WebServlet("/data-table")
 public class TableServlet extends HttpServlet {
@@ -26,7 +27,7 @@ public class TableServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    String entityName = pcapUtility.getSessionEntity(request);
+    String entityName = SessionManager.getSessionEntity(request);
 
     //will need to run lookups for Domain/location to display for datatable
     dataTable = maliciousLookup.run(datastore.getPCAPObjects(entityName));
