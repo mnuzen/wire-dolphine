@@ -45,7 +45,7 @@ public class MockDataLoader {
         String[] pcapLine = line.split(cvsSplitBy);
 
         PCAPdata tempPCAP = new PCAPdata(pcapLine[0], pcapLine[1], pcapLine[2],
-            Integer.parseInt(pcapLine[3]));
+            Integer.parseInt(pcapLine[3]), Integer.parseInt(pcapLine[4]), Long.parseLong(pcapLine[5]));
 
         data.add(tempPCAP);
       }
