@@ -19,4 +19,26 @@ public interface Cache<K, V extends Serializable> {
    * @return null if does not exist
    */
   public V get(K key);
+
+  public void garbageCollect();
+
+  public long getSize();
+
+  /**
+   * Enables counting of hits()/misses()
+   * @return on/off counting of hits/misses
+   */
+  public boolean statisticsEnabled();
+
+  /**
+   *
+   * @return cache hits
+   */
+  public long hits();
+
+  /**
+   *
+   * @return cache misses
+   */
+  public long misses();
 }

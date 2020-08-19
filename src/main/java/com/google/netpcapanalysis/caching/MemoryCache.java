@@ -6,9 +6,11 @@ import java.io.Serializable;
 public class MemoryCache<K, V extends Serializable> implements Cache<K, V> {
 
   private final com.github.benmanes.caffeine.cache.Cache<K, V> cache;
+  private boolean stats;
 
-  public MemoryCache(com.github.benmanes.caffeine.cache.Cache<K, V> cache) {
+  public MemoryCache(com.github.benmanes.caffeine.cache.Cache<K, V> cache, boolean stats) {
     this.cache = cache;
+    this.stats = stats;
   }
 
   @Override
@@ -21,5 +23,30 @@ public class MemoryCache<K, V extends Serializable> implements Cache<K, V> {
   public V get(K key) {
     if (key == null) throw new IllegalArgumentException("null value provided");
     return cache.getIfPresent(key);
+  }
+
+  @Override
+  public void garbageCollect() {
+
+  }
+
+  @Override
+  public long getSize() {
+    return cache.estimatedSize();
+  }
+
+  @Override
+  public boolean statisticsEnabled() {
+    return stats;
+  }
+
+  @Override
+  public long hits() {
+    return cache.stats().hitCount();
+  }
+
+  @Override
+  public long misses() {
+    return cache.stats().missCount();
   }
 }

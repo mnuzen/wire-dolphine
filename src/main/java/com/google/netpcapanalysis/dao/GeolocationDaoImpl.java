@@ -20,9 +20,9 @@ public class GeolocationDaoImpl implements GeolocationDao {
   public GeolocationDaoImpl() {
     cache = new CacheBuilder<InetAddress, String>()
         .setCacheName("geolocation")
-        .setExpiration(600000) // 10 min
-        .setMaxItems(1000)
-        .setType(CacheType.MEMORY)
+        .setExpirationPolicy(600000) // 10 min
+        .setPolicyArgument(1000)
+        .setCacheType(CacheType.MEMORY)
         .build();
 
     try {

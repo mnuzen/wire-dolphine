@@ -97,9 +97,9 @@ public class BenchmarkServlet extends HttpServlet {
   public static long benchmarkCached(DatabaseReader reader, int requests) throws Exception {
     Cache<InetAddress, String> cache = new CacheBuilder<InetAddress, String>()
         .setCacheName("geolocation")
-        .setExpiration(600000) // 10 min
-        .setMaxItems(1000)
-        .setType(CacheType.DATASTORE)
+        .setExpirationPolicy(600000) // 10 min
+        .setPolicyArgument(1000)
+        .setCacheType(CacheType.DATASTORE)
         .build();
 
     InetAddress[] ips = genIPsUneven(requests);

@@ -1,6 +1,8 @@
 package com.google.netpcapanalysis.caching;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.google.netpcapanalysis.caching.policy.EvictionPolicy;
+import com.google.netpcapanalysis.caching.policy.MaximumItemPolicy;
 import com.google.netpcapanalysis.interfaces.caching.Cache;
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
@@ -11,31 +13,28 @@ public class CacheBuilder<K, V extends Serializable> {
     MEMORY, DATASTORE
   }
 
+  public enum Policy {
+    TIME_AFTER_WRITE,
+    TIME_AFTER_ACCESS,
+    MAXIMUM_SIZE
+  }
+
   private CacheType type;
+  private Policy policy;
+  private int evictionPolicyArg;
 
   // right now used only for datastore - sets name of datastore object
   private String cacheName;
+  private boolean enableStatistics;
 
-  private int expiration; // ms
-  private int maxItems;
+  public CacheBuilder() {}
 
-  public CacheBuilder() {
-    this.type = CacheType.MEMORY;
-    this.cacheName = null;
-    this.expiration = 0;
-    this.maxItems = 0;
-  }
-
-  public CacheBuilder(CacheType type, String cacheName, int expiration, int maxItems) {
+  public CacheBuilder(String cacheName, CacheType type, Policy policy, int evictionPolicyArg, boolean enableStatistics) {
     this.type = type;
     this.cacheName = cacheName;
-    this.expiration = expiration;
-    this.maxItems = maxItems;
-  }
-
-  public CacheBuilder<K, V> setType(CacheType type) {
-    this.type = type;
-    return this;
+    this.policy = policy;
+    this.evictionPolicyArg = evictionPolicyArg;
+    this.enableStatistics = enableStatistics;
   }
 
   public CacheBuilder<K, V> setCacheName(String cacheName) {
@@ -43,13 +42,23 @@ public class CacheBuilder<K, V extends Serializable> {
     return this;
   }
 
-  public CacheBuilder<K, V> setExpiration(int expiration) {
-    this.expiration = expiration;
+  public CacheBuilder<K, V> setCacheType(CacheType type) {
+    this.type = type;
     return this;
   }
 
-  public CacheBuilder<K, V> setMaxItems(int maxItems) {
-    this.maxItems = maxItems;
+  public CacheBuilder<K, V> setPolicy(Policy policy) {
+    this.policy = policy;
+    return this;
+  }
+
+  public CacheBuilder<K, V> setPolicyArgument(int arg) {
+    this.evictionPolicyArg = arg;
+    return this;
+  }
+
+  public CacheBuilder<K, V> enableStatistics(boolean b) {
+    this.enableStatistics = b;
     return this;
   }
 
@@ -58,21 +67,47 @@ public class CacheBuilder<K, V extends Serializable> {
     if (type == CacheType.MEMORY) {
       cache = buildMemoryCache();
     } else if (type == CacheType.DATASTORE) {
-      cache = new DatastoreCache<>(cacheName, expiration, maxItems);
+      cache = buildDatastoreCache();
     } else {
       throw new Error("No cache type specified");
     }
     return cache;
   }
 
-  private Cache<K, V> buildMemoryCache() {
+  private MemoryCache<K, V> buildMemoryCache() {
     Caffeine<Object, Object> builder = Caffeine.newBuilder();
-    if (expiration > 0) {
-      builder.expireAfterWrite(expiration, TimeUnit.MILLISECONDS);
+    if (policy == Policy.MAXIMUM_SIZE) {
+      builder.maximumSize(evictionPolicyArg);
+    } else if (policy == Policy.TIME_AFTER_ACCESS) {
+      builder.expireAfterAccess(evictionPolicyArg, TimeUnit.MILLISECONDS);
+    } else if (policy == Policy.TIME_AFTER_WRITE) {
+      builder.expireAfterWrite(evictionPolicyArg, TimeUnit.MILLISECONDS);
+    } else {
+      throw new Error("cache has no eviction policy");
     }
-    if (maxItems > 0) {
-      builder.maximumSize(maxItems);
+
+    if (enableStatistics) {
+      builder.recordStats();
     }
-    return (Cache<K, V>) builder.build();
+    return new MemoryCache<>(builder.build(), enableStatistics);
+  }
+
+  private DatastoreCache<K, V> buildDatastoreCache() {
+    return new DatastoreCache<>(
+        cacheName,
+        getPolicy(),
+        enableStatistics
+    );
+  }
+
+  private EvictionPolicy<K, V> getPolicy() {
+    switch (policy) {
+      case MAXIMUM_SIZE:
+        return new MaximumItemPolicy<>(evictionPolicyArg);
+      case TIME_AFTER_ACCESS:
+      case TIME_AFTER_WRITE:
+      default:
+        throw new Error("No policy set");
+    }
   }
 }

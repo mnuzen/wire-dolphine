@@ -11,71 +11,49 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.Transaction;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.google.netpcapanalysis.caching.policy.EvictionPolicy;
 import com.google.netpcapanalysis.interfaces.caching.Cache;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 
 public class DatastoreCache<K, V extends Serializable> implements Cache<K, V> {
 
-  private static class DSCacheObject<T> {
-
-    public String id;
-    public T data;
-    public long expiration;
-
-    public DSCacheObject(String id, T data, long expiration) {
-      this.id = id;
-      this.data = data;
-      this.expiration = expiration;
-    }
-  }
-
   private static final String EXPIRATION_PROP = "expiration";
   private static final String CACHED_PROP = "cached";
+
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   private final Type jsonType = new TypeToken<V>() {
   }.getType();
   private final Gson gson = new Gson();
   private final String objectName;
-  private final int cacheDuration;
-  private final int maxItems;
+
+  private final EvictionPolicy<K, V> policy;
+
+  private boolean statistics;
+  private long hits;
+  private long misses;
 
   /**
-   * @param objectName    non-null
-   * @param cacheDuration 0 == no expiration, time in MS
-   * @param maxItems      0 == no limit
+   * @param objectName entity name
+   * @param policy     eviction policy
+   * @param statistics boolean to enable statistics recording
    */
-  public DatastoreCache(String objectName, int cacheDuration, int maxItems) {
-    this.cacheDuration = cacheDuration;
+  public DatastoreCache(String objectName, EvictionPolicy<K, V> policy, boolean statistics) {
     this.objectName = objectName;
-    this.maxItems = maxItems;
+    this.policy = policy;
+    this.statistics = statistics;
   }
 
   @Override
-  public void put(K key, V data) {
-    if (key == null || data == null) {
-      throw new IllegalArgumentException("null value provided");
+  public void put(K key, V value) {
+    if (policy.checkGarbageCollect(this)) {
+      garbageCollect();
     }
 
-    if (this.maxItems > 0 && Math.random() * maxItems < 1 ||
-        Math.random() * 1000 < 1) {
-      // kinda hacky solution but since counting # of items in cache is expensive, we want to call
-      // it as infrequently as possible, so we want to garbage collect approximately every `maxItems`
-      // inserts into datastore which gets us to an average of `maxItems`*1.5 items in the datastore,
-      // and preserving at minimum `maxItems`
+    DSCacheObject<V> data = new DSCacheObject<>(key.toString(), value, System.currentTimeMillis());
+    data = policy.onPut(this, data);
 
-      // this means that theoretically even if there are multiple datastore cache workers running
-      // on the same model, maxItems limit will approximately be followed
-
-      // in the case no max-item val is set, default to once every 1000 inserts
-      this.garbageCollect();
-    }
-    Entity entity = new Entity(objectName, key.toString());
-    entity.setProperty(CACHED_PROP, gson.toJson(data));
-
-    long expirationTime = cacheDuration + cacheDuration > 0 ? System.currentTimeMillis() : 0;
-    entity.setProperty(EXPIRATION_PROP, expirationTime);
-    datastore.put(entity);
+    putDSObject(data);
   }
 
   @Override
@@ -83,60 +61,112 @@ public class DatastoreCache<K, V extends Serializable> implements Cache<K, V> {
     if (key == null) {
       throw new IllegalArgumentException("null value provided");
     }
-    DSCacheObject<V> res = getFromDatastore(key.toString());
+    DSCacheObject<V> res = getDSObject(key);
+    res = policy.onGet(this, res);
 
     if (res == null) {
-      return null;
-    }
-    if (res.expiration > 0 && res.expiration < System.currentTimeMillis()) {
+      if (statistics) {
+        misses++;
+      }
       return null;
     }
 
-    return res.data;
+    hits++;
+    return res.value;
+  }
+
+  @Override
+  public long getSize() {
+    Entity globalStat = datastore.prepare(new Query("__Stat_Total__")).asSingleEntity();
+    return (Long) globalStat.getProperty("count");
   }
 
   /**
    * Automatically run roughly every `maxItem` inserts. Or can be manually called at the end of a
    * series of operations.
    */
+  @Override
   public void garbageCollect() {
-    Entity globalStat = datastore.prepare(new Query("__Stat_Total__")).asSingleEntity();
-    Long totalEntities = (Long) globalStat.getProperty("count");
+    Query query = new Query(objectName).addSort(EXPIRATION_PROP, SortDirection.ASCENDING)
+        .setKeysOnly();
+    Iterable<Entity> pq;
 
-    if (totalEntities != null && totalEntities > maxItems) {
-      int removeNum = (int) (totalEntities - maxItems);
-      Query query = new Query(objectName).addSort(EXPIRATION_PROP, SortDirection.ASCENDING)
-          .setKeysOnly();
-      Iterable<Entity> pq = datastore.prepare(query)
-          .asIterable(FetchOptions.Builder.withLimit(removeNum));
+    if (policy.checkSizeConstraint(this)) {
+      int limit = (int) policy.enforceSizeConstraint(this);
+      pq = datastore.prepare(query)
+          .asIterable(FetchOptions.Builder.withLimit(limit));
+    } else {
+      pq = datastore.prepare(query).asIterable();
+    }
 
-      // bulk delete extras
-      Transaction txn = datastore.beginTransaction();
-      try {
-        for (Entity entity : pq) {
+    // bulk delete extras
+    Transaction txn = datastore.beginTransaction();
+    try {
+      for (Entity entity : pq) {
+        if (policy.checkCacheObjectEvict(this, entityToCacheObject(entity))) {
           datastore.delete(entity.getKey());
         }
-        txn.commit();
-      } finally {
-        if (txn.isActive()) {
-          txn.rollback();
-        }
+      }
+      txn.commit();
+    } finally {
+      if (txn.isActive()) {
+        txn.rollback();
       }
     }
   }
 
-  private DSCacheObject<V> getFromDatastore(String key) {
+  @Override
+  public boolean statisticsEnabled() {
+    return statistics;
+  }
+
+  @Override
+  public long hits() {
+    return hits;
+  }
+
+  @Override
+  public long misses() {
+    return misses;
+  }
+
+  public void putDSObject(DSCacheObject<V> data) {
+    if (data.key == null || data.value == null) {
+      throw new IllegalArgumentException("null value provided");
+    }
+
+    Entity entity = cacheObjectToEntity(data);
+    datastore.put(entity);
+  }
+
+  public DSCacheObject<V> getDSObject(K key) {
     try {
-      Entity entity = datastore.get(KeyFactory.createKey(objectName, key));
-      String jsonEncoded = (String) entity.getProperty(CACHED_PROP);
-
-      String id = (String) entity.getProperty("id");
-      long expiration = (long) entity.getProperty(EXPIRATION_PROP);
-      V data = gson.fromJson(jsonEncoded, jsonType);
-
-      return new DSCacheObject<>(id, data, expiration);
+      Entity entity = datastore.get(KeyFactory.createKey(objectName, key.toString()));
+      return entityToCacheObject(entity);
     } catch (EntityNotFoundException e) {
       return null;
     }
+  }
+
+  public void enableStatistics(boolean b) {
+    this.statistics = b;
+  }
+
+  private Entity cacheObjectToEntity(DSCacheObject<V> data) {
+    Entity entity = new Entity(objectName, data.key);
+    entity.setProperty(CACHED_PROP, gson.toJson(data.value));
+    entity.setProperty(EXPIRATION_PROP, data.expiration);
+
+    return entity;
+  }
+
+  private DSCacheObject<V> entityToCacheObject(Entity entity) {
+    String jsonEncoded = (String) entity.getProperty(CACHED_PROP);
+
+    String id = (String) entity.getProperty("id");
+    long expiration = (long) entity.getProperty(EXPIRATION_PROP);
+    V data = gson.fromJson(jsonEncoded, jsonType);
+
+    return new DSCacheObject<>(id, data, expiration);
   }
 }
