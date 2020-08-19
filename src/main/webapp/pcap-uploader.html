@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>IP Visualization</title>
+  <title>Upload PCAP File</title>
 
   <!-- Custom fonts for this template-->
   <link href="js/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -17,7 +17,6 @@
 
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
-  <link href="css/bucket.css" rel="stylesheet">
 
 </head>
 
@@ -41,7 +40,7 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
+    <li class="nav-item">
       <a class="nav-link" href="index.html">
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>Dashboard</span></a>
@@ -55,19 +54,33 @@
       Explore Your Data
     </div>
 
-    <!-- Nav Item - Map Viz - Jevin -->
+    <!-- Nav Item - Map -->
     <li class="nav-item">
-      <a class="nav-link active" href="mapviz.html">
+      <a class="nav-link" href="/mapviz.html">
         <i class="fas fa-fw fa-globe-americas"></i>
         <span>Where are your requests going?</span></a>
     </li>
+    <!-- Nav Item - Domain -->
     <li class="nav-item">
-      <a class="nav-link" href="network.html">
+      <a class="nav-link" href="/domains.html">
+        <i class="fas fa-fw fa-satellite"></i>
+        <span>Who are you sending to?</span></a>
+    </li>
+    <!-- Nav Item - Network -->
+    <li class="nav-item">
+      <a class="nav-link" href="/network.html">
         <i class="fas fa-fw fa-project-diagram"></i>
         <span>What does your network look like?</span></a>
     </li>
+    <!-- Nav Item - Charts -->
     <li class="nav-item">
-      <a class="nav-link" href="tables.html">
+      <a class="nav-link" href="charts.html">
+        <i class="fas fa-fw fa-chart-area"></i>
+        <span>Charts</span></a>
+    </li>
+    <!-- Nav Item - Table -->
+    <li class="nav-item">
+      <a class="nav-link" href="/tables.html">
         <i class="fas fa-fw fa-table"></i>
         <span>View your packets</span></a>
     </li>
@@ -115,16 +128,16 @@
           </div>
         </li>
 
-            <!-- Nav Item - User Information -->
-            <li class="nav-item dropdown no-arrow">
-              <a href="packet.html" class="btn btn-primary btn-icon-split mr-2">
+        <!-- Nav Item - User Information -->
+        <li class="nav-item dropdown no-arrow">
+          <a href="#" class="btn btn-primary btn-icon-split mr-2">
                     <span class="icon text-white-50">
                       <i class="fas fa-arrow-left"></i>
                     </span>
-                <span class="text">Previous</span>
-              </a>
-              <a href="network.html" class="btn btn-success btn-icon-split">
-                  <span class="text">Next</span>
+            <span class="text">Previous</span>
+          </a>
+          <a href="#" class="btn btn-success btn-icon-split">
+            <span class="text">Next</span>
 
             <span class="icon text-white-50">
                       <i class="fas fa-arrow-right"></i>
@@ -137,14 +150,30 @@
 
 
     <!-- Main Content -->
-    <div class="container-fluid">
-        <!-- Page Heading -->
-        <h1>Bucket Visualizations</h1>
+    <div id="content" class="container-fluid">
 
-          <button onclick="drawVisualization()">Visualize Packet Class and Distribution</button>
-          <br/><br/>
-          <div style="height: 100vh", id="chart_class_div"></div>
-          <div style="height: 100vh", id="chart_dist_div"></div>
+      <!-- Welcome -->
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h2 class="m-0 font-weight-bold text-primary, text-center">Upload PCAP File</h2>
+        </div>
+        <div class="card-body align-self-center">
+            <form action="/PCAP-data" method="POST" class="text-left">
+              <label for="file">Select a file:</label>
+              <select name="file-input">
+                <option value="files/file1.pcap">files/file1.pcap</option>
+                <option value="files/file2.pcap">files/file2.pcap</option>
+                <option value="files/file1.pcap">files/file3.pcap</option>
+              </select>
+              <br>
+              <label for="description">Description:</label>
+              <input type="text" id="description" name="description" maxlength="280"><br>
+              <input type="submit">
+            </form>
+
+        </div>
+      </div>
+
     </div>
     <!-- End of Main Content -->
 
@@ -152,7 +181,7 @@
     <footer class="sticky-footer bg-white">
       <div class="container my-auto">
         <div class="copyright text-center my-auto">
-          <span>Made with <i class="fa fa-heart" aria-hidden="true"></i> in America</span>
+          <span>Made with <i class="fa fa-heart" aria-hidden="true"></i> by Google Interns</span>
         </div>
       </div>
     </footer>
@@ -180,12 +209,8 @@
 <script src="js/sb-admin-2.min.js"></script>
 
 <!-- Page level plugins -->
-<script src="vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 <!-- PAGE LEVEL CUSTOM SCRIPTS -->
-<script src="js/bucket.js"></script>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 </body>
 

@@ -153,20 +153,8 @@
     <!-- Main Content -->
     <div class="container-fluid">
         <!-- Page Heading -->
-        <h1>Network Visualizations Demo</h1>
+        <h1>Network Visualizations</h1>
         <!-- Network Example -->
-
-          <p class="mb-4">Example network visualization with data from data.csv (loaded from the <a href="tables.html">tables</a> page). Check out <a href="https://visjs.github.io/vis-network/examples/">this</a> library to see the source code. Enter a filename, submit, then click to view!</p>
-          
-          <form action="/PCAP-freq-loader" method="POST">
-            <p>Choose a file to view:</p>
-            <textarea name="file-input">files/file1.pcap</textarea>
-            <br/>
-            <input type="submit" />
-          </form>
-
-          <br/><br/>
-          <p>Now that you've chosen a file, take a look at the network visualization.</p>
           <button onclick="drawObfusNetwork()">Obfuscated Network</button><button onclick="createIPNetwork()">IP Network</button>
           <br/><br/>
           <div style="height: 100vh", id="mynetwork"></div>
