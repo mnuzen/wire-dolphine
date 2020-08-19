@@ -16,30 +16,50 @@ package com.google.netpcapanalysis.servlets;
 
 import com.google.netpcapanalysis.models.PCAPdata;
 
+import com.google.netpcapanalysis.dao.PCAPDaoImpl;
+import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
+
 import com.google.netpcapanalysis.dao.PCAPParserDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPParserDao;
+
+import io.pkts.PacketHandler;
+import io.pkts.Pcap;
+import io.pkts.buffer.Buffer;
+import io.pkts.packet.Packet;
+import io.pkts.packet.TCPPacket;
+import io.pkts.packet.UDPPacket;
+import io.pkts.packet.IPPacket;
+import io.pkts.protocol.Protocol;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
+
 import java.util.*; 
+import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.io.*;
 
 /** Servlet that puts raw PCAP files to Datastore by calling PCAPParserDao. */
 @WebServlet("/PCAP-data")
 public class PacketParserServlet extends HttpServlet {
   HashMap<String, PCAPdata> allPCAP = new HashMap<String, PCAPdata>();
+  DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); //creates database
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Retrieve user input to determine file name.
-    String file = request.getParameter("file-input");
-    String description = request.getParameter("description");
-
-    PCAPParserDao parser = new PCAPParserDaoImpl(file, description);
+    String file = getParameter(request, "file-input", "");
+    PCAPParserDao parser = new PCAPParserDaoImpl(file);
     parser.parseRaw();
     parser.putDatastore(); 
 

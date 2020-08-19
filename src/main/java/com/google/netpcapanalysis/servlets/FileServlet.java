@@ -41,6 +41,9 @@ public class FileServlet extends HttpServlet {
 
       SessionManager.setSessionEntity(request, file);
 
+      Cookie ck=new Cookie("uname", file);//creating cookie object  
+      response.addCookie(ck);//adding cookie in the response  
+
       response.sendRedirect("/");
     }
 

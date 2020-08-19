@@ -15,10 +15,14 @@ import io.pkts.packet.UDPPacket;
 import io.pkts.packet.IPPacket;
 import io.pkts.protocol.Protocol;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.interfaces.dao.PCAPParserDao;
-import com.google.netpcapanalysis.utils.UtilityPCAP;
-import com.google.netpcapanalysis.models.FileAttribute;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,13 +42,11 @@ public class PCAPParserDaoImpl implements PCAPParserDao {
   //private HashMap<String, PCAPdata> finalPCAP = new HashMap<String, PCAPdata>();
 
   private String filename;
-  private String description;
   /*private String myip = "";
   private boolean first = true;*/
 
-  public PCAPParserDaoImpl(String file, String description) { 
+  public PCAPParserDaoImpl(String file) { 
       this.filename = file;
-      this.description = description;
   }
 
    /* Reads PCAP file (from file name) as a stream and puts unique connections into allPCAP HashMap. */
@@ -122,14 +124,7 @@ public class PCAPParserDaoImpl implements PCAPParserDao {
  
   /* Adds all raw packets to datastore through GenericPCAPDao*/
   public void putDatastore(){
-
-    String entityName = UtilityPCAP.hashText(filename);
-    String myip = UtilityPCAP.findMyIP(allPCAP);
-
-    datastore.setPCAPObjects(allPCAP, entityName);
-
-    FileAttribute data = new FileAttribute(entityName, filename, myip, description);
-    datastore.setFileAttribute(data);
+    datastore.setPCAPObjects(allPCAP, filename);
   } 
 
   /* Access elements for testing. */

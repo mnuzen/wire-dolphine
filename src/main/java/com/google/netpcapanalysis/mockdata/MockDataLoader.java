@@ -19,7 +19,7 @@ public class MockDataLoader {
 
   }
 
-  public void LoadData(ArrayList<PCAPdata> dataTable, String csvFile, String description) { // uploads to datastore
+  public void LoadData(ArrayList<PCAPdata> dataTable, String csvFile) { // uploads to datastore
     PCAPDao dataBase = new PCAPDaoImpl();
 
     String entityName = UtilityPCAP.hashText(csvFile);
@@ -27,7 +27,7 @@ public class MockDataLoader {
     dataBase.setPCAPObjects(dataTable, entityName);
     String myip = UtilityPCAP.findMyIP(dataTable);
 
-    FileAttribute data = new FileAttribute(entityName, csvFile, myip, description);
+    FileAttribute data = new FileAttribute(entityName, csvFile, myip, "Description Text");
     dataBase.setFileAttribute(data);
   }
 
@@ -57,8 +57,8 @@ public class MockDataLoader {
     return data;
   }
 
-  public void CSVDataUpload(String csvFile, String description) {
-    LoadData(CSVDataLoader(csvFile), csvFile, description);
+  public void CSVDataUpload(String csvFile) {
+    LoadData(CSVDataLoader(csvFile), csvFile);
   }
 
 }
