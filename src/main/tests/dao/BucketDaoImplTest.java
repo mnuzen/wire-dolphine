@@ -34,10 +34,8 @@ import java.net.URL;
 public class BucketDaoImplTest {
   private BucketDao bucket;
   private ArrayList<PCAPdata> data;
-
   private String PCAPNAME = "files/file2.pcap";
   private String FILENAME = "files/file2.txt";
-
   private String IP1;
   private String IP2;
   private String UDP = "UDP";
@@ -50,7 +48,6 @@ public class BucketDaoImplTest {
     // Parse set IP addresses from hidden text file
     Path path = Paths.get(FILENAME);
     InputStream stream = BucketDaoImplTest.class.getClassLoader().getResourceAsStream(path.toString());
-    
     String text = IOUtils.toString(stream, StandardCharsets.UTF_8);
     String[] values = text.split(",");
     IP1 = values[0];
@@ -104,12 +101,11 @@ public class BucketDaoImplTest {
   private ArrayList<PCAPdata> sortHelper() {
     // Generate frequency information
     ArrayList<PCAPdata> comparison = new ArrayList<PCAPdata>();
+
     PCAPdata tempPCAP3 = new PCAPdata(IP1, IP1, "", "", UDP, SIZE, "false", FREQ); // OUTIP of IP1 comes first, since it's a smaller IP address
     comparison.add(tempPCAP3);
-
     PCAPdata tempPCAP1 = new PCAPdata(IP1, IP2, "", "", UDP, SIZE, "false", FREQ);
     comparison.add(tempPCAP1);
-
     PCAPdata tempPCAP2 = new PCAPdata(IP1, IP2, "", "", TCP, SIZE, "false", FREQ);
     comparison.add(tempPCAP2);
 
@@ -154,7 +150,7 @@ public class BucketDaoImplTest {
     return comparison;
   }
 
-  /* Checks IP addresses are put correctly into final map */
+  /* Checks that IP addresses are put correctly into final map */
   @Test
   public void checkFinalMap() {
     LinkedHashMap<String, Integer> finalMap = bucket.getFinalMap();
@@ -175,7 +171,7 @@ public class BucketDaoImplTest {
     return helperMap;
   }
 
-  /* Ensures that common prefix parsing works correctly */
+  /* Checks that common prefix parsing works correctly. */
   @Test
   public void checkCommonPrefix() {
     String[] ips = new String[]{IP1, IP2};
@@ -184,4 +180,35 @@ public class BucketDaoImplTest {
     assertEquals(prefix, comparison);
   }
 
+  /* Checks if a prefix of only one byte is properly formatted. */
+  @Test 
+  public void checkPrefixParser1() {
+    String parsedIP = bucket.parsePrefix("1");
+    String comp = "1.0.0.0/8";
+    assertEquals(parsedIP, comp);
+  }
+
+  /* Checks if a prefix of two bytes is properly formatted. */
+  @Test 
+  public void checkPrefixParser2() {
+    String parsedIP = bucket.parsePrefix("1.1");
+    String comp = "1.1.0.0/16";
+    assertEquals(parsedIP, comp);
+  }
+
+  /* Checks if a prefix of three bytes is properly formatted. */
+  @Test 
+  public void checkPrefixParser3() {
+    String parsedIP = bucket.parsePrefix("1.1.1");
+    String comp = "1.1.1.0/24";
+    assertEquals(parsedIP, comp);
+  }
+
+  /* Checks if a full address of four bytes is properly formatted. */
+  @Test 
+  public void checkPrefixParser4() {
+    String parsedIP = bucket.parsePrefix("1.1.1.1");
+    String comp = "1.1.1.1"; // no changes to full IP addresses
+    assertEquals(parsedIP, comp);
+  }
 }

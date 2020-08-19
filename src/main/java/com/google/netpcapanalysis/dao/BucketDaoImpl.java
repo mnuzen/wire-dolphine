@@ -268,7 +268,7 @@ public class BucketDaoImpl implements BucketDao {
   }
 
   /* Retrieves proper prefix namings */
-  private String parsePrefix(String ip) {
+  public String parsePrefix(String ip) {
     String[] ips = ip.split("\\.");
     int len = ips.length;
     String ret = "";
@@ -276,7 +276,7 @@ public class BucketDaoImpl implements BucketDao {
       ret = ip;
     }
     else if (len == IP_SIZE-1) {
-      ret = ips[0] + "." + ips[1] + "." + ips[2] + ".0/16";
+      ret = ips[0] + "." + ips[1] + "." + ips[2] + ".0/24";
     }
     else if (len == IP_SIZE-2) {
       ret = ips[0] + "." + ips[1] + ".0.0/16";

@@ -12,4 +12,5 @@ public interface BucketDao {
     public LinkedHashMap<String, HashMap<String, Integer>> getFinalBuckets();
     public LinkedHashMap<String, Integer> getFinalMap();
     public String longestCommonPrefix(String[] strs);
+    public String parsePrefix(String ip);
 }
