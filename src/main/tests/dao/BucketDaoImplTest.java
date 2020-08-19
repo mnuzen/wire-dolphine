@@ -3,14 +3,9 @@ package dao;
 import static org.junit.Assert.assertEquals;
 import org.junit.Assert;
 
-import com.google.netpcapanalysis.dao.PCAPParserDaoImpl;
-import com.google.netpcapanalysis.interfaces.dao.PCAPParserDao;
-
 import com.google.netpcapanalysis.models.PCAPdata;
-
 import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
-
 import com.google.netpcapanalysis.dao.BucketDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.BucketDao;
 
@@ -28,7 +23,6 @@ import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
 import java.nio.charset.StandardCharsets;
-import java.net.URL; 
 
 /* Compares file2.pcap's parsed results to hard-coded results. IP1 and IP2 addresses are located in hidden text file and retrieved as a stream. */
 public class BucketDaoImplTest {
@@ -101,14 +95,12 @@ public class BucketDaoImplTest {
   private ArrayList<PCAPdata> sortHelper() {
     // Generate frequency information
     ArrayList<PCAPdata> comparison = new ArrayList<PCAPdata>();
-
     PCAPdata tempPCAP3 = new PCAPdata(IP1, IP1, "", "", UDP, SIZE, "false", FREQ); // OUTIP of IP1 comes first, since it's a smaller IP address
     comparison.add(tempPCAP3);
     PCAPdata tempPCAP1 = new PCAPdata(IP1, IP2, "", "", UDP, SIZE, "false", FREQ);
     comparison.add(tempPCAP1);
     PCAPdata tempPCAP2 = new PCAPdata(IP1, IP2, "", "", TCP, SIZE, "false", FREQ);
     comparison.add(tempPCAP2);
-
     return comparison;
   }
 

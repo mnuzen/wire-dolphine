@@ -16,9 +16,6 @@ import java.util.List;
 import java.io.InputStream;
 import java.io.IOException;
 
-import io.pkts.Pcap;
-import io.pkts.packet.Packet;
-import io.pkts.protocol.Protocol;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;

@@ -15,25 +15,15 @@
 package com.google.netpcapanalysis.servlets;
 
 import com.google.netpcapanalysis.models.PCAPdata;
-
 import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
-
 import com.google.netpcapanalysis.dao.BucketDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.BucketDao;
-
-import io.pkts.PacketHandler;
-import io.pkts.Pcap;
-import io.pkts.packet.Packet;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
 
 import com.google.gson.Gson;
 

@@ -1,20 +1,14 @@
 package dao;
 
 import static org.junit.Assert.assertEquals;
-import com.google.netpcapanalysis.dao.PCAPParserDaoImpl;
-import com.google.netpcapanalysis.interfaces.dao.PCAPParserDao;
-
 import com.google.netpcapanalysis.models.PCAPdata;
-
 import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
-
 import com.google.netpcapanalysis.dao.FrequencyDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.FrequencyDao;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,7 +23,6 @@ import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
 import java.nio.charset.StandardCharsets;
-import java.net.URL; 
 
 /* Compares file2.pcap's parsed results to hard-coded results. IP1 and IP2 addresses are located in hidden text file and retrieved as a stream. */
 public class FrequencyDaoImplTest {
