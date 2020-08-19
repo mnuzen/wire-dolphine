@@ -17,7 +17,8 @@ public class LoadMockData extends HttpServlet {
     MockDataLoader mockData = new MockDataLoader();
 
     String file = request.getParameter("file");
-    mockData.CSVDataUpload(file);
+    String description = request.getParameter("description");
+    mockData.CSVDataUpload(file, description);
 
     response.sendRedirect("/files.html");
   }
