@@ -66,12 +66,14 @@ public class PCAPParserDaoImpl implements PCAPParserDao {
         String dstip = ip.getDestinationIP();
 
         Buffer buffer = ip.getPayload();
+        long arrTime = ip.getArrivalTime(); 
         int size = buffer.getReadableBytes();
 
         String protocol = getProtocol(ip); 
+        int port = 0;
 
-        // PCAPdata takes in (source, destination, domain, location, protocol, size, flagged, frequency) 
-        PCAPdata rawPCAP = new PCAPdata(srcip, dstip, "", "", protocol, size, Flagged.UNKNOWN, 1);
+        // PCAPdata takes in (source, destination, domain, location, protocol, size, flagged, int port, long time) 
+        PCAPdata rawPCAP = new PCAPdata(srcip, dstip, "", "", protocol, size, Flagged.UNKNOWN, port, arrTime);
         allPCAP.add(rawPCAP);
       }
       return true;

@@ -37,6 +37,9 @@ public class FrequencyDaoImplTest {
   private String UDP = "UDP";
   private int FREQ = 2;
   private int SIZE = 2;
+  // ports and times not used in frequency vis
+  private int PORT = 0;
+  private long TIME = 0; 
 
   @Before
   public void setup() throws IOException {
@@ -56,13 +59,13 @@ public class FrequencyDaoImplTest {
   private void setupHelper(){
     // Generate frequency information
     data = new ArrayList<PCAPdata>();
-    PCAPdata tempPCAP1 = new PCAPdata(IP1, IP2, "", "", UDP, SIZE, "false", FREQ);
+    PCAPdata tempPCAP1 = new PCAPdata(IP1, IP2, "", "", UDP, SIZE, "false", PORT, TIME);
     data.add(tempPCAP1);
 
-    PCAPdata tempPCAP2 = new PCAPdata(IP2, IP1, "", "", UDP, SIZE, "false", FREQ);
+    PCAPdata tempPCAP2 = new PCAPdata(IP2, IP1, "", "", UDP, SIZE, "false", PORT, TIME);
     data.add(tempPCAP2);
 
-    PCAPdata tempPCAP3 = new PCAPdata(IP1, IP1, "", "", UDP, SIZE, "false", FREQ);
+    PCAPdata tempPCAP3 = new PCAPdata(IP1, IP1, "", "", UDP, SIZE, "false", PORT, TIME);
     data.add(tempPCAP3);
   }
 

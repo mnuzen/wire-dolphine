@@ -36,6 +36,9 @@ public class BucketDaoImplTest {
   private String TCP = "TCP";
   private int FREQ = 2;
   private int SIZE = 2;
+  // ports and times not used in bucket vis
+  private int PORT = 0;
+  private int TIME = 0;
 
   @Before
   public void setup() throws IOException {
@@ -54,13 +57,14 @@ public class BucketDaoImplTest {
   private void setupHelper() {
     // Generate frequency information
     data = new ArrayList<PCAPdata>();
-    PCAPdata tempPCAP1 = new PCAPdata(IP1, IP2, "", "", UDP, SIZE, "false", FREQ);
+            // PCAPdata takes in (source, destination, domain, location, protocol, size, flagged, port, time) 
+    PCAPdata tempPCAP1 = new PCAPdata(IP1, IP2, "", "", UDP, SIZE, "false", PORT, TIME);
     data.add(tempPCAP1);
 
-    PCAPdata tempPCAP2 = new PCAPdata(IP2, IP1, "", "", TCP, SIZE, "false", FREQ);
+    PCAPdata tempPCAP2 = new PCAPdata(IP2, IP1, "", "", TCP, SIZE, "false", PORT, TIME);
     data.add(tempPCAP2);
 
-    PCAPdata tempPCAP3 = new PCAPdata(IP1, IP1, "", "", UDP, SIZE, "false", FREQ);
+    PCAPdata tempPCAP3 = new PCAPdata(IP1, IP1, "", "", UDP, SIZE, "false", PORT, TIME);
     data.add(tempPCAP3);
   }
 
@@ -95,11 +99,12 @@ public class BucketDaoImplTest {
   private ArrayList<PCAPdata> sortHelper() {
     // Generate frequency information
     ArrayList<PCAPdata> comparison = new ArrayList<PCAPdata>();
-    PCAPdata tempPCAP3 = new PCAPdata(IP1, IP1, "", "", UDP, SIZE, "false", FREQ); // OUTIP of IP1 comes first, since it's a smaller IP address
+            // PCAPdata takes in (source, destination, domain, location, protocol, size, flagged, int port, long time) 
+    PCAPdata tempPCAP3 = new PCAPdata(IP1, IP1, "", "", UDP, SIZE, "false", PORT, TIME); // OUTIP of IP1 comes first, since it's a smaller IP address
     comparison.add(tempPCAP3);
-    PCAPdata tempPCAP1 = new PCAPdata(IP1, IP2, "", "", UDP, SIZE, "false", FREQ);
+    PCAPdata tempPCAP1 = new PCAPdata(IP1, IP2, "", "", UDP, SIZE, "false", PORT, TIME);
     comparison.add(tempPCAP1);
-    PCAPdata tempPCAP2 = new PCAPdata(IP1, IP2, "", "", TCP, SIZE, "false", FREQ);
+    PCAPdata tempPCAP2 = new PCAPdata(IP1, IP2, "", "", TCP, SIZE, "false", PORT, TIME);
     comparison.add(tempPCAP2);
     return comparison;
   }

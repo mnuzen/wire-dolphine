@@ -124,7 +124,7 @@ function drawObfusNetwork(){
     Object.keys(data).forEach(key => {
       if (limit < NODE_LIMIT) {
         var normaled = normalize(data[key]);
-        nodes[n] = {id: n, label: key + "\n" + data[key] + " Connections", group: n}; // maybe coloring by class?
+        nodes[n] = {id: n, label: "Node " + n + "\n" + data[key] + " Connections", group: n}; // maybe coloring by class?
         for (var m = 0; m < normaled; m++) {
             edges[edge] = {from: n, to: SOURCE};
             edge++;

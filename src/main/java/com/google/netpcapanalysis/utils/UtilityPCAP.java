@@ -101,7 +101,10 @@ static public ArrayList<PCAPdata> getUniqueIPs(ArrayList<PCAPdata> allData){
     
     //puts data into map if not already there
     if (!finalMap.containsKey(outip)){
-      PCAPdata tempPCAP = new PCAPdata(myip, outip, packet.protocol, packet.size); 
+      PCAPdata tempPCAP = 
+      new PCAPdata(myip, outip, packet.protocol,
+       packet.size, packet.port, packet.time); 
+       
       finalMap.put(outip, tempPCAP);
     }
   }

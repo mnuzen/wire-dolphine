@@ -74,7 +74,8 @@ public class BucketDaoImpl implements BucketDao {
       else {
         outip = srcip;
       }
-      PCAPdata tempPCAP = new PCAPdata(myip, outip, "", "", packet.protocol, packet.size, packet.flagged, packet.frequency); 
+              // PCAPdata takes in (source, destination, domain, location, protocol, size, flagged, port, time) 
+      PCAPdata tempPCAP = new PCAPdata(myip, outip, "", "", packet.protocol, packet.size, packet.flagged, 0, 0); 
       sortedPCAP.add(tempPCAP);
     }
     // sort all packets in order of OUTIP
@@ -229,7 +230,7 @@ public class BucketDaoImpl implements BucketDao {
         String[] dests = new String[arr.size()];
         int i = 0;
         for (PCAPdata packet : arr) {
-          freq += packet.frequency;
+          freq += 1;
           dests[i] = packet.destination;
           i++;
         }
