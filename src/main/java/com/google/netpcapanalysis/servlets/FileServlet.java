@@ -14,7 +14,7 @@ import com.google.netpcapanalysis.models.PCAPdata;
 import com.google.netpcapanalysis.models.FileAttribute;
 import java.util.ArrayList;
 import com.google.netpcapanalysis.utils.SessionManager;
-import com.google.netpcapanalysis.utils.UtilityPCAP;
+import com.google.netpcapanalysis.utils.NetUtils;
 
 
 
@@ -29,7 +29,7 @@ public class FileServlet extends HttpServlet {
 
       fileList = datastore.getFileAttributes(fileEntity);
   
-      String json = UtilityPCAP.convertFileToJson(fileList);
+      String json = NetUtils.convertFileToJson(fileList);
       response.setContentType("application/json;");
       response.getWriter().println(json);
     }
@@ -40,9 +40,6 @@ public class FileServlet extends HttpServlet {
       String file = request.getParameter("file");
 
       SessionManager.setSessionEntity(request, file);
-
-      Cookie ck=new Cookie("uname", file);//creating cookie object  
-      response.addCookie(ck);//adding cookie in the response  
 
       response.sendRedirect("/");
     }

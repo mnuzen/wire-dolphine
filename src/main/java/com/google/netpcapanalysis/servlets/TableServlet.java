@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.netpcapanalysis.utils.SessionManager;
-import com.google.netpcapanalysis.utils.UtilityPCAP;
+import com.google.netpcapanalysis.utils.NetUtils;
 
 @WebServlet("/data-table")
 public class TableServlet extends HttpServlet {
@@ -31,7 +31,7 @@ public class TableServlet extends HttpServlet {
     //will need to run lookups for Domain/location to display for datatable
     dataTable = maliciousLookup.run(datastore.getPCAPObjects(entityName));
 
-    String json = UtilityPCAP.convertPCAPdataToJson(dataTable);
+    String json = NetUtils.convertPCAPdataToJson(dataTable);
     response.setContentType("application/json;");
     response.getWriter().println(json);
   }

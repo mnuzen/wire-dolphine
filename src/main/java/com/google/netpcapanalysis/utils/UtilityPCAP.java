@@ -1,15 +1,7 @@
 package com.google.netpcapanalysis.utils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.Cookie;
-import com.google.gson.Gson;
 import com.google.netpcapanalysis.models.PCAPdata;
-import com.google.netpcapanalysis.models.FileAttribute;
-import com.google.netpcapanalysis.models.Flagged;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.HashMap;
 import java.util.Collections;
 import java.util.Map;
@@ -22,18 +14,6 @@ public class UtilityPCAP{
 
   private UtilityPCAP() {
 
-  }
-
-  static public String convertPCAPdataToJson(ArrayList<PCAPdata> data) {
-    Gson gson = new Gson();
-    String json = gson.toJson(data);
-    return json;
-  }
-
-  static public String convertFileToJson(ArrayList<FileAttribute> data) {
-    Gson gson = new Gson();
-    String json = gson.toJson(data);
-    return json;
   }
 
   static public String hashText(String text){

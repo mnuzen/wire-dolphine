@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.netpcapanalysis.utils.SessionManager;
-import com.google.netpcapanalysis.utils.UtilityPCAP;
+import com.google.netpcapanalysis.utils.NetUtils;
 
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
@@ -22,7 +22,7 @@ public class DataServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String entityName = SessionManager.getSessionEntity(request);
 
-    String json = UtilityPCAP.convertPCAPdataToJson(datastore.getPCAPObjects(entityName));
+    String json = NetUtils.convertPCAPdataToJson(datastore.getPCAPObjects(entityName));
     response.setContentType("application/json;");
     response.getWriter().println(json);
   }
