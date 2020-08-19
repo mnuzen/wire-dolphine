@@ -19,6 +19,7 @@ import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.utils.NetUtils;
 import com.google.netpcapanalysis.dao.BucketDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.BucketDao;
+import com.google.netpcapanalysis.utils.SessionManager;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -40,8 +41,8 @@ public class BucketLoaderServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      // sess manager
-    BucketDao bucket = new BucketDaoImpl(data.getPCAPObjects(filename));
+    String entityName = SessionManager.getSessionEntity(request);
+    BucketDao bucket = new BucketDaoImpl(data.getPCAPObjects(entityName));
     LinkedHashMap<String, HashMap<String, Integer>> bucketData = bucket.getFinalBuckets();
     String json = convertToJsonUsingGson(bucketData);
     response.setContentType("application/json;");

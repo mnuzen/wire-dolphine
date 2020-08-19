@@ -14,12 +14,12 @@
 
 package com.google.netpcapanalysis.servlets;
 
-import com.google.netpcapanalysis.utils.NetUtils;
+import com.google.netpcapanalysis.models.PCAPdata;
 import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
-
 import com.google.netpcapanalysis.dao.BucketDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.BucketDao;
+import com.google.netpcapanalysis.utils.SessionManager;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -38,7 +38,8 @@ public class IPLoaderServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    BucketDao bucket = new BucketDaoImpl(data.getPCAPObjects(filename));
+    String entityName = SessionManager.getSessionEntity(request);
+    BucketDao bucket = new BucketDaoImpl(data.getPCAPObjects(entityName));
     LinkedHashMap<String, Integer> finalFreq = bucket.getFinalMap();
     String json = convertToJsonUsingGson(finalFreq);
     response.setContentType("application/json;");
