@@ -2,6 +2,7 @@ package com.google.netpcapanalysis.dao;
 
 import com.google.netpcapanalysis.caching.CacheBuilder;
 import com.google.netpcapanalysis.caching.CacheBuilder.CacheType;
+import com.google.netpcapanalysis.caching.CacheBuilder.Policy;
 import com.google.netpcapanalysis.interfaces.caching.Cache;
 import com.google.netpcapanalysis.interfaces.dao.GeolocationDao;
 import com.maxmind.geoip2.DatabaseReader;
@@ -20,7 +21,7 @@ public class GeolocationDaoImpl implements GeolocationDao {
   public GeolocationDaoImpl() {
     cache = new CacheBuilder<InetAddress, String>()
         .setCacheName("geolocation")
-        .setExpirationPolicy(600000) // 10 min
+        .setPolicy(Policy.MAXIMUM_SIZE)
         .setPolicyArgument(1000)
         .setCacheType(CacheType.MEMORY)
         .build();

@@ -1,5 +1,6 @@
 import com.google.netpcapanalysis.caching.CacheBuilder;
 import com.google.netpcapanalysis.caching.CacheBuilder.CacheType;
+import com.google.netpcapanalysis.caching.CacheBuilder.Policy;
 import com.google.netpcapanalysis.interfaces.caching.Cache;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.AddressNotFoundException;
@@ -82,7 +83,7 @@ public class BenchmarkGeoDB {
   public static long benchmarkCached(DatabaseReader reader, int requests) throws Exception {
     Cache<InetAddress, String> cache = new CacheBuilder<InetAddress, String>()
         .setCacheName("geolocation")
-        .setExpirationPolicy(600000) // 10 min
+        .setPolicy(Policy.MAXIMUM_SIZE) // 10 min
         .setPolicyArgument(1000)
         .setCacheType(CacheType.MEMORY)
         .build();
