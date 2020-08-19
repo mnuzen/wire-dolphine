@@ -42,6 +42,7 @@ public class BucketLoaderServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      // sess manager
     BucketDao bucket = new BucketDaoImpl(data.getPCAPObjects(filename));
     LinkedHashMap<String, HashMap<String, Integer>> bucketData = bucket.getFinalBuckets();
     String json = convertToJsonUsingGson(bucketData);
@@ -49,7 +50,7 @@ public class BucketLoaderServlet extends HttpServlet {
     response.getWriter().println(json); 
   }
 
-  @Override
+  @Override // don't need with new sess manager
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     filename = getParameter(request, "file-input", "");
     response.sendRedirect("/bucket.html");

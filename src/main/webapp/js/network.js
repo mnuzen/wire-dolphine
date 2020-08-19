@@ -42,7 +42,7 @@ function createIPNetwork(){
       if (limit < NODE_LIMIT) {
         var normaled = normalize(data[key]);
         nodes[n] = {id: n, label: key + "\n" + data[key] + " Connections", group: n}; // maybe coloring by class?
-        for (var m = 0; m < normaled; m++) {
+        for (var m = 0; m <= normaled; m++) {
             edges[edge] = {from: n, to: SOURCE};
             edge++;
         }
@@ -125,7 +125,7 @@ function drawObfusNetwork(){
       if (limit < NODE_LIMIT) {
         var normaled = normalize(data[key]);
         nodes[n] = {id: n, label: key + "\n" + data[key] + " Connections", group: n}; // maybe coloring by class?
-        for (var m = 0; m < normaled; m++) {
+        for (var m = 0; m <= normaled; m++) {
             edges[edge] = {from: n, to: SOURCE};
             edge++;
         }
