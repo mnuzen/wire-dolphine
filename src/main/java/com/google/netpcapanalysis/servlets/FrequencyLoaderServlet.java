@@ -15,20 +15,11 @@
 package com.google.netpcapanalysis.servlets;
 
 import com.google.netpcapanalysis.models.PCAPdata;
-
 import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
-
-import com.google.netpcapanalysis.dao.PCAPParserDaoImpl;
-import com.google.netpcapanalysis.interfaces.dao.PCAPParserDao;
-
 import com.google.netpcapanalysis.dao.FrequencyDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.FrequencyDao;
-
-import io.pkts.PacketHandler;
-import io.pkts.Pcap;
-import io.pkts.packet.Packet;
-import io.pkts.protocol.Protocol;
+import com.google.netpcapanalysis.utils.SessionManager;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -49,18 +40,12 @@ public class FrequencyLoaderServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    FrequencyDao freq = new FrequencyDaoImpl(data.getPCAPObjects(filename));
+    String entityName = SessionManager.getSessionEntity(request);
+    FrequencyDao freq = new FrequencyDaoImpl(data.getPCAPObjects(entityName));
     LinkedHashMap<String, Integer> finalFrequencies = freq.getFinalMap(); 
-
     String json = convertToJsonUsingGson(finalFrequencies);
     response.setContentType("application/json;");
     response.getWriter().println(json); 
-  }
-
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    filename = getParameter(request, "file-input", "");
-    response.sendRedirect("/network.html");
   }
 
   private String convertToJsonUsingGson(LinkedHashMap<String, Integer> data) {
@@ -81,4 +66,4 @@ public class FrequencyLoaderServlet extends HttpServlet {
     return value;
   }
 
-} // end of PacketParserServlet class
+} 
