@@ -2,7 +2,7 @@ const SOURCE = 0;
 const SHAPE = "dot"
 const SHAPE_SIZE = 16;
 const EDGE_LIMIT = 20; // limit the number of edges on visualization 
-const NODE_LIMIT = 20;
+const NODE_LIMIT = 20; // limit the number of nodes in visualization
 
 const GROUP1 = 1;
 const GROUP2 = 2;
