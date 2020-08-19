@@ -15,8 +15,10 @@ public class LoadMockData extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     MockDataLoader mockData = new MockDataLoader();
-    mockData.CSVDataUpload();
 
-    response.sendRedirect("/tables.html");
+    String file = request.getParameter("file");
+    mockData.CSVDataUpload(file);
+
+    response.sendRedirect("/files.html");
   }
 }
