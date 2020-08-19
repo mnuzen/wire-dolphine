@@ -36,7 +36,6 @@ import java.io.IOException;
 /** Servlet that retrieves and returns frequencies. */
 @WebServlet("/PCAP-bucket")
 public class BucketLoaderServlet extends HttpServlet {
-  private String filename;
   private PCAPDao data = new PCAPDaoImpl();
 
   @Override
@@ -47,12 +46,6 @@ public class BucketLoaderServlet extends HttpServlet {
     String json = convertToJsonUsingGson(bucketData);
     response.setContentType("application/json;");
     response.getWriter().println(json); 
-  }
-
-  @Override // don't need with new sess manager
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    filename = NetUtils.getParameter(request, "file-input", "");
-    response.sendRedirect("/bucket.html");
   }
 
   private String convertToJsonUsingGson(LinkedHashMap<String, HashMap<String, Integer>> data) {

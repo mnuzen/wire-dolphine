@@ -19,6 +19,7 @@ import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.dao.BucketDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.BucketDao;
+import com.google.netpcapanalysis.utils.NetUtils;
 import com.google.netpcapanalysis.utils.SessionManager;
 
 import javax.servlet.annotation.WebServlet;
@@ -33,7 +34,6 @@ import java.io.IOException;
 /** Servlet that retrieves and returns IP addresses. */
 @WebServlet("/PCAP-IP")
 public class IPLoaderServlet extends HttpServlet {
-  private String filename;
   private PCAPDao data = new PCAPDaoImpl();
 
   @Override
@@ -44,12 +44,6 @@ public class IPLoaderServlet extends HttpServlet {
     String json = convertToJsonUsingGson(finalFreq);
     response.setContentType("application/json;");
     response.getWriter().println(json); 
-  }
-
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    filename = NetUtils.getParameter(request, "file-input", "");
-    response.sendRedirect("/bucket.html");
   }
 
   private String convertToJsonUsingGson(LinkedHashMap<String, Integer> data) {

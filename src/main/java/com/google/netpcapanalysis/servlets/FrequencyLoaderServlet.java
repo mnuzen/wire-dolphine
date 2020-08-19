@@ -19,6 +19,7 @@ import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.dao.FrequencyDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.FrequencyDao;
+import com.google.netpcapanalysis.utils.NetUtils;
 import com.google.netpcapanalysis.utils.SessionManager;
 
 import javax.servlet.annotation.WebServlet;
@@ -34,7 +35,6 @@ import java.io.IOException;
 /** Servlet that retrieves and returns frequencies. */
 @WebServlet("/PCAP-freq-loader")
 public class FrequencyLoaderServlet extends HttpServlet {
-  private String filename;
   private PCAPDao data = new PCAPDaoImpl();
 
   @Override
@@ -45,12 +45,6 @@ public class FrequencyLoaderServlet extends HttpServlet {
     String json = convertToJsonUsingGson(finalFrequencies);
     response.setContentType("application/json;");
     response.getWriter().println(json); 
-  }
-
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    filename = NetUtils.getParameter(request, "file-input", "");
-    response.sendRedirect("/network.html");
   }
 
   private String convertToJsonUsingGson(LinkedHashMap<String, Integer> data) {
