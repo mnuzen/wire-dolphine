@@ -5,12 +5,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Cookie;
-import com.google.gson.Gson;
 
 import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
-import com.google.netpcapanalysis.models.PCAPdata;
 import com.google.netpcapanalysis.models.FileAttribute;
 import java.util.ArrayList;
 import com.google.netpcapanalysis.utils.SessionManager;

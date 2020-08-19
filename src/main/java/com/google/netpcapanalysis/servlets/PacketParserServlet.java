@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.gson.Gson;
 import java.io.IOException;
 
 /** Servlet that puts raw PCAP files to Datastore by calling PCAPParserDao. */
@@ -40,6 +39,6 @@ public class PacketParserServlet extends HttpServlet {
     parser.putDatastore(); 
 
     // Respond with the result.
-    response.sendRedirect("/packet.html");
+    response.sendRedirect("/");
   }
 } // end of PacketParserServlet class

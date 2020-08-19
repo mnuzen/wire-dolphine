@@ -14,21 +14,11 @@
 
 package com.google.netpcapanalysis.servlets;
 
-import com.google.netpcapanalysis.models.PCAPdata;
-
 import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
-
-import com.google.netpcapanalysis.dao.PCAPParserDaoImpl;
-import com.google.netpcapanalysis.interfaces.dao.PCAPParserDao;
-
+import com.google.netpcapanalysis.utils.NetUtils;
 import com.google.netpcapanalysis.dao.FrequencyDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.FrequencyDao;
-
-import io.pkts.PacketHandler;
-import io.pkts.Pcap;
-import io.pkts.packet.Packet;
-import io.pkts.protocol.Protocol;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -37,7 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.io.IOException;
 
@@ -59,7 +48,7 @@ public class FrequencyLoaderServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    filename = getParameter(request, "file-input", "");
+    filename = NetUtils.getParameter(request, "file-input", "");
     response.sendRedirect("/network.html");
   }
 
@@ -73,12 +62,5 @@ public class FrequencyLoaderServlet extends HttpServlet {
    * @return the request parameter, or the default value if the parameter
    *         was not specified by the client
    */
-  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
-    String value = request.getParameter(name);
-    if (value == null) {
-      return defaultValue;
-    }
-    return value;
-  }
 
 } // end of PacketParserServlet class

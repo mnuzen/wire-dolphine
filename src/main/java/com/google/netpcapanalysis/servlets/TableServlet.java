@@ -7,7 +7,6 @@ import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.dao.MaliciousIPDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.MaliciousIPDao;
 
-import com.google.gson.Gson;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
