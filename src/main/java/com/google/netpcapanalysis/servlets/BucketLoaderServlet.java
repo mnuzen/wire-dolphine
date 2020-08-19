@@ -19,6 +19,7 @@ import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.dao.BucketDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.BucketDao;
+import com.google.netpcapanalysis.utils.SessionManager;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -42,27 +43,15 @@ public class BucketLoaderServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      // sess manager
-    BucketDao bucket = new BucketDaoImpl(data.getPCAPObjects(filename));
+    String entityName = SessionManager.getSessionEntity(request);
+    BucketDao bucket = new BucketDaoImpl(data.getPCAPObjects(entityName));
     LinkedHashMap<String, HashMap<String, Integer>> bucketData = bucket.getFinalBuckets();
     String json = convertToJsonUsingGson(bucketData);
     response.setContentType("application/json;");
     response.getWriter().println(json); 
   }
 
-  @Override // don't need with new sess manager
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    filename = getParameter(request, "file-input", "");
-    response.sendRedirect("/bucket.html");
-  }
-
   private String convertToJsonUsingGson(LinkedHashMap<String, HashMap<String, Integer>> data) {
-    Gson gson = new Gson();
-    String json = gson.toJson(data);
-    return json;
-  }
-
-  private String convertToJsonUsingGson2(LinkedHashMap<String, Integer> data) {
     Gson gson = new Gson();
     String json = gson.toJson(data);
     return json;

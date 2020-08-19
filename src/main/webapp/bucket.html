@@ -142,7 +142,7 @@
         <h1>Bucket Visualizations</h1>
 
           <p class="mb-4">Take a look at your file data.</p>
-          <table>
+          <!--<table>
             <td>
               <form action="/PCAP-bucket" method="POST">
                 <p>Choose file for IP classes:</p>
@@ -161,7 +161,11 @@
               </form>
               <br/><br/>
             </td>
-          </table>
+          </table>-
+          <form action="/PCAP-bucket" method="post">
+            <label for="bucketdata">Load Selected Data</label>
+            <input type="submit" name="bucketdata" value="Click Me!" />
+          </form>-->
 
           <button onclick="drawVisualization()">Visualize Packet Class and Distribution</button>
           <br/><br/>

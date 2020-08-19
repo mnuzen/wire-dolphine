@@ -62,6 +62,7 @@ public class BucketDaoImpl implements BucketDao {
   private void orderIPs(){
     // find local IP 
     findMyIP();
+
     // sort all packets such that MYIP, OUTIP is the formatting
     sortedPCAP = new ArrayList<PCAPdata>(); 
     for (PCAPdata packet : allPCAP) {
