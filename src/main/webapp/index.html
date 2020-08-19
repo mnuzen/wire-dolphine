@@ -150,39 +150,64 @@
       <!-- Main Content -->
       <div id="content" class="container-fluid">
 
+        <!-- Welcome -->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h2 class="m-0 font-weight-bold text-primary", style="text-align: center">Welcome!</h2>
+          </div>
+          <div class="card-body", style="text-align:justify">
+            This PCAP Analyzer is the culmination of our twelve-week summer internship with Google. Our project focused on creating
+            a tool to help everyday computer users understand the basic fundamentals of how data is shared across the Internet.                     
+          </div>
+        </div>
+
+        <!-- Getting started -->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h4 class="m-0 font-weight-bold text-primary", style="text-align: center">Getting Started</h4>
+          </div>
+          <div class="card-body">
+              <table>
+              <td style="height:40%">
+                <img style="width: 25rem; float:left" src="img/mindmap.svg" alt=""> <!--float:right-->
+              </td>
+              <td style="text-align:justify; width:60%"> 
+                While most people use the internet in some kind of way, not everyone understands the basic fundamentals of
+                how information can be transferred from one machine to another. The goal of this web-app is to provide casual
+                users a simple and intuitive way of visualizing network communciations to explain how computers communicate
+                through networks and packets. We hope you can use our site to understand the structure of the internet! </br></br>
+                Our project analyzes packets stored in PCAP (packet capture) files. Analyzing PCAP files, reveals
+                a lot about your internet footprint. You can learn more about internet fundamentals below 
+                or view PCAP visualizations by clicking on the Start button in the top right-hand corner of this page.            
+              </td>
+              </table> 
+          </div>
+        </div>
+
+        <!-- How does the Internet Work? -->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h4 class="m-0 font-weight-bold text-primary", style="text-align: center">How does the Internet Work?</h4>
+          </div>
+          <div class="card-body">
+              <table>
+              <td style="text-align:justify; width:60%"> 
+                When you load something on the internet, your content is split into tiny fragments called packets. 
+                These packets are sent over WiFi and network cabling via different types of protocols. 
+                Different types ofprotocols determine how each packet is transported and interpreted by the receiving device. Once all of the
+                packets are routed from one device to another, the packets are rebuilt into the content originally requested.
+              </td>
+              <td style="height:40%">
+                <img style="width: 25rem; float:right" src="img/network.svg" alt=""> <!--float:right-->
+              </td>
+            </table>
+          </div>
+        </div>
+
+        <!-- Jumbotron -->
         <div class="jumbotron">
-          <!-- Welcome-->
           <div>
-            <h1 class="display-4, text-center">Welcome!</h1>
-            <p class="lead">
-              PCAP Analyzer is the culmination of our twelve week summer internship with Google. Our project focused on designing
-              a tool to help everyday computer users understand the basic fundamentals of how data is shared across the
-              Internet.</p>
-          </div>
-          <hr class="my-4">
-
-          <!-- About the project-->
-          <div>
-            <h4>Getting Started</h4>
-            <p>
-              Our project analyzed packets which are stored in PCAP (packet capture) files. By analyzing PCAP file you
-              can tell a lot about your internet footprint. You can learn more about internet fundamentals below 
-              or view PCAP Visualization by click on the Start button in the top right-hand corner
-            </p>
-          </div>
-          <hr class="my-4">
-
-          <!-- How does the Internet Work -->
-          <div>
-            <h4>How does the Internet Work?</h4>
-            <p>When you load something on the internet, its content is split into tiny fragments called packets.
-              These packets are sent over WIFI and network cabling via different types of protocols. What protocols is
-              used determines how the packet is to be transported and interpreted by the receiving device. Once the
-              packet
-              is routed from one device to another, they packets are rebuild into the content originally requested.
-            </p>
-
-            Some Common protocols:
+            Some Common Protocols:
             <ul>
               <li><a href="https://en.wikipedia.org/wiki/Transmission_Control_Protocol">
                   TCP: Core internet protocol with build in retransmission of lost packets</a></li>
@@ -197,15 +222,86 @@
                   IMAP/POP: protocol used to transmit Email (TCP)</a></li>
             </ul>
           </div>
-        
+        </div> <!-- End jumbotron -->
 
+        <!-- Types of Packets -->
+        <div class="row">
+            <!-- TCP Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">TCP</div>
+                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                          Core internet protocol with built-in retransmission of lost packets</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-sitemap fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-      
+            <!-- UDP Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">UDP</div>
+                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">A faster core protocol than TCP without lost packet detection
+                      </div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-sitemap fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-        </div>
+            <!-- DNS Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">DNS</div>
+                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                          The phonebook of the internet, converting IP addresses into domain names
+                      </div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-sitemap fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-      </div>
-      <!-- End of Main Content -->
+            <!-- HTTP/S -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">HTTP/S</div>
+                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                         Protocol used to transmit webpages
+                      </div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-sitemap fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div> <!-- End of Packet types -->
+
+      </div> <!-- End of Main Content -->
 
     <!-- Footer -->
     <footer class="sticky-footer bg-white">
