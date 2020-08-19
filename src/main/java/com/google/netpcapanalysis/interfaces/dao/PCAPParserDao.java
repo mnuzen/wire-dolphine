@@ -1,8 +1,8 @@
 package com.google.netpcapanalysis.interfaces.dao;
 
 import com.google.netpcapanalysis.models.PCAPdata;
-import java.util.*; 
-import java.io.*;
+import java.util.ArrayList; 
+import java.io.IOException;
 
 public interface PCAPParserDao {
     public void parseRaw() throws IOException;
