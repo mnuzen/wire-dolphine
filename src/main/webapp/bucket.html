@@ -165,8 +165,64 @@
     <div class="container-fluid">
         <!-- Page Heading -->
         <h1>Bucket Visualizations</h1>
-          <p class="mb-4">Take a look at your file data.</p>
-          <button onclick="drawVisualization()">Visualize Packet Class and Distribution</button>
+
+        <div class="row"> <!--start ip row-->
+            <div class="col-xl-8 col-lg-7"> <!-- start info card-->
+                <div class="card mb-4">
+                  <div class="card-header">
+                    <b>IP Addresses</b>
+                  </div>
+                <div class="card-body">
+                  An Internet Protocol address (or IP address) is the name associated with a device that's connected to a network. 
+                  Think of IP addresses as a sort of network ID; packets are sent and received from IP addresses in the same way 
+                  mail is sent and received from different home addresses. IPv4 addresses, which consist of four bytes of numbers, are sorted into one of 
+                  five classes: Class A, Class B, Class C, Class D, and Class E. 
+                  </br></br>
+                  <center><img style="width: 25rem; float:center" src="img/workspace.svg" alt=""> </center>
+                </div>
+              </div>
+            </div><!-- end info card-->
+            <div class="col-xl-4 col-lg-5"> <!--start layers-->
+                <div class="card bg-primary text-white shadow">
+                    <div class="card-body">
+                      Class A
+                      <div class="text-white small">1.0.0.0 to 126.255.255.255</div>
+                    </div>
+                </div>
+                <div class="card bg-info text-white shadow">
+                  <div class="card-body">
+                    Class B
+                    <div class="text-white small">128.0.0.0 to 191.255.255.255</div>
+                  </div>
+                </div>
+                 <div class="card bg-success text-white shadow">
+                  <div class="card-body">
+                    Class C
+                    <div class="text-white small">192.0.0.0 to 223.255.255.255</div>
+                  </div>
+                </div>
+                  <div class="card bg-secondary text-white shadow">
+                    <div class="card-body">
+                      Class D
+                      <div class="text-white small">224.0.0.0 to 239.255.255.255</div>
+                    </div>
+                </div>
+                <div class="card bg-dark text-white shadow">
+                    <div class="card-body">
+                      Class E
+                      <div class="text-white small">240.0.0.0 to 254.255.255.255</div>
+                    </div>
+                </div>
+            </div> <!--end layers-->
+        </div> <!--end ip row-->
+        </br></br>
+
+          <p class="mb-4">
+              Different classes are assigned to different types of users. Class A typically serves large companies and organizations, while Class B serves
+              smaller ones. Class C is typically used by private, individual users. Class D is reserved for mutlicasting while Class E is reserved for special future
+              purposes. 
+              Take a look at your file data and see how the addresses you connect to are distributed across the classes and addresses.</p>
+          <center><button onclick="drawVisualization()">Visualize Packet Class and Distribution</button></center>
           <br/><br/>
           <div style="height: 100vh", id="chart_class_div"></div>
           <div style="height: 100vh", id="chart_dist_div"></div>
