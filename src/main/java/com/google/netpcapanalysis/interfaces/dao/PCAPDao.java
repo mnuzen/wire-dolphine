@@ -3,14 +3,17 @@ package com.google.netpcapanalysis.interfaces.dao;
 import com.google.netpcapanalysis.models.PCAPdata;
 import com.google.netpcapanalysis.models.MaliciousPacket;
 import java.util.ArrayList;
+import com.google.netpcapanalysis.models.FileAttribute;
 
 public interface PCAPDao {
 
+    public FileAttribute getFileAttribute(String searchEntity);
+    public ArrayList<FileAttribute> getFileAttributes(String searchEntity);
+    public void setFileAttribute(FileAttribute data);
+
     public ArrayList<PCAPdata> getPCAPObjects(String searchEntity);
-    public void setPCAPObjects(PCAPdata data, String searchEntity);
-    public void updateFlagged(String searchEntity, PCAPdata oldData, String flagged);
-    public void updateDomain(String searchEntity, PCAPdata oldData, String domain);
-    public void updateLocation(String searchEntity, PCAPdata oldData, String location);
+    public void setPCAPObjects(ArrayList<PCAPdata>  data, String searchEntity);
+
     public String searchMaliciousDB(String seachIP);
     public void setMaliciousIPObjects(MaliciousPacket data);
 }

@@ -32,8 +32,8 @@
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-      <div class="sidebar-brand-icon rotate-n-15">
-        <i class="fas fa-laugh-wink"></i>
+      <div class="sidebar-brand-icon">
+        <i class="fas fa-network-wired"></i>
       </div>
       <div class="sidebar-brand-text mx-3">PCAP Analyzer</div>
     </a>
@@ -45,7 +45,7 @@
     <li class="nav-item active">
       <a class="nav-link" href="index.html">
         <i class="fas fa-fw fa-tachometer-alt"></i>
-        <span>Dashboard</span></a>
+        <span>Home Page</span></a>
     </li>
 
     <!-- Divider -->
@@ -56,26 +56,47 @@
       Explore Your Data
     </div>
 
-    <!-- Nav Item - Jevin -->
+    <!-- Nav Item - Load -->
+    <li class="nav-item">
+      <a class="nav-link" href="files.html">
+        <i class="fas fa-fw fa-file"></i>
+        <span>Load a File</span></a>
+    </li>
+     <!-- Nav Item - Map -->
     <li class="nav-item">
       <a class="nav-link" href="/mapviz.html">
         <i class="fas fa-fw fa-globe-americas"></i>
         <span>Where are your requests going?</span></a>
     </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/domains.html">
-        <i class="fas fa-fw fa-satellite"></i>
-        <span>Who are you sending to?</span></a>
-    </li>
+     <!-- Nav Item - Network -->
     <li class="nav-item">
       <a class="nav-link" href="/network.html">
         <i class="fas fa-fw fa-project-diagram"></i>
         <span>What does your network look like?</span></a>
     </li>
+    <!-- Nav Item - Table -->
     <li class="nav-item">
       <a class="nav-link" href="/tables.html">
         <i class="fas fa-fw fa-table"></i>
-        <span>View your packets</span></a>
+        <span>What do your packets look like?</span></a>
+    </li>
+    <!-- Nav Item - bucket -->
+    <li class="nav-item">
+      <a class="nav-link" href="/bucket.html">
+        <i class="fas fa-fw fa-chart-bar"></i>
+        <span>How are your packets distributed?</span></a>
+    </li>
+    <!-- Nav Item - Charts -->
+    <li class="nav-item">
+      <a class="nav-link" href="charts.html">
+        <i class="fas fa-fw fa-chart-pie"></i>
+        <span>See more packet data</span></a>
+    </li>
+    <!-- Nav Item - Domain -->
+    <li class="nav-item">
+      <a class="nav-link" href="/domains.html">
+        <i class="fas fa-fw fa-satellite"></i>
+        <span>Who are you sending to?</span></a>
     </li>
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
@@ -127,7 +148,7 @@
 
         <!-- Nav Item - User Information -->
         <li class="nav-item dropdown no-arrow">
-          <a href="/mapviz.html" class="btn btn-success btn-icon-split">
+          <a href="/files.html" class="btn btn-success btn-icon-split">
             <span class="text">Start</span>
             <span class="icon text-white-50">
               <i class="fas fa-arrow-right"></i>
@@ -138,26 +159,247 @@
     </nav>
     <!-- End of Topbar -->
 
-    <!-- Main Content -->
-    <div id="content">
-      <div class="jumbotron">
-        <h1 class="display-4">Welcome!</h1>
-        <p class="lead">This is our capstone web-app project, a tool designed to help every day
-          computer users understand the basic fundamentals of how
-          information can be transferred from one machine to another.</p>
-        <hr class="my-4">
-        <p>The structure of the internet relies on computers communicating through packets and
-          networks. The way these packets are stored and examined are in PCAP files, where PCAP
-          stands for packet capture. Our goal is to help you understand the components of a PCAP
-          file and understand how a PCAP file can tell you about your internet footprint and the
-          websites
-          you navigate to.</p>
-        <p>To get started on visualizing packet movement and network communications, click on the
-          Start button in the top right-hand corner.</p>
-        <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
-      </div>
-    </div>
-    <!-- End of Main Content -->
+      <!-- Main Content -->
+      <div id="content" class="container-fluid">
+
+        <!-- Welcome -->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h2 class="m-0 font-weight-bold text-primary", style="text-align: center">Welcome!</h2>
+          </div>
+          <div class="card-body", style="text-align:justify">
+            This PCAP Analyzer is the culmination of our twelve-week summer internship with Google. Our project focused on creating
+            a tool to help everyday computer users understand the basic fundamentals of how data is shared across the Internet.                     
+          </div>
+        </div>
+
+        <!-- Getting started -->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h4 class="m-0 font-weight-bold text-primary", style="text-align: center">Getting Started</h4>
+          </div>
+          <div class="card-body">
+              <table>
+              <td style="height:40%">
+                <img style="width: 25rem; float:left" src="img/mindmap.svg" alt=""> <!--float:right-->
+              </td>
+              <td style="text-align:justify; width:60%"> 
+                While most people use the internet in some kind of way, not everyone understands the basic fundamentals of
+                how information can be transferred from one machine to another. The goal of this web-app is to provide casual
+                users a simple and intuitive way of visualizing network communciations to explain how computers communicate
+                through networks and packets. We hope you can use our site to understand the structure of the internet! </br></br>
+                Our project analyzes packets stored in PCAP (packet capture) files. Analyzing PCAP files, reveals
+                a lot about your internet footprint. You can learn more about internet fundamentals below 
+                or view PCAP visualizations by clicking on the Start button in the top right-hand corner of this page.            
+              </td>
+              </table> 
+          </div>
+        </div>
+
+        <!-- How does the Internet Work? -->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h4 class="m-0 font-weight-bold text-primary", style="text-align: center">How does the Internet Work?</h4>
+          </div>
+          <div class="card-body">
+              <table>
+              <td style="text-align:justify; width:60%"> 
+                When you load something on the internet, your content is split into tiny fragments called packets. 
+                These packets are sent over WiFi and network cabling via different types of protocols. 
+                Different types ofprotocols determine how each packet is transported and interpreted by the receiving device. Once all of the
+                packets are routed from one device to another, the packets are rebuilt into the content originally requested.
+              </td>
+              <td style="height:40%">
+                <img style="width: 25rem; float:right" src="img/globe.svg" alt=""> <!--float:right-->
+              </td>
+            </table>
+          </div>
+        </div> <!-- End of How does the Internet Work? -->
+
+        <!-- Jumbotron -->
+        <div class="jumbotron">
+          <div>
+            Some Common Protocols:
+            <ul>
+              <li><a href="https://en.wikipedia.org/wiki/Transmission_Control_Protocol">
+                  TCP: Core internet protocol with build in retransmission of lost packets</a></li>
+              <li><a href="https://en.wikipedia.org/wiki/User_Datagram_Protocol">
+                  UDP: A faster core protocol then TCP without the lost packet ditection</a></li>
+              <li><a href="https://en.wikipedia.org/wiki/Internet_Message_Access_Protocol">
+                  DNS: The phonebook of the Internet,
+                  it converts IP address into domain names (TCP/UDP)</a></li>
+              <li><a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">
+                  HTTP/S: protocol used to transmit Webpages (TCP/UDP)</a></li>
+              <li><a href="https://en.wikipedia.org/wiki/Internet_Message_Access_Protocol">
+                  IMAP/POP: protocol used to transmit Email (TCP)</a></li>
+            </ul>
+          </div>
+        </div> <!-- End jumbotron -->
+
+        <!-- Types of Packets -->
+        <div class="row">
+            <!-- TCP Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">TCP</div>
+                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                          Core internet protocol with built-in retransmission of lost packets</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-sitemap fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- UDP Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">UDP</div>
+                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">A faster core protocol than TCP without lost packet detection
+                      </div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-sitemap fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- DNS Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">DNS</div>
+                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                          The phonebook of the internet, converting IP addresses into domain names
+                      </div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-sitemap fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- HTTP/S -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">HTTP/S</div>
+                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                         Protocol used to transmit webpages
+                      </div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-sitemap fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div> <!-- End of Packet types -->
+
+
+        <!-- OSI Model header-->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h4 class="m-0 font-weight-bold text-primary", style="text-align: center">ISO-OSI Model</h4>
+          </div>
+          <div class="card-body">
+              <table>
+              <td style="height:40%">
+                <img style="width: 25rem; float:left" src="img/network.svg" alt=""> <!--float:right-->
+              </td>
+              <td style="text-align:justify; width:60%"> 
+                Packets make sense, but how do they fit into the big picture of the internet? There exists a standard structured model 
+                that defines how most computers talk to each other and how they fit together in one framework. This model is called the ISO/OSI
+                model, and contains seven layers of different functionality and characteristics. Let's take a look at them and see how packets fit in.
+              </td>
+            </table>
+          </div>
+        </div> <!-- End of OSI Model header -->
+
+        <div class="row"> <!--start osi row-->
+            <div class="col-xl-8 col-lg-7"> <!-- start info card-->
+                <div class="card mb-4">
+                  <div class="card-header">
+                    <b>The Seven Layer Model</b>
+                  </div>
+                <div class="card-body">
+                  <ol type = "1">
+                    <li> <b>Physical Layer:</b> as the name suggests, physically transmits signals from one place to another.</li>
+                    <li> <b>Data Link Layer:</b> transforms raw bits (0s and 1s) from physical layer for the network layer.</li>
+                    <li> <b>Network Layer:</b> controls movements of a packet from one network to another (think packet routing).</li>
+                    <li> <b>Transport Layer:</b> splits data into smaller packets for delivery and ensures the packets arrive correctly at the other end.</li>
+                    <li> <b>Session Layer:</b> establishes and manages sessions, conversions, or dialogue between two machines.</li>
+                    <li> <b>Presentation Layer:</b> manages the syntax and semantics of information transmitted between two machines.</li>
+                    <li> <b>Application Layer:</b> highest layer, containing a variety of protocols.</li>
+                  </ol>
+                  <center><img style="width: 25rem; float:center" src="img/connected_globe.svg" alt=""> </center>
+                </div>
+              </div>
+            </div><!-- end info card-->
+            <div class="col-xl-4 col-lg-5"> <!--start layers-->
+                <div class="card bg-primary text-white shadow">
+                  <div class="card-body">
+                    Application Layer
+                    <div class="text-white small">End User Layer — HTTP, FTP, IRC, SSH, DNS</div>
+                  </div>
+                </div>
+                <div class="card bg-primary text-white shadow">
+                    <div class="card-body">
+                      Presentation Layer
+                      <div class="text-white small">Syntax Layer — SSL, SSH, IMAP, FTP, MPEG, JPEG</div>
+                    </div>
+                </div>
+                <div class="card bg-primary text-white shadow">
+                    <div class="card-body">
+                      Session Layer
+                      <div class="text-white small">Synch &amp; Send to Port — APIs, Sockets, WinSock</div>
+                    </div>
+                </div>
+                <div class="card bg-info text-white shadow">
+                  <div class="card-body">
+                    Transport Layer
+                    <div class="text-white small">End-to-End Connections — TCP, UDP</div>
+                  </div>
+                </div>
+                 <div class="card bg-success text-white shadow">
+                  <div class="card-body">
+                    Network Layer
+                    <div class="text-white small">Packets — IP, ICMP, IPSec, IGMP</div>
+                  </div>
+                </div>
+                  <div class="card bg-secondary text-white shadow">
+                    <div class="card-body">
+                      Data Link Layer
+                      <div class="text-white small">Frames — Ethernet, PPP, Switch, Bridge</div>
+                    </div>
+                </div>
+                <div class="card bg-dark text-white shadow">
+                    <div class="card-body">
+                      Physical Layer
+                      <div class="text-white small">Physical Structure — Coax, Fiber, Wireless, Hubs</div>
+                    </div>
+                </div>
+            </div> <!--end layers-->
+        </div> <!--end osi row-->
+
+      </div> <!-- End of Main Content -->
 
     <!-- Footer -->
     <footer class="sticky-footer bg-white">

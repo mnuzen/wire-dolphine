@@ -35,12 +35,52 @@ public final class PCAPdata {
     this.frequency = frequency;
   }
 
+  public PCAPdata(
+    String source,
+    String destination,
+    String protocol,
+    int size
+) {
+  this.source = source;
+  this.destination = destination;
+  this.protocol = protocol;
+  this.size = size;
+}
+
   public int getFrequency() {
     return this.frequency;
   }
 
   public void incrementFrequency() {
     this.frequency++;
+  }
+
+  public boolean equals(PCAPdata other) {
+    if (!this.source.equals(other.source)) {
+      return false;
+    }
+    if (!this.destination.equals(other.destination)) {
+      return false;
+    }
+    if (!this.domain.equals(other.domain)) {
+      return false;
+    }
+    if (!this.location.equals(other.location)) {
+      return false;
+    }
+    if (!this.protocol.equals(other.protocol)) {
+      return false;
+    }
+    if (this.size != other.size) {
+      return false;
+    }
+    if (!this.flagged.equals(other.flagged)) {
+      return false;
+    }
+    if (this.frequency != other.frequency) {
+      return false;
+    }
+    return true;
   }
 
 }

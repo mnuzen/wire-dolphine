@@ -6,29 +6,32 @@ import java.io.BufferedReader;
 import java.util.ArrayList;
 
 import com.google.netpcapanalysis.models.PCAPdata;
-import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
+import com.google.netpcapanalysis.dao.PCAPDaoImpl;
+import com.google.netpcapanalysis.utils.UtilityPCAP;
+import com.google.netpcapanalysis.models.FileAttribute;
 
 public class MockDataLoader {
-
-  private static final String FILE_NAME = "file_1";
   // CSV format:
   // Source,Destination,Domain,Location,Protocal,Size,Flagged,Frequency
-  private String CSV_FILE = "data.csv"; // CSV located in project dir /webapp
 
   public MockDataLoader() {
 
   }
 
-  public void LoadData(ArrayList<PCAPdata> dataTable) { // uploads to datastore
+  public void LoadData(ArrayList<PCAPdata> dataTable, String csvFile, String description) { // uploads to datastore
     PCAPDao dataBase = new PCAPDaoImpl();
 
-    for (PCAPdata PCAP : dataTable) {
-      dataBase.setPCAPObjects(PCAP, FILE_NAME);
-    }
+    String entityName = UtilityPCAP.hashText(csvFile);
+
+    dataBase.setPCAPObjects(dataTable, entityName);
+    String myip = UtilityPCAP.findMyIP(dataTable);
+
+    FileAttribute data = new FileAttribute(entityName, csvFile, myip, description);
+    dataBase.setFileAttribute(data);
   }
 
-  // Source,Destination,Domain,Location,Protocal,Size,Flagged,Frequency
+  // Source,Destination,Protocal,Size
   public ArrayList<PCAPdata> CSVDataLoader(String csvFile) {
     ArrayList<PCAPdata> data = new ArrayList<PCAPdata>();
     String line = "";
@@ -41,9 +44,8 @@ public class MockDataLoader {
         // use comma as separator
         String[] pcapLine = line.split(cvsSplitBy);
 
-        PCAPdata tempPCAP = new PCAPdata(pcapLine[0], pcapLine[1], pcapLine[2], pcapLine[3],
-            pcapLine[4], Integer.parseInt(pcapLine[5]), pcapLine[6],
-            Integer.parseInt(pcapLine[7]));
+        PCAPdata tempPCAP = new PCAPdata(pcapLine[0], pcapLine[1], pcapLine[2],
+            Integer.parseInt(pcapLine[3]));
 
         data.add(tempPCAP);
       }
@@ -55,8 +57,8 @@ public class MockDataLoader {
     return data;
   }
 
-  public void CSVDataUpload() {
-    LoadData(CSVDataLoader(CSV_FILE));
+  public void CSVDataUpload(String csvFile, String description) {
+    LoadData(CSVDataLoader(csvFile), csvFile, description);
   }
 
 }

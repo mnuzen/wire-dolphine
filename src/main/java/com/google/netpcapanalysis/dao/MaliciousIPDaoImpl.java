@@ -1,6 +1,7 @@
 package com.google.netpcapanalysis.dao;
-import com.google.netpcapanalysis.dao.PCAPDaoImpl;
+
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
+import com.google.netpcapanalysis.interfaces.dao.KeystoreDao;
 import com.google.netpcapanalysis.interfaces.dao.MaliciousIPDao;
 import com.google.netpcapanalysis.models.PCAPdata;
 import com.google.netpcapanalysis.models.MaliciousPacket;
@@ -8,9 +9,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.google.netpcapanalysis.models.Flagged;
-
-import com.google.netpcapanalysis.dao.KeystoreDaoImpl;
-import com.google.netpcapanalysis.interfaces.dao.KeystoreDao;
+import java.util.ArrayList;
 
 public class  MaliciousIPDaoImpl implements MaliciousIPDao{
 
@@ -22,14 +21,27 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
     private static final String REQUEST_LIMIT = "Rate limit exceeded";
 
     private PCAPDao ipCache = new PCAPDaoImpl();
+    private String myIP;
 
     public MaliciousIPDaoImpl(){
     }
+
     public PCAPdata isMalicious(PCAPdata data)
     {
         HttpResponse<String> result;
+        String searchIP;
 
-        String searchDB = ipCache.searchMaliciousDB(data.destination);
+        //set searchIP to not myIP
+        if(data.source.equals(myIP))
+        {
+            searchIP = data.destination;
+        }
+        else{
+            searchIP = data.source;
+        }
+
+        //checks to see if cache has seen IP already
+        String searchDB = ipCache.searchMaliciousDB(searchIP);
         if(searchDB.equalsIgnoreCase(Flagged.TRUE))
         {
             data.flagged = Flagged.TRUE;
@@ -38,22 +50,21 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
             data.flagged = Flagged.FALSE;
         }
         else{
-            System.out.println("Else statement");
             try {
-                result = Unirest.get("https://signals.api.auth0.com/badip/" + data.destination)
+                result = Unirest.get("https://signals.api.auth0.com/badip/" + searchIP)
                         .header("X-Auth-Token", AUTH0_API_KEY)
                         .asString();
            
                 if(result.getBody().equalsIgnoreCase(FLAGGED_FALSE))
                 {
                     data.flagged = Flagged.FALSE;
-                    MaliciousPacket tempPacket = new MaliciousPacket(data.destination,data.flagged);
+                    MaliciousPacket tempPacket = new MaliciousPacket(searchIP,data.flagged);
                     ipCache.setMaliciousIPObjects(tempPacket);
                 }
                 else if(result.getBody().equalsIgnoreCase(FLAGGED_TRUE))
                 {
                     data.flagged = Flagged.TRUE; 
-                    MaliciousPacket tempPacket = new MaliciousPacket(data.destination,data.flagged);
+                    MaliciousPacket tempPacket = new MaliciousPacket(searchIP,data.flagged);
                     ipCache.setMaliciousIPObjects(tempPacket);
                 }
                 else if (result.getBody().contains(REQUEST_LIMIT))
@@ -65,12 +76,20 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
                 }
     
             } catch (UnirestException e) {
-                System.out.println("IP lookup failed");
-                // TODO Auto-generated catch block
+                data.flagged = Flagged.ERROR; 
                 e.printStackTrace();
             }
         }
         return data;
     }
     
+    public ArrayList<PCAPdata> run(ArrayList<PCAPdata> allData, String myIP){
+        this.myIP = myIP;
+
+        for(PCAPdata packet : allData){
+            packet = isMalicious(packet);
+        }
+
+        return allData;
+    }
 }

@@ -1,53 +1,41 @@
 package com.google.netpcapanalysis.servlets;
 
 import java.util.ArrayList;
+
+import com.google.netpcapanalysis.models.FileAttribute;
 import com.google.netpcapanalysis.models.PCAPdata;
 import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
-import com.google.gson.Gson;
+import com.google.netpcapanalysis.dao.MaliciousIPDaoImpl;
+import com.google.netpcapanalysis.interfaces.dao.MaliciousIPDao;
+
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.netpcapanalysis.utils.SessionManager;
+import com.google.netpcapanalysis.utils.NetUtils;
 
-@WebServlet("/data")
+@WebServlet("/data-table")
 public class TableServlet extends HttpServlet {
 
-  private static final String FILE_NAME = "file_1";
   private PCAPDao datastore = new PCAPDaoImpl();
+  private MaliciousIPDao maliciousLookup = new MaliciousIPDaoImpl();
+  private ArrayList<PCAPdata> dataTable;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String json = convertToJsonUsingGson(datastore.getPCAPObjects(FILE_NAME));
+
+    String entityName = SessionManager.getSessionEntity(request);
+    FileAttribute entity = datastore.getFileAttribute(entityName);
+
+    //will need to run lookups for Domain/location to display for datatable
+    dataTable = maliciousLookup.run(datastore.getPCAPObjects(entityName), entity.myIP);
+
+    String json = NetUtils.convertPCAPdataToJson(dataTable);
     response.setContentType("application/json;");
     response.getWriter().println(json);
   }
 
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-    // gets values from table forms and puts them into datastore
-    String source = request.getParameter("source");
-    String destination = request.getParameter("destination");
-    String domain = request.getParameter("domain");
-    String location = request.getParameter("location");
-    String protocol = request.getParameter("protocol");
-    int size = Integer.parseInt(request.getParameter("size"));
-    String flagged = request.getParameter("flagged");
-    int frequency = Integer.parseInt(request.getParameter("frequency"));
-
-    PCAPdata tempPCAP = new PCAPdata(source, destination, domain, location, protocol,
-         size, flagged, frequency);
-
-         datastore.setPCAPObjects(tempPCAP, FILE_NAME);
-
-    response.sendRedirect("/tables.html");
-  }
-
-  private String convertToJsonUsingGson(ArrayList<PCAPdata> data) {
-    Gson gson = new Gson();
-    String json = gson.toJson(data);
-    return json;
-  }
 }

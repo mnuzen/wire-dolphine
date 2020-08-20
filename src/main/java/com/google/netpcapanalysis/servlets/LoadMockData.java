@@ -2,7 +2,6 @@ package com.google.netpcapanalysis.servlets;
 
 import com.google.netpcapanalysis.mockdata.MockDataLoader;
 
-import com.google.gson.Gson;
 import java.io.IOException;
 
 import javax.servlet.annotation.WebServlet;
@@ -13,10 +12,16 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/load_mock_data")
 public class LoadMockData extends HttpServlet {
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     MockDataLoader mockData = new MockDataLoader();
-    mockData.CSVDataUpload();
 
-    response.sendRedirect("/tables.html");
+    //String file = request.getParameter("file");
+    //String description = request.getParameter("description");
+    //mockData.CSVDataUpload(file, description);
+    mockData.CSVDataUpload("data.csv", "description");
+    mockData.CSVDataUpload("data2.csv", "description");
+    mockData.CSVDataUpload("data3.csv", "description");
+
+    response.sendRedirect("/files.html");
   }
 }

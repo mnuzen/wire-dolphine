@@ -2,6 +2,7 @@ const SOURCE = 0;
 const SHAPE = "dot"
 const SHAPE_SIZE = 16;
 const EDGE_LIMIT = 20; // limit the number of edges on visualization 
+const NODE_LIMIT = 20; // limit the number of nodes in visualization
 
 const GROUP1 = 1;
 const GROUP2 = 2;
@@ -26,34 +27,42 @@ function createIPNetwork(){
     var nodes = new Array();
     var edges = new Array();
 
-    var num_nodes = data.length;
+    var num_nodes = Object.keys(data).length;
     var title = "My Computer";
 
     // add source node
-    var curr = SOURCE;
+    var n = SOURCE;
     var edge = 0;
-    nodes[SOURCE] = {id: SOURCE, label: title, group: SOURCE}; 
-    
-    populateSmallGraph();
-    createNetwork();
+    nodes[n] = {id: n, label: title, group: n};  
+    n++;
 
-    function populateSmallGraph(){
-      for (var n = 1; n < data.length+1; n++) {
-        nodes[n] = {id: n, label: data[n-1].destination + "\n" + data[n-1].frequency + " Connections", group: n};
-        // take normalized frequency
-        var normaled = normalize(data[n-1].frequency);
-        for (var m = 0; m < normaled; m++) {
-          edges[edge] = {from: n, to: SOURCE};
-          edge++;
+    var limit = 0;
+    // put all addresses onto graph
+    Object.keys(data).forEach(key => {
+      if (limit < NODE_LIMIT) {
+        var normaled = normalize(data[key]);
+        nodes[n] = {id: n, label: key + "\n" + data[key] + " Connections", group: n}; // maybe coloring by class?
+        for (var m = 0; m <= normaled; m++) {
+            edges[edge] = {from: n, to: SOURCE};
+            edge++;
         }
+        n++;
       }
-    } // end small graph
+      limit++;
+    });
+    
+    createNetwork();
 
     // normalize frequency on a scale from 1 to EDGE_LIMIT
     function normalize(m){
-      var max = data[0].frequency; //largest frequency
-      var min = data[data.length-1].frequency; //smallest frequency
-      return ((m - min) / (max - min) * EDGE_LIMIT + 1);
+      if (num_nodes > 1) {
+        var max = Object.keys(data)[0]; //largest frequency
+        var min = Object.keys(data)[num_nodes-1]; //smallest frequency
+        return ((m - data[min]) / (data[max] - data[min]) * EDGE_LIMIT + 1);
+      }
+      else {
+        return m;
+      }
     }
 
     /* Initialize network based on nodes and edges. */
@@ -93,7 +102,7 @@ function createIPNetwork(){
 
 /** Create visualization network graph based on data in datastore without descriptive labels.*/
 function drawObfusNetwork(){
-  fetch('/PCAP-freq-loader') 
+  fetch('/PCAP-freq-loader') // retrieve all Datastore data that has proper label
   .then(response => response.json())
   .then((data) => {
   
@@ -101,34 +110,42 @@ function drawObfusNetwork(){
     var nodes = new Array();
     var edges = new Array();
 
-    var num_nodes = data.length;
+    var num_nodes = Object.keys(data).length;
     var title = "My Computer";
 
     // add source node
-    var curr = SOURCE;
+    var n = SOURCE;
     var edge = 0;
-    nodes[SOURCE] = {id: SOURCE, label: title, group: SOURCE}; 
-    
-    populateSmallGraph();
-    createNetwork();
+    nodes[n] = {id: n, label: title, group: n}; 
+    n++;
 
-    function populateSmallGraph(){
-      for (var n = 1; n < data.length+1; n++) {
-        nodes[n] = {id: n, label: "Node: " + n + "\n" + data[n-1].frequency + " Connections", group: n};
-        // take normalized frequency
-        var normaled = normalize(data[n-1].frequency);
-        for (var m = 0; m < normaled; m++) {
-          edges[edge] = {from: n, to: SOURCE};
-          edge++;
+    var limit = 0;
+    // put all addresses onto graph
+    Object.keys(data).forEach(key => {
+      if (limit < NODE_LIMIT) {
+        var normaled = normalize(data[key]);
+        nodes[n] = {id: n, label: "Node " + n + "\n" + data[key] + " Connections", group: n}; 
+        for (var m = 0; m <= normaled; m++) {
+            edges[edge] = {from: n, to: SOURCE};
+            edge++;
         }
+        n++;
       }
-    } // end small graph
+      limit++;
+    });
+    
+    createNetwork();
 
     // normalize frequency on a scale from 1 to EDGE_LIMIT
     function normalize(m){
-      var max = data[0].frequency; //largest frequency
-      var min = data[data.length-1].frequency; //smallest frequency
-      return ((m - min) / (max - min) * EDGE_LIMIT + 1);
+      if (num_nodes > 1) {
+        var max = Object.keys(data)[0]; //largest frequency
+        var min = Object.keys(data)[num_nodes-1]; //smallest frequency
+        return ((m - data[min]) / (data[max] - data[min]) * EDGE_LIMIT + 1);
+      }
+      else {
+        return m;
+      }
     }
 
     /* Initialize network based on nodes and edges. */
@@ -164,4 +181,4 @@ function drawObfusNetwork(){
     
     window.addEventListener("load", () => {draw();});
   });
-} // end obfuscated 
+} // end obfuscated
