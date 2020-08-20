@@ -33,8 +33,8 @@ function drawClassVisualization() {
     console.log(graphSize);
 
     var tableOptions = {
-      title : 'Number of Connections per Protocol by IP Class',
-      vAxis: {title: 'Number of Connections'},
+      title : 'Number of Packets per Protocol by IP Class',
+      vAxis: {title: 'Number of Packets'},
       hAxis: {title: 'IP Class'},
       seriesType: 'bars',
       series: {graphSize: {type: 'line'}}        
@@ -90,14 +90,14 @@ function drawIPVisualization() {
     
      // Add columns
     data.addColumn('string', 'IP Class');
-    data.addColumn('number', 'Total');
+    data.addColumn('number', 'Total Packets');
 
     // Add rows
     addRows();
 
     var tableOptions = {
-      title : 'Number of Connections Grouped by Prefix',
-      vAxis: {title: 'Number of Connections'},
+      title : 'Number of Packets Grouped by Prefix',
+      vAxis: {title: 'Number of Packets'},
       hAxis: {title: 'Prefix'},
       seriesType: 'bars',
       series: {1: {type: 'line'}}        
