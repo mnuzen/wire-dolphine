@@ -22,6 +22,7 @@ public abstract class CacheTest {
     }
 
     for (int i = 0; i < 100; i++) {
+      System.out.println(cache.get(i));
       assertEquals(new Integer(2 * i), cache.get(i));
     }
   }
@@ -42,8 +43,7 @@ public abstract class CacheTest {
       cache.get(i);
     }
 
-    MemoryCache<Integer, Integer> mc = (MemoryCache<Integer, Integer>) cache;
-    mc.garbageCollect();
+    cache.garbageCollect();
     assertNull(cache.get(0));
   }
 }

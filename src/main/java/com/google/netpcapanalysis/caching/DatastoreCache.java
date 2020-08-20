@@ -22,9 +22,8 @@ public class DatastoreCache<K, V extends Serializable> implements Cache<K, V> {
   private static final String CACHED_PROP = "cached";
 
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-  private final Type jsonType = new TypeToken<V>() {
-  }.getType();
-  private final Gson gson = new Gson();
+  private final Type jsonType;
+  private final Gson gson;
   private final String objectName;
 
   private final EvictionPolicy<K, V> policy;
@@ -42,6 +41,8 @@ public class DatastoreCache<K, V extends Serializable> implements Cache<K, V> {
     this.objectName = objectName;
     this.policy = policy;
     this.statistics = statistics;
+    this.jsonType = new TypeToken<V>() {}.getType();
+    this.gson = new Gson();
   }
 
   @Override
