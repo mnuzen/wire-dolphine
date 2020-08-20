@@ -38,7 +38,7 @@ public class BenchmarkMaliciousIP {
             end = System.currentTimeMillis();
             avgTime+=(end-start);
 
-            if(packet.flagged == true)
+            if(packet.flagged == "")
             {
               flaggedTrue++;
             }
