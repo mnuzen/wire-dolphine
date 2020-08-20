@@ -2,11 +2,9 @@ $(document).ready(async function () {
   await loadCharts();
 });
 
-
 async function loadCharts() {
-  const queryParams = getUrlVars();
-  const key = queryParams.PCAPId || 'file_1'; // default
   let data = await loadData();
+
   const maliciousCount = data[0];
   const trafficCount = data[1];
   const protocolCount = data[2];
@@ -20,14 +18,27 @@ async function loadCharts() {
 
 
   loadChart("maliciousPieChart", Object.keys(maliciousCount), Object.values(maliciousCount),
-    ['#1cc88a', '#e74a3b', '#36b9cc'],
-    ['#03AF71', '#CE3122', '#1DA0B3'], );
+    ['#e74a3b', '#1cc88a', '#36b9cc'],
+    ['#CE3122', '#03AF71', '#1DA0B3'], );
 
 }
 
+async function loadMyIP() {
+  let ip;
+  await fetch('/file-attributes')
+    .then(response => response.json())
+    .then((data) => {
+      ip = data.myIP;
+      
+    });
+
+    return ip;
+}
 
 async function loadData() {
-  
+
+  let userIP = await loadMyIP()
+
   maliciousCount = {
     Bad: 0,
     Good: 0,
@@ -35,8 +46,8 @@ async function loadData() {
   };
 
   trafficCount = {
-    Incoming: 1,
-    Outgoing: 1
+    Incoming: 0,
+    Outgoing: 0
   };
 
   protocolCount = {
@@ -47,54 +58,61 @@ async function loadData() {
     DNS: 0,
     OTHER: 0 //add others that might be needed/add dynamically?
   };
-
+ 
   await fetch('/data-table')
     .then(response => response.json())
     .then((data) => {
       for (i in data) {
-
-        //malicious Counter
+        
+        //malicious counter
         if (data[i].flagged.toLowerCase() === "true") {
-          window.maliciousCount.true++;
+          maliciousCount.Bad++;
         } else if (data[i].flagged.toLowerCase() === "false") {
-          window.maliciousCount.false++;
+          maliciousCount.Good++;
         } else {
-          window.maliciousCount.unknown++;
+          maliciousCount.Unknown++;
         }
 
-        //protocol
+        //traffic counter
+        if (data[i].source === userIP) {
+          trafficCount.Outgoing++;
+        }
+        else {
+          trafficCount.Incoming++;
+        }
+
+        //protocol counter
         switch (data[i].protocol.toLowerCase()) {
           case "http":
-            window.protocolCount.HTTP++;
+            protocolCount.HTTP++;
             break;
 
           case "https":
-            window.protocolCount.HTTPS++;
+            protocolCount.HTTPS++;
             break;
 
           case "udp":
-            window.protocolCount.UDP++;
+            protocolCount.UDP++;
             break;
 
           case "tcp":
-            window.protocolCount.TCP++;
+            protocolCount.TCP++;
             break;
 
           case "dns":
-            window.protocolCount.DNS++;
+            protocolCount.DNS++;
             break;
 
           default:
-            window.protocolCount.OTHER++;
+            protocolCount.OTHER++;
         }
       }
     });
 
-    return await [maliciousCount, trafficCount, protocolCount]
+    return [maliciousCount, trafficCount, protocolCount]
 }
 
 function loadChart(chartID, chartLables = [], chartData = [], chartBColor = [], chartHColor = []) {
-  // Set new default font family and font color to mimic Bootstrap's default styling
   Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
   Chart.defaults.global.defaultFontColor = '#858796';
 
