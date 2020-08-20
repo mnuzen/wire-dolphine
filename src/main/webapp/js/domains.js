@@ -6,16 +6,13 @@ $(document).ready(async function() {
   await loadDomainVisualization();
 });
 
-async function loadData(key) {
-  const res = await fetch('/reversedns?PCAPId=' + key);
+async function loadData() {
+  const res = await fetch('/reversedns');
   return await res.json();
 }
 
 async function loadDomainVisualization() {
-  const queryParams = getUrlVars();
-  const key = queryParams.PCAPId || 'file_1'; // default
-  const data = await loadData(key);
-
+  const data = await loadData();
   loadDescriptorsFromData(data);
   loadChartsFromData(data);
 }
