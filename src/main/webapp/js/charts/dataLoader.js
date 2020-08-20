@@ -4,9 +4,8 @@ $(document).ready(async function () {
 
 
 async function loadCharts() {
-  const queryParams = getUrlVars();
-  const key = queryParams.PCAPId || 'file_1'; // default
-  let data = await loadData();
+  let userIP = await loadMyIP();
+  let data = await loadData(userIP);
   const maliciousCount = data[0];
   const trafficCount = data[1];
   const protocolCount = data[2];
@@ -25,8 +24,21 @@ async function loadCharts() {
 
 }
 
+async function loadMyIP() {
 
-async function loadData() {
+  let ip;
+  await fetch('/file-attributes')
+    .then(response => response.json())
+    .then((data) => {
+      ip = data.myIP;
+      
+    });
+
+    return await ip;
+}
+
+
+async function loadData(userIP) {
   
   maliciousCount = {
     Bad: 0,
@@ -35,8 +47,8 @@ async function loadData() {
   };
 
   trafficCount = {
-    Incoming: 1,
-    Outgoing: 1
+    Incoming: 0,
+    Outgoing: 0
   };
 
   protocolCount = {
@@ -48,44 +60,53 @@ async function loadData() {
     OTHER: 0 //add others that might be needed/add dynamically?
   };
 
-  await fetch('/data-table')
+  await fetch('/data') //data-table
     .then(response => response.json())
     .then((data) => {
       for (i in data) {
-
-        //malicious Counter
+        
+        //malicious counter {having issues with data-table servlet loading}
+        /*
         if (data[i].flagged.toLowerCase() === "true") {
-          window.maliciousCount.true++;
+          maliciousCount.true++;
         } else if (data[i].flagged.toLowerCase() === "false") {
-          window.maliciousCount.false++;
+          maliciousCount.false++;
         } else {
-          window.maliciousCount.unknown++;
+          maliciousCount.unknown++;
+        }*/
+
+        //traffic counter
+        if (data[i].source === userIP) {
+          trafficCount.Outgoing++;
+        }
+        else {
+          trafficCount.Incoming++;
         }
 
-        //protocol
+        //protocol counter
         switch (data[i].protocol.toLowerCase()) {
           case "http":
-            window.protocolCount.HTTP++;
+            protocolCount.HTTP++;
             break;
 
           case "https":
-            window.protocolCount.HTTPS++;
+            protocolCount.HTTPS++;
             break;
 
           case "udp":
-            window.protocolCount.UDP++;
+            protocolCount.UDP++;
             break;
 
           case "tcp":
-            window.protocolCount.TCP++;
+            protocolCount.TCP++;
             break;
 
           case "dns":
-            window.protocolCount.DNS++;
+            protocolCount.DNS++;
             break;
 
           default:
-            window.protocolCount.OTHER++;
+            protocolCount.OTHER++;
         }
       }
     });

@@ -45,8 +45,9 @@ public class PCAPDaoImpl implements PCAPDao {
     try{
       Query query = new Query(searchEntity).addSort("Source", SortDirection.DESCENDING);
       PreparedQuery results = datastore.prepare(query);
+      FetchOptions options = FetchOptions.Builder.withChunkSize(500);
 
-      for (Entity entity : results.asIterable()) {
+      for (Entity entity : results.asIterable(options)) {
         String source = (String) entity.getProperty("Source");
         String destination = (String) entity.getProperty("Destination");
         String protocol = (String) entity.getProperty("Protocol");
