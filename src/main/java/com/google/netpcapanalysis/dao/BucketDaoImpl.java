@@ -1,6 +1,5 @@
 package com.google.netpcapanalysis.dao;
 
-import com.google.netpcapanalysis.models.Flagged;
 import com.google.netpcapanalysis.models.PCAPdata;
 
 import java.util.ArrayList;
@@ -13,16 +12,6 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.List;
 
-import java.io.InputStream;
-import java.io.IOException;
-
-
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-
-import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
-import com.google.netpcapanalysis.interfaces.dao.PCAPParserDao;
 import com.google.netpcapanalysis.interfaces.dao.BucketDao;
 
 public class BucketDaoImpl implements BucketDao {
@@ -62,6 +51,7 @@ public class BucketDaoImpl implements BucketDao {
   private void orderIPs(){
     // find local IP 
     findMyIP();
+
     // sort all packets such that MYIP, OUTIP is the formatting
     sortedPCAP = new ArrayList<PCAPdata>(); 
     for (PCAPdata packet : allPCAP) {

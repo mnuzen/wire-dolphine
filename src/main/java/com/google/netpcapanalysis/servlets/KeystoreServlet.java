@@ -1,19 +1,9 @@
 package com.google.netpcapanalysis.servlets;
 
-import com.google.gson.Gson;
-import com.google.netpcapanalysis.dao.GeolocationDaoImpl;
 import com.google.netpcapanalysis.dao.KeystoreDaoImpl;
-import com.google.netpcapanalysis.dao.PCAPDaoImpl;
-import com.google.netpcapanalysis.interfaces.dao.GeolocationDao;
 import com.google.netpcapanalysis.interfaces.dao.KeystoreDao;
-import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
-import com.google.netpcapanalysis.models.PCAPdata;
 import com.google.netpcapanalysis.utils.NetUtils;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import javax.servlet.ServletConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;

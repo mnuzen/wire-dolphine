@@ -5,7 +5,6 @@ import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.model.CityResponse;
 import com.maxmind.geoip2.record.Country;
 import java.io.File;
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
 

@@ -1,6 +1,5 @@
 package com.google.netpcapanalysis.dao;
 
-import com.google.netpcapanalysis.models.Flagged;
 import com.google.netpcapanalysis.models.PCAPdata;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,38 +11,13 @@ import java.util.List;
 import java.util.Collections;
 import java.util.Comparator;
 
-import java.io.InputStream;
-import java.io.IOException;
-
-import io.pkts.PacketHandler;
-import io.pkts.Pcap;
-import io.pkts.buffer.Buffer;
-import io.pkts.packet.Packet;
-import io.pkts.packet.TCPPacket;
-import io.pkts.packet.UDPPacket;
-import io.pkts.packet.IPPacket;
-import io.pkts.protocol.Protocol;
-
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.SortDirection;
-
-import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
-import com.google.netpcapanalysis.interfaces.dao.PCAPParserDao;
 import com.google.netpcapanalysis.interfaces.dao.FrequencyDao;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class FrequencyDaoImpl implements FrequencyDao {
   private ArrayList<PCAPdata> allPCAP; 
   private LinkedHashMap<String, Integer> finalMap;
 
   private String myip = "";
-  private boolean first = true;
 
   public FrequencyDaoImpl(ArrayList<PCAPdata> packets) {
     allPCAP = packets; 

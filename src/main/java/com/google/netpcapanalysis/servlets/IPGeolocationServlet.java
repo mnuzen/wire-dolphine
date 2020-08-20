@@ -1,8 +1,6 @@
 package com.google.netpcapanalysis.servlets;
 
-import com.google.netpcapanalysis.dao.KeystoreDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.GeolocationDao;
-import com.google.netpcapanalysis.interfaces.dao.KeystoreDao;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.dao.GeolocationDaoImpl;

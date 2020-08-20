@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 import com.google.netpcapanalysis.dao.PCAPParserDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPParserDao;
 import com.google.netpcapanalysis.models.PCAPdata;
-import com.google.netpcapanalysis.dao.PCAPDaoImpl;
-import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,9 +11,9 @@ import java.nio.file.Paths;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.*; 
-import java.io.*;
-import java.lang.*;
+import java.util.ArrayList; 
+import java.io.InputStream;
+import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
 import java.nio.charset.StandardCharsets;
@@ -45,7 +43,7 @@ public class PCAPParserDaoImplTest {
     IP2 = values[1];
 
     // Retrieve PCAPParser information
-    parser = new PCAPParserDaoImpl(PCAPNAME);
+    parser = new PCAPParserDaoImpl(PCAPNAME, "");
     parser.parseRaw();
   }
 

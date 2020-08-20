@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Network Visualization</title>
+  <title>Upload PCAP File</title>
 
   <!-- Custom fonts for this template-->
   <link href="js/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -17,7 +17,6 @@
 
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
-  <link href="css/network.css" rel="stylesheet">
 
 </head>
 
@@ -131,13 +130,13 @@
 
         <!-- Nav Item - User Information -->
         <li class="nav-item dropdown no-arrow">
-          <a href="/mapviz.html" class="btn btn-primary btn-icon-split mr-2">
+          <a href="#" class="btn btn-primary btn-icon-split mr-2">
                     <span class="icon text-white-50">
                       <i class="fas fa-arrow-left"></i>
                     </span>
             <span class="text">Previous</span>
           </a>
-          <a href="/tables.html" class="btn btn-success btn-icon-split">
+          <a href="#" class="btn btn-success btn-icon-split">
             <span class="text">Next</span>
 
             <span class="icon text-white-50">
@@ -151,15 +150,30 @@
 
 
     <!-- Main Content -->
-    <div class="container-fluid">
-        <!-- Page Heading -->
-        <h1>Network Visualizations Demo</h1>
-        <!-- Network Example -->    
-          <p>Take a look at the network visualization.</p>
-          <button onclick="drawObfusNetwork()">Obfuscated Network</button><button onclick="createIPNetwork()">IP Network</button>
-          <br/><br/>
-          <div style="height: 100vh", id="mynetwork"></div>
-          <!-- End Network Example -->
+    <div id="content" class="container-fluid">
+
+      <!-- Welcome -->
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h2 class="m-0 font-weight-bold text-primary, text-center">Upload PCAP File</h2>
+        </div>
+        <div class="card-body align-self-center">
+            <form action="/PCAP-data" method="POST" class="text-left">
+              <label for="file">Select a file:</label>
+              <select name="file">
+                <option value="files/file1.pcap">files/file1.pcap</option>
+                <option value="files/file2.pcap">files/file2.pcap</option>
+                <option value="files/file1.pcap">files/file3.pcap</option>
+              </select>
+              <br>
+              <label for="description">Description:</label>
+              <input type="text" id="description" name="description" maxlength="280"><br>
+              <input type="submit">
+            </form>
+
+        </div>
+      </div>
+
     </div>
     <!-- End of Main Content -->
 
@@ -167,7 +181,7 @@
     <footer class="sticky-footer bg-white">
       <div class="container my-auto">
         <div class="copyright text-center my-auto">
-          <span>Made with <i class="fa fa-heart" aria-hidden="true"></i> in America</span>
+          <span>Made with <i class="fa fa-heart" aria-hidden="true"></i> by Google Interns</span>
         </div>
       </div>
     </footer>
@@ -195,12 +209,8 @@
 <script src="js/sb-admin-2.min.js"></script>
 
 <!-- Page level plugins -->
-<script src="vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 <!-- PAGE LEVEL CUSTOM SCRIPTS -->
-<script src="js/network.js"></script>
-<script src="https://visjs.github.io/vis-network/standalone/umd/vis-network.min.js"></script>
 
 </body>
 
