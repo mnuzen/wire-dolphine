@@ -2,10 +2,9 @@ $(document).ready(async function () {
   await loadCharts();
 });
 
-
 async function loadCharts() {
-  let userIP = await loadMyIP();
-  let data = await loadData(userIP);
+  let data = await loadData();
+
   const maliciousCount = data[0];
   const trafficCount = data[1];
   const protocolCount = data[2];
@@ -25,7 +24,6 @@ async function loadCharts() {
 }
 
 async function loadMyIP() {
-
   let ip;
   await fetch('/file-attributes')
     .then(response => response.json())
@@ -34,12 +32,13 @@ async function loadMyIP() {
       
     });
 
-    return await ip;
+    return ip;
 }
 
+async function loadData() {
 
-async function loadData(userIP) {
-  
+  let userIP = await loadMyIP()
+
   maliciousCount = {
     Bad: 0,
     Good: 0,
@@ -59,7 +58,7 @@ async function loadData(userIP) {
     DNS: 0,
     OTHER: 0 //add others that might be needed/add dynamically?
   };
-
+ 
   await fetch('/data-table')
     .then(response => response.json())
     .then((data) => {
@@ -110,11 +109,10 @@ async function loadData(userIP) {
       }
     });
 
-    return await [maliciousCount, trafficCount, protocolCount]
+    return [maliciousCount, trafficCount, protocolCount]
 }
 
 function loadChart(chartID, chartLables = [], chartData = [], chartBColor = [], chartHColor = []) {
-  // Set new default font family and font color to mimic Bootstrap's default styling
   Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
   Chart.defaults.global.defaultFontColor = '#858796';
 
