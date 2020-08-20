@@ -94,9 +94,6 @@ function drawIPVisualization() {
 
     // Add rows
     addRows();
-    
-    // Set up chart
-    //console.log();
 
     var tableOptions = {
       title : 'Number of Connections Grouped by Prefix',
