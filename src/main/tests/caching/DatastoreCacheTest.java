@@ -17,18 +17,25 @@ public class DatastoreCacheTest extends CacheTest {
   @Override
   public void setup() {
     helper.setUp();
+    initCache();
+  }
+
+  @Override
+  public void initCache() {
     cache =
-        new CacheBuilder<Integer, Integer>()
+        new CacheBuilder<Integer, CacheTestingClass>()
             .setCacheName("dstest")
             .setCacheType(CacheType.DATASTORE)
+            .setKVClass(Integer.class, CacheTestingClass.class)
             .setPolicy(Policy.MAXIMUM_SIZE)
             .setPolicyArgument(100)
             .build();
-
   }
 
   @After
+  @Override
   public void tearDown() {
+    super.tearDown();
     helper.tearDown();
   }
 

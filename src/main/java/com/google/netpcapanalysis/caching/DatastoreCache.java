@@ -7,24 +7,32 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.Transaction;
+import com.google.appengine.api.datastore.TransactionOptions;
+import com.google.apphosting.datastore.DatastoreV4.PropertyFilter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.netpcapanalysis.caching.policy.EvictionPolicy;
 import com.google.netpcapanalysis.interfaces.caching.Cache;
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.util.List;
 
 public class DatastoreCache<K, V extends Serializable> implements Cache<K, V> {
 
+  private static final String KEY_PROP = "key";
   private static final String EXPIRATION_PROP = "expiration";
   private static final String CACHED_PROP = "cached";
 
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-  private final Type jsonType;
   private final Gson gson;
   private final String objectName;
+  private Class<K> keyClass;
+  private Class<V> valClass;
 
   private final EvictionPolicy<K, V> policy;
 
@@ -37,12 +45,15 @@ public class DatastoreCache<K, V extends Serializable> implements Cache<K, V> {
    * @param policy     eviction policy
    * @param statistics boolean to enable statistics recording
    */
-  public DatastoreCache(String objectName, EvictionPolicy<K, V> policy, boolean statistics) {
+  public DatastoreCache(String objectName, EvictionPolicy<K, V> policy, Class<K> keyClass,
+      Class<V> valClass, boolean statistics) {
     this.objectName = objectName;
     this.policy = policy;
     this.statistics = statistics;
-    this.jsonType = new TypeToken<V>() {}.getType();
+
     this.gson = new Gson();
+    this.keyClass = keyClass;
+    this.valClass = valClass;
   }
 
   @Override
@@ -78,8 +89,8 @@ public class DatastoreCache<K, V extends Serializable> implements Cache<K, V> {
 
   @Override
   public long getSize() {
-    Entity globalStat = datastore.prepare(new Query("__Stat_Total__")).asSingleEntity();
-    return (Long) globalStat.getProperty("count");
+    Query query = new Query(objectName).setKeysOnly();
+    return (long) datastore.prepare(query).countEntities();
   }
 
   /**
@@ -88,8 +99,7 @@ public class DatastoreCache<K, V extends Serializable> implements Cache<K, V> {
    */
   @Override
   public void garbageCollect() {
-    Query query = new Query(objectName).addSort(EXPIRATION_PROP, SortDirection.ASCENDING)
-        .setKeysOnly();
+    Query query = new Query(objectName).addSort(EXPIRATION_PROP, SortDirection.ASCENDING);
     Iterable<Entity> pq;
 
     if (policy.checkSizeConstraint(this)) {
@@ -100,19 +110,20 @@ public class DatastoreCache<K, V extends Serializable> implements Cache<K, V> {
       pq = datastore.prepare(query).asIterable();
     }
 
-    // bulk delete extras
-    Transaction txn = datastore.beginTransaction();
-    try {
-      for (Entity entity : pq) {
-        if (policy.checkCacheObjectEvict(this, entityToCacheObject(entity))) {
-          datastore.delete(entity.getKey());
-        }
+    for (Entity entity : pq) {
+      if (policy.checkCacheObjectEvict(this, entityToCacheObject(entity))) {
+        datastore.delete(entity.getKey());
       }
-      txn.commit();
-    } finally {
-      if (txn.isActive()) {
-        txn.rollback();
-      }
+    }
+  }
+
+  @Override
+  public void clear() {
+    Query query = new Query(objectName);
+    Iterable<Entity> pq = datastore.prepare(query).asIterable();
+
+    for (Entity entity : pq) {
+      datastore.delete(entity.getKey());
     }
   }
 
@@ -142,9 +153,13 @@ public class DatastoreCache<K, V extends Serializable> implements Cache<K, V> {
 
   public DSCacheObject<V> getDSObject(K key) {
     try {
-      Entity entity = datastore.get(KeyFactory.createKey(objectName, key.toString()));
-      return entityToCacheObject(entity);
-    } catch (EntityNotFoundException e) {
+      Query query = new Query(objectName).addSort(EXPIRATION_PROP, SortDirection.DESCENDING);
+      Filter keyFilter = new FilterPredicate(KEY_PROP, FilterOperator.EQUAL, key.toString());
+      query.setFilter(keyFilter);
+      List<Entity> res = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(1));
+
+      return entityToCacheObject(res.get(0));
+    } catch (Exception e) {
       return null;
     }
   }
@@ -154,7 +169,8 @@ public class DatastoreCache<K, V extends Serializable> implements Cache<K, V> {
   }
 
   private Entity cacheObjectToEntity(DSCacheObject<V> data) {
-    Entity entity = new Entity(objectName, data.key);
+    Entity entity = new Entity(objectName);
+    entity.setProperty(KEY_PROP, data.key);
     entity.setProperty(CACHED_PROP, gson.toJson(data.value));
     entity.setProperty(EXPIRATION_PROP, data.expiration);
 
@@ -162,12 +178,16 @@ public class DatastoreCache<K, V extends Serializable> implements Cache<K, V> {
   }
 
   private DSCacheObject<V> entityToCacheObject(Entity entity) {
-    String jsonEncoded = (String) entity.getProperty(CACHED_PROP);
+    try {
+      String jsonEncoded = (String) entity.getProperty(CACHED_PROP);
 
-    String id = (String) entity.getProperty("id");
-    long expiration = (long) entity.getProperty(EXPIRATION_PROP);
-    V data = gson.fromJson(jsonEncoded, jsonType);
+      String id = (String) entity.getProperty(KEY_PROP);
+      long expiration = (long) entity.getProperty(EXPIRATION_PROP);
+      V data = gson.fromJson(jsonEncoded, valClass);
 
-    return new DSCacheObject<>(id, data, expiration);
+      return new DSCacheObject<>(id, data, expiration);
+    } catch (NullPointerException e) {
+      return null;
+    }
   }
 }

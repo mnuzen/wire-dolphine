@@ -24,6 +24,8 @@ public interface Cache<K, V extends Serializable> {
 
   public long getSize();
 
+  public void clear();
+
   /**
    * Enables counting of hits()/misses()
    * @return on/off counting of hits/misses

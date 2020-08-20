@@ -27,6 +27,7 @@ public class MaximumItemPolicy<K, V extends Serializable> extends EvictionPolicy
 
   @Override
   public boolean checkCacheObjectEvict(Cache<K, V> cache, DSCacheObject<V> data) {
+    if (data == null) return false;
     // we always evict objects since for this policy, since eviction is determined by max size and
     // hence already checked in checkGarbageCollect
     return true;

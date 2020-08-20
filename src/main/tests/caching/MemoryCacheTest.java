@@ -7,16 +7,14 @@ import org.junit.Before;
 
 public class MemoryCacheTest extends CacheTest {
 
-  @Before
   @Override
-  public void setup() {
+  public void initCache() {
     cache =
-        new CacheBuilder<Integer, Integer>()
+        new CacheBuilder<Integer, CacheTestingClass>()
             .setCacheName("dstest")
             .setCacheType(CacheType.MEMORY)
             .setPolicy(Policy.MAXIMUM_SIZE)
             .setPolicyArgument(100)
             .build();
-
   }
 }

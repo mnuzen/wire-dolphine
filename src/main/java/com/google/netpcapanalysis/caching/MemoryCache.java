@@ -36,6 +36,11 @@ public class MemoryCache<K, V extends Serializable> implements Cache<K, V> {
   }
 
   @Override
+  public void clear() {
+    cache.invalidateAll();
+  }
+
+  @Override
   public boolean statisticsEnabled() {
     return stats;
   }

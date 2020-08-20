@@ -25,6 +25,11 @@ public class CacheBuilder<K, V extends Serializable> {
 
   // right now used only for datastore - sets name of datastore object
   private String cacheName;
+
+  // datastore only, used to cast gson
+  private Class<K> keyClass;
+  private Class<V> valClass;
+
   private boolean enableStatistics;
 
   public CacheBuilder() {}
@@ -54,6 +59,12 @@ public class CacheBuilder<K, V extends Serializable> {
 
   public CacheBuilder<K, V> setPolicyArgument(int arg) {
     this.evictionPolicyArg = arg;
+    return this;
+  }
+
+  public CacheBuilder<K, V> setKVClass(Class<K> k, Class<V> v) {
+    this.keyClass = k;
+    this.valClass = v;
     return this;
   }
 
@@ -93,9 +104,13 @@ public class CacheBuilder<K, V extends Serializable> {
   }
 
   private DatastoreCache<K, V> buildDatastoreCache() {
+    if (keyClass == null || valClass == null) throw new NullPointerException("kv classes needed for datastore cache");
+
     return new DatastoreCache<>(
         cacheName,
         getPolicy(),
+        keyClass,
+        valClass,
         enableStatistics
     );
   }
