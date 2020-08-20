@@ -19,8 +19,8 @@ async function loadCharts() {
 
 
   loadChart("maliciousPieChart", Object.keys(maliciousCount), Object.values(maliciousCount),
-    ['#1cc88a', '#e74a3b', '#36b9cc'],
-    ['#03AF71', '#CE3122', '#1DA0B3'], );
+    ['#e74a3b', '#1cc88a', '#36b9cc'],
+    ['#CE3122', '#03AF71', '#1DA0B3'], );
 
 }
 
@@ -60,20 +60,19 @@ async function loadData(userIP) {
     OTHER: 0 //add others that might be needed/add dynamically?
   };
 
-  await fetch('/data') //data-table
+  await fetch('/data-table')
     .then(response => response.json())
     .then((data) => {
       for (i in data) {
         
-        //malicious counter {having issues with data-table servlet loading}
-        /*
+        //malicious counter
         if (data[i].flagged.toLowerCase() === "true") {
-          maliciousCount.true++;
+          maliciousCount.Bad++;
         } else if (data[i].flagged.toLowerCase() === "false") {
-          maliciousCount.false++;
+          maliciousCount.Good++;
         } else {
-          maliciousCount.unknown++;
-        }*/
+          maliciousCount.Unknown++;
+        }
 
         //traffic counter
         if (data[i].source === userIP) {

@@ -1,6 +1,8 @@
 package com.google.netpcapanalysis.servlets;
 
 import java.util.ArrayList;
+
+import com.google.netpcapanalysis.models.FileAttribute;
 import com.google.netpcapanalysis.models.PCAPdata;
 import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
@@ -26,9 +28,10 @@ public class TableServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     String entityName = SessionManager.getSessionEntity(request);
+    FileAttribute entity = datastore.getFileAttribute(entityName);
 
     //will need to run lookups for Domain/location to display for datatable
-    dataTable = maliciousLookup.run(datastore.getPCAPObjects(entityName));
+    dataTable = maliciousLookup.run(datastore.getPCAPObjects(entityName), entity.myIP);
 
     String json = NetUtils.convertPCAPdataToJson(dataTable);
     response.setContentType("application/json;");
