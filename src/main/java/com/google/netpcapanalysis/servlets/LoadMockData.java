@@ -12,12 +12,15 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/load_mock_data")
 public class LoadMockData extends HttpServlet {
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     MockDataLoader mockData = new MockDataLoader();
 
-    String file = request.getParameter("file");
-    String description = request.getParameter("description");
-    mockData.CSVDataUpload(file, description);
+    //String file = request.getParameter("file");
+    //String description = request.getParameter("description");
+    //mockData.CSVDataUpload(file, description);
+    mockData.CSVDataUpload("data.csv", "description");
+    mockData.CSVDataUpload("data2.csv", "description");
+    mockData.CSVDataUpload("data3.csv", "description");
 
     response.sendRedirect("/files.html");
   }

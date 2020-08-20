@@ -1,6 +1,8 @@
 package com.google.netpcapanalysis.models;
 
-public class DNSRecord {
+import java.io.Serializable;
+
+public class DNSRecord implements Serializable {
   public boolean authority;
   public boolean server;
   public String domain;
