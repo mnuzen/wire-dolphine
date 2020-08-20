@@ -14,9 +14,9 @@
 
 package com.google.netpcapanalysis.servlets;
 
-import com.google.netpcapanalysis.models.PCAPdata;
 import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
+import com.google.netpcapanalysis.utils.NetUtils;
 import com.google.netpcapanalysis.dao.BucketDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.BucketDao;
 import com.google.netpcapanalysis.utils.SessionManager;
@@ -28,17 +28,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.io.InputStream;
 import java.io.IOException;
 
 /** Servlet that retrieves and returns frequencies. */
 @WebServlet("/PCAP-bucket")
 public class BucketLoaderServlet extends HttpServlet {
-  private String filename;
   private PCAPDao data = new PCAPDaoImpl();
 
   @Override
@@ -61,12 +58,5 @@ public class BucketLoaderServlet extends HttpServlet {
    * @return the request parameter, or the default value if the parameter
    *         was not specified by the client
    */
-  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
-    String value = request.getParameter(name);
-    if (value == null) {
-      return defaultValue;
-    }
-    return value;
-  }
 
 } // end of BucketLoaderServlet class

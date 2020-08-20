@@ -18,8 +18,6 @@ import io.pkts.protocol.Protocol;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.interfaces.dao.PCAPParserDao;
 
-import com.google.netpcapanalysis.models.PCAPdata;
-import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.utils.UtilityPCAP;
 import com.google.netpcapanalysis.models.FileAttribute;
 

@@ -1,5 +1,4 @@
 package com.google.netpcapanalysis.dao;
-import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.interfaces.dao.MaliciousIPDao;
 import com.google.netpcapanalysis.models.PCAPdata;
@@ -9,12 +8,6 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.google.netpcapanalysis.models.Flagged;
 import java.util.ArrayList;
-
-import com.google.netpcapanalysis.dao.KeystoreDaoImpl;
-import com.google.netpcapanalysis.interfaces.dao.KeystoreDao;
-
-import com.google.netpcapanalysis.dao.PCAPDaoImpl;
-import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 
 public class  MaliciousIPDaoImpl implements MaliciousIPDao{
 
