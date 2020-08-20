@@ -198,11 +198,11 @@
                 packets are routed from one device to another, the packets are rebuilt into the content originally requested.
               </td>
               <td style="height:40%">
-                <img style="width: 25rem; float:right" src="img/network.svg" alt=""> <!--float:right-->
+                <img style="width: 25rem; float:right" src="img/globe.svg" alt=""> <!--float:right-->
               </td>
             </table>
           </div>
-        </div>
+        </div> <!-- End of How does the Internet Work? -->
 
         <!-- Jumbotron -->
         <div class="jumbotron">
@@ -300,6 +300,92 @@
               </div>
             </div>
         </div> <!-- End of Packet types -->
+
+
+        <!-- OSI Model header-->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h4 class="m-0 font-weight-bold text-primary", style="text-align: center">ISO-OSI Model</h4>
+          </div>
+          <div class="card-body">
+              <table>
+              <td style="height:40%">
+                <img style="width: 25rem; float:left" src="img/network.svg" alt=""> <!--float:right-->
+              </td>
+              <td style="text-align:justify; width:60%"> 
+                Packets make sense, but how do they fit into the big picture of the internet? There exists a standard structured model 
+                that defines how most computers talk to each other and how they fit together in one framework. This model is called the ISO/OSI
+                model, and contains seven layers of different functionality and characteristics. Let's take a look at them and see how packets fit in.
+              </td>
+            </table>
+          </div>
+        </div> <!-- End of OSI Model header -->
+
+        <div class="row"> <!--start osi row-->
+            <div class="col-xl-4 col-lg-5"> <!--start cards-->
+                <div class="card bg-primary text-white shadow">
+                  <div class="card-body">
+                    Application Layer
+                    <div class="text-white-50 small">Data</div>
+                  </div>
+                </div>
+                <div class="card bg-primary text-white shadow">
+                    <div class="card-body">
+                      Presentation Layer
+                      <div class="text-white-50 small">Data</div>
+                    </div>
+                </div>
+                <div class="card bg-primary text-white shadow">
+                    <div class="card-body">
+                      Session Layer
+                      <div class="text-white-50 small">Data</div>
+                    </div>
+                </div>
+                <div class="card bg-info text-white shadow">
+                  <div class="card-body">
+                    Transport Layer
+                    <div class="text-white-50 small">Segments</div>
+                  </div>
+                </div>
+                 <div class="card bg-success text-white shadow">
+                  <div class="card-body">
+                    Network Layer
+                    <div class="text-white-50 small">Packets</div>
+                  </div>
+                </div>
+                  <div class="card bg-secondary text-white shadow">
+                    <div class="card-body">
+                      Data Link Layer
+                      <div class="text-white-50 small">Frames</div>
+                    </div>
+                </div>
+                <div class="card bg-dark text-white shadow">
+                    <div class="card-body">
+                      Physical Layer
+                      <div class="text-white-50 small">Bits</div>
+                    </div>
+                </div>
+            </div> <!--end cards-->
+            <div class="col-xl-8 col-lg-7">
+                <div class="card mb-4">
+                  <div class="card-header">
+                    The Seven Layer Model
+                  </div>
+                <div class="card-body">
+                  <ol type = "1">
+                    <li> Physical Layer: as the name suggests, physically transmits signals from one place to another.</li>
+                    <li> Data Link Layer: transforms raw bits (0s and 1s) from physical layer for the network layer.</li>
+                    <li> Network Layer: controls movements of a packet from one network to another (think packet routing).</li>
+                    <li> Transport Layer: splits data into smaller packets for delivery and ensures the packets arrive correctly at the other end.</li>
+                    <li> Session Layer: establishes and manages sessions, conversions, or dialogue between two machines.</li>
+                    <li> Presentation Layer: manages the syntax and semantics of information transmitted between two machines.</li>
+                    <li> Application Layer: highest layer, containing a variety of protocols.</li>
+                  </ol>
+                  <center><img style="width: 25rem; float:center" src="img/connected_globe.svg" alt=""> </center>
+                </div>
+              </div>
+            </div>
+        </div> <!--end osi row-->
 
       </div> <!-- End of Main Content -->
 
