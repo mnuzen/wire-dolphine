@@ -3,10 +3,6 @@ package caching;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import com.google.netpcapanalysis.caching.CacheBuilder;
-import com.google.netpcapanalysis.caching.CacheBuilder.CacheType;
-import com.google.netpcapanalysis.caching.CacheBuilder.Policy;
-import com.google.netpcapanalysis.caching.DatastoreCache;
 import com.google.netpcapanalysis.caching.MemoryCache;
 import com.google.netpcapanalysis.interfaces.caching.Cache;
 import org.junit.Before;

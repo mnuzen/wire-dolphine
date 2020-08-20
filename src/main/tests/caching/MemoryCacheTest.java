@@ -13,7 +13,7 @@ public class MemoryCacheTest extends CacheTest {
     cache =
         new CacheBuilder<Integer, Integer>()
             .setCacheName("dstest")
-            .setCacheType(CacheType.DATASTORE)
+            .setCacheType(CacheType.MEMORY)
             .setPolicy(Policy.MAXIMUM_SIZE)
             .setPolicyArgument(100)
             .build();
