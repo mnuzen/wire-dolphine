@@ -7,9 +7,11 @@ import java.io.Serializable;
 public class MaximumItemPolicy<K, V extends Serializable> extends EvictionPolicy<K, V> {
 
   private final long max;
+  private int cacheInsertions;
 
   public MaximumItemPolicy(long max) {
     this.max = max;
+    this.cacheInsertions = 0;
   }
 
   @Override
@@ -19,11 +21,14 @@ public class MaximumItemPolicy<K, V extends Serializable> extends EvictionPolicy
 
   @Override
   public DSCacheObject<V> onPut(Cache<K, V> cache, DSCacheObject<V> data) {
+    cacheInsertions++;
     return data;
   }
 
   @Override
   public boolean checkCacheObjectEvict(Cache<K, V> cache, DSCacheObject<V> data) {
+    // we always evict objects since for this policy, since eviction is determined by max size and
+    // hence already checked in checkGarbageCollect
     return true;
   }
 
@@ -36,7 +41,9 @@ public class MaximumItemPolicy<K, V extends Serializable> extends EvictionPolicy
 
     // this means that theoretically even if there are multiple datastore cache workers running
     // on the same model, maxItems limit will approximately be followed
-    return (int) (Math.random() * max) == 0;
+    boolean gc = cacheInsertions >= 100;
+    cacheInsertions = 0;
+    return gc;
   }
 
   @Override

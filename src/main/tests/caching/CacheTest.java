@@ -12,20 +12,22 @@ import com.google.netpcapanalysis.interfaces.caching.Cache;
 import org.junit.Before;
 import org.junit.Test;
 
-public class CacheTest {
+public abstract class CacheTest {
 
   public Cache<Integer, Integer> cache;
 
   @Before
-  public void setup() {
-    cache =
-        new CacheBuilder<Integer, Integer>()
-            .setCacheName("dstest")
-            .setCacheType(CacheType.MEMORY)
-            .setPolicy(Policy.MAXIMUM_SIZE)
-            .setPolicyArgument(100)
-            .build();
+  public abstract void setup();
 
+  @Test
+  public void testPutGet() {
+    for (int i = 0; i < 100; i++) {
+      cache.put(i, 2 * i);
+    }
+
+    for (int i = 0; i < 100; i++) {
+      assertEquals(new Integer(2 * i), cache.get(i));
+    }
   }
 
   @Test

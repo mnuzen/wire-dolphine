@@ -27,7 +27,7 @@ public class MemoryCache<K, V extends Serializable> implements Cache<K, V> {
 
   @Override
   public void garbageCollect() {
-
+    cache.cleanUp();
   }
 
   @Override

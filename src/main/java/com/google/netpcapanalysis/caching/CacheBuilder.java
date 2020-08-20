@@ -107,7 +107,7 @@ public class CacheBuilder<K, V extends Serializable> {
       case TIME_AFTER_ACCESS:
       case TIME_AFTER_WRITE:
       default:
-        throw new Error("No policy set");
+        throw new Error("Unsupported Policy");
     }
   }
 }
