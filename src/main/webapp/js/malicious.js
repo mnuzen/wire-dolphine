@@ -53,9 +53,7 @@ $(document).ready(async function () {
 
       let index = 0;
       for (let [key, value] of locationMap) {
-
-        locationList[key] = value;
-
+        locationList[key] = value.val;
         index++;
         if (index == 5) {
           break;
