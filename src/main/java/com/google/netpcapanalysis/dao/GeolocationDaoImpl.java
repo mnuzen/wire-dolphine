@@ -5,12 +5,14 @@ import com.google.netpcapanalysis.caching.CacheBuilder.CacheType;
 import com.google.netpcapanalysis.caching.CacheBuilder.Policy;
 import com.google.netpcapanalysis.interfaces.caching.Cache;
 import com.google.netpcapanalysis.interfaces.dao.GeolocationDao;
+import com.google.netpcapanalysis.models.PCAPdata;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.model.CityResponse;
 import com.maxmind.geoip2.record.Country;
 import java.io.File;
 import java.net.InetAddress;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class GeolocationDaoImpl implements GeolocationDao {
   private static final String GEO_DB_LOCATION = "GeoLite2-City.mmdb";
@@ -35,6 +37,7 @@ public class GeolocationDaoImpl implements GeolocationDao {
       System.exit(0);
     }
   }
+
   
   public String getCountry(InetAddress ip) {
     String result = cache.get(ip);
@@ -52,5 +55,18 @@ public class GeolocationDaoImpl implements GeolocationDao {
     } catch (Exception e) {
       return "unknown";
     }
+  }
+
+  public ArrayList<PCAPdata> getLocation(ArrayList<PCAPdata> data)
+  {
+    for (PCAPdata pcap: data) {
+      try {
+        String country = getCountry(InetAddress.getByName(pcap.destination));
+        pcap.location = country;
+      } catch (Exception e) {
+        pcap.location = "Unknown";
+      }
+    }
+    return data;
   }
 }
