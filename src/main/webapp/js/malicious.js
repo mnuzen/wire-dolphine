@@ -6,11 +6,14 @@ $(document).ready(async function () {
     url: '/data-malicious',
     success: function (data) {
 
-      maliciousCount = {
+     let maliciousCount = {
         Bad: 0,
         Good: 0,
         Unknown: 0
       };
+
+      let locationMap = new Map()
+      let locationList = [];
 
       for (i in data) {
 
@@ -26,13 +29,45 @@ $(document).ready(async function () {
           maliciousCount.Unknown++;
         }
 
+        //Counts Location of IP's
+        if(locationMap.has(data[i].location))
+        {
+            locationMap.get(data[i].location).val++; //map.set("a", map.get("a")+1);
+        }else{
+            locationMap.set(data[i].location, {val: 1});
+        }
+
         row.innerHTML = "<td>" + data[i].destination + "</td> <td>" + data[i].domain + 
           "</td> <td>" + data[i].location + "</td> <td>" + data[i].flagged + "</td>";
 
         table.appendChild(row);
       }
-      
+
+    //Sorts hashmap by key and Top 5 locations
+      locationMap[Symbol.iterator] = function* () {
+        yield* [...this.entries()].sort(function(a,b) { return +b[1] - +a[1] });
+        }
+
+        let index = 0;
+        for (let [key, value] of locationMap) {
+            locationList.push({
+            key:   key,
+            value: value
+            });
+
+            index++;
+            if(index == 5)
+            {
+            break;
+            }
+        }
+
+      console.log([...locationList]);
       loadChart("maliciousPieChart", Object.keys(maliciousCount), Object.values(maliciousCount),
+      ['#e74a3b', '#1cc88a', '#36b9cc'],
+      ['#CE3122', '#03AF71', '#1DA0B3'], );
+
+      loadChart("locationPieChart", Object.keys(locationList), Object.values(locationList),
       ['#e74a3b', '#1cc88a', '#36b9cc'],
       ['#CE3122', '#03AF71', '#1DA0B3'], );
 
