@@ -32,7 +32,7 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
         .setCacheName("Malicious_IP_Cache")
         .setPolicy(Policy.MAXIMUM_SIZE)
         .setPolicyArgument(1000)
-        .setCacheType(CacheType.MEMORY) //Memory works Datastore fails
+        .setCacheType(CacheType.MEMORY)
         .build();
     }
 
