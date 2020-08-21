@@ -65,8 +65,8 @@ $(document).ready(async function () {
         ['#CE3122', '#03AF71', '#1DA0B3'], );
 
       loadChart("locationPieChart", Object.keys(locationList), Object.values(locationList),
-        ['#e74a3b', '#1cc88a', '#36b9cc','#f6c23e','#858796'],
-        ['#CE3122', '#03AF71', '#1DA0B3','#DDA925','#6C6E7D'] );
+        ['#858796', '#f6c23e', '#36b9cc','#1cc88a','#e74a3b'],
+        ['#6C6E7D', '#DDA925', '#1DA0B3','#03AF71','#CE3122'] );
 
       $("#dataTable").DataTable();
     },
