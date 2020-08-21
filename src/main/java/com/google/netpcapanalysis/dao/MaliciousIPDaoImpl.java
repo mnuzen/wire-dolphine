@@ -4,12 +4,16 @@ import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.interfaces.dao.KeystoreDao;
 import com.google.netpcapanalysis.interfaces.dao.MaliciousIPDao;
 import com.google.netpcapanalysis.models.PCAPdata;
-import com.google.netpcapanalysis.models.MaliciousPacket;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.google.netpcapanalysis.models.Flagged;
 import java.util.ArrayList;
+
+import com.google.netpcapanalysis.caching.CacheBuilder;
+import com.google.netpcapanalysis.caching.CacheBuilder.CacheType;
+import com.google.netpcapanalysis.caching.CacheBuilder.Policy;
+import com.google.netpcapanalysis.interfaces.caching.Cache;
 
 public class  MaliciousIPDaoImpl implements MaliciousIPDao{
 
@@ -20,10 +24,16 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
     private static final String FLAGGED_TRUE = "200: OK";
     private static final String REQUEST_LIMIT = "Rate limit exceeded";
 
-    private PCAPDao ipCache = new PCAPDaoImpl();
+    private Cache<String, String> ipCache;
     private String myIP;
 
     public MaliciousIPDaoImpl(){
+        ipCache = new CacheBuilder<String, String>()
+        .setCacheName("Malicious_IP_Cache")
+        .setPolicy(Policy.MAXIMUM_SIZE)
+        .setPolicyArgument(1000)
+        .setCacheType(CacheType.MEMORY) //Memory works Datastore fails
+        .build();
     }
 
     public PCAPdata isMalicious(PCAPdata data)
@@ -41,13 +51,16 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
         }
 
         //checks to see if cache has seen IP already
-        String searchDB = ipCache.searchMaliciousDB(searchIP);
-        if(searchDB.equalsIgnoreCase(Flagged.TRUE))
-        {
-            data.flagged = Flagged.TRUE;
-        }
-        else if(searchDB.equalsIgnoreCase(Flagged.FALSE)){
-            data.flagged = Flagged.FALSE;
+        String searchDB = ipCache.get(searchIP);
+
+        if (searchDB != null) {
+            if(searchDB.equalsIgnoreCase(Flagged.TRUE))
+            {
+                data.flagged = Flagged.TRUE;
+            }
+            else if(searchDB.equalsIgnoreCase(Flagged.FALSE)){
+                data.flagged = Flagged.FALSE;
+            }
         }
         else{
             try {
@@ -58,14 +71,12 @@ public class  MaliciousIPDaoImpl implements MaliciousIPDao{
                 if(result.getBody().equalsIgnoreCase(FLAGGED_FALSE))
                 {
                     data.flagged = Flagged.FALSE;
-                    MaliciousPacket tempPacket = new MaliciousPacket(searchIP,data.flagged);
-                    ipCache.setMaliciousIPObjects(tempPacket);
+                    ipCache.put(searchIP,data.flagged);
                 }
                 else if(result.getBody().equalsIgnoreCase(FLAGGED_TRUE))
                 {
-                    data.flagged = Flagged.TRUE; 
-                    MaliciousPacket tempPacket = new MaliciousPacket(searchIP,data.flagged);
-                    ipCache.setMaliciousIPObjects(tempPacket);
+                    data.flagged = Flagged.TRUE;
+                    ipCache.put(searchIP,data.flagged);
                 }
                 else if (result.getBody().contains(REQUEST_LIMIT))
                 {
