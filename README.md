@@ -64,6 +64,14 @@ On GCP Shell:
 For privileged keys that need to be publicly accessible, use the KeystoreDao. 
 
 ## Datastore
+Datastore retrieval Times:
+| Packets | Time in s |
+|---------|-----------|
+| 15,000  | ~0.5      |
+| 30,000  | ~0.9      |
+| 60,000  | ~1.8      |
+| 120,000 | ~4.2      |
+
 The Entity Properties for the two data objects stored:
 
 1. File Attributes
