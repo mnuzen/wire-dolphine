@@ -23,19 +23,19 @@ $(document).ready(async function () {
         if (data[i].flagged.toLowerCase() === "true") {
           row.setAttribute("id", "flagged");
           maliciousCount.Bad++;
+          
+          //Counts Location of IP's
+          if (locationMap.has(data[i].location)) {
+          locationMap.get(data[i].location).val++;
+          } else {
+          locationMap.set(data[i].location, {
+            val: 1
+          });
+          }
         }else if (data[i].flagged.toLowerCase() === "false") {
           maliciousCount.Good++;
         } else {
           maliciousCount.Unknown++;
-        }
-
-        //Counts Location of IP's
-        if (locationMap.has(data[i].location)) {
-          locationMap.get(data[i].location).val++;
-        } else {
-          locationMap.set(data[i].location, {
-            val: 1
-          });
         }
 
         row.innerHTML = "<td>" + data[i].destination + "</td> <td>" + data[i].domain +
