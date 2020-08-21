@@ -29,6 +29,7 @@ public class DatastoreCacheTest extends CacheTest {
             .setKVClass(Integer.class, CacheTestingClass.class)
             .setPolicy(Policy.MAXIMUM_SIZE)
             .setPolicyArgument(100)
+            .enableStatistics(true)
             .build();
   }
 

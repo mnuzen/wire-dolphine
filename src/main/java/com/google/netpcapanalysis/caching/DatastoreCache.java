@@ -83,7 +83,9 @@ public class DatastoreCache<K, V extends Serializable> implements Cache<K, V> {
       return null;
     }
 
-    hits++;
+    if (statistics) {
+      hits++;
+    }
     return res.value;
   }
 

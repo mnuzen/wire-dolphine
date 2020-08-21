@@ -15,6 +15,7 @@ public class MemoryCacheTest extends CacheTest {
             .setCacheType(CacheType.MEMORY)
             .setPolicy(Policy.MAXIMUM_SIZE)
             .setPolicyArgument(100)
+            .enableStatistics(true)
             .build();
   }
 }
