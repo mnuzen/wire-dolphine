@@ -1,6 +1,10 @@
 package com.google.netpcapanalysis.dao;
 
 import com.google.gson.Gson;
+import com.google.netpcapanalysis.caching.CacheBuilder;
+import com.google.netpcapanalysis.caching.CacheBuilder.CacheType;
+import com.google.netpcapanalysis.caching.CacheBuilder.Policy;
+import com.google.netpcapanalysis.interfaces.caching.Cache;
 import com.google.netpcapanalysis.interfaces.dao.ReverseDNSLookupDao;
 import com.google.netpcapanalysis.models.DNSRecord;
 import java.io.BufferedReader;
@@ -42,12 +46,23 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
   private static final String DNS_REGEX =
       "[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)(?=.\\s[0-9\\s]+)?";
   private Pattern dnsPattern;
+  private Cache<String, DNSRecord> cache;
 
   public ReverseDNSLookupDaoImpl() {
     dnsPattern = Pattern.compile(DNS_REGEX);
+    cache = new CacheBuilder<String, DNSRecord>()
+        .setCacheName("reversedns")
+        .setPolicy(Policy.MAXIMUM_SIZE)
+        .setPolicyArgument(5000)
+        .setCacheType(CacheType.MEMORY)
+        .build();
   }
 
   public DNSRecord lookup(String ip) {
+    DNSRecord cached;
+    if ((cached = cache.get(ip)) != null) {
+      return cached;
+    }
     try {
       String request = dnsRequest(ip);
       GoogleDNS res = new Gson().fromJson(request, GoogleDNS.class);
@@ -77,6 +92,7 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
       }
 
       rdns.setDomain(data);
+      cache.put(ip, rdns);
       return rdns;
     } catch (Exception e) {
       return null;

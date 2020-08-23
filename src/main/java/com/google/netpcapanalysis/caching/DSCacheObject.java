@@ -1,6 +1,7 @@
 package com.google.netpcapanalysis.caching;
 
 public class DSCacheObject<T> {
+
   public String key;
   public T value;
   public long expiration;

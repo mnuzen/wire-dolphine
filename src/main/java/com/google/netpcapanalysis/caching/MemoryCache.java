@@ -15,13 +15,17 @@ public class MemoryCache<K, V extends Serializable> implements Cache<K, V> {
 
   @Override
   public void put(K key, V data) {
-    if (key == null || data == null) throw new IllegalArgumentException("null value provided");
+    if (key == null || data == null) {
+      throw new IllegalArgumentException("null value provided");
+    }
     cache.put(key, data);
   }
 
   @Override
   public V get(K key) {
-    if (key == null) throw new IllegalArgumentException("null value provided");
+    if (key == null) {
+      throw new IllegalArgumentException("null value provided");
+    }
     return cache.getIfPresent(key);
   }
 
