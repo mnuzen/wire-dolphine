@@ -12,7 +12,6 @@ import com.google.netpcapanalysis.models.PCAPdata;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.models.Flagged;
 import com.google.netpcapanalysis.models.FileAttribute;
-import com.google.netpcapanalysis.models.MaliciousPacket;
 
 import java.util.Date;
 import java.util.ArrayList;
@@ -32,7 +31,6 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 public class PCAPDaoImpl implements PCAPDao {
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   private final String fileEntity= "File_Attributes";
-  private final String cacheEntity= "Malicious_IP_Cache";
 
   public PCAPDaoImpl() {
 
@@ -81,39 +79,6 @@ public class PCAPDaoImpl implements PCAPDao {
 
     datastore.put(pcapEntityAll);
 
-  }
-
-  public String searchMaliciousDB(String searchIP) {
-   
-    Filter propertyFilter =
-    new FilterPredicate("IP", FilterOperator.EQUAL, searchIP);
-    Query q = new Query(cacheEntity).setFilter(propertyFilter);
-    PreparedQuery pq = datastore.prepare(q);
-    List<Entity> result = pq.asList(FetchOptions.Builder.withLimit(1));
-
-    if(result.size() > 0){
-      String value = (String) result.get(0).getProperty("Flagged");
-
-      if(value.equalsIgnoreCase(Flagged.TRUE)){
-        return Flagged.TRUE;
-      }
-      else
-      {
-        return Flagged.FALSE;
-      }
-    }
-    else
-    {
-      return Flagged.UNKNOWN;
-    }
-  }
-
-  public void setMaliciousIPObjects(MaliciousPacket data) {
-    Entity Entity = new Entity(cacheEntity);
-   
-    Entity.setProperty("IP", data.ip);
-    Entity.setProperty("Flagged", data.flagged);
-    datastore.put(Entity);
   }
 
   private Entity getEntityAttribute(String searchEntity)

@@ -14,6 +14,7 @@ import org.junit.Test;
 public abstract class CacheTest {
 
   public static class CacheTestingClass implements Serializable {
+
     int x;
     int y;
     long z;
@@ -88,7 +89,7 @@ public abstract class CacheTest {
       cache.put(i, new CacheTestingClass(i));
     }
 
-   assertEquals(100, cache.getSize());
+    assertEquals(100, cache.getSize());
   }
 
   @Test
@@ -110,5 +111,42 @@ public abstract class CacheTest {
 
     cache.garbageCollect();
     assertNull(cache.get(0));
+  }
+
+  @Test
+  public void testHits() {
+    for (int i = 0; i < 100; i++) {
+      cache.put(i, new CacheTestingClass(i));
+      cache.get(i);
+    }
+
+    assertEquals(100, cache.hits());
+  }
+
+  @Test
+  public void testMisses() {
+    for (int i = 0; i < 100; i++) {
+      cache.get(i);
+    }
+
+    assertEquals(100, cache.misses());
+  }
+
+
+  @Test
+  public void testHitMiss() {
+    for (int i = 0; i < 100; i++) {
+      cache.get(i);
+    }
+    for (int i = 0; i < 100; i++) {
+      cache.put(i, new CacheTestingClass(2 * i));
+    }
+    cache.garbageCollect();
+    for (int i = 50; i < 150; i++) {
+      cache.get(i);
+    }
+
+    assertEquals(150, cache.misses());
+    assertEquals(50, cache.hits());
   }
 }
