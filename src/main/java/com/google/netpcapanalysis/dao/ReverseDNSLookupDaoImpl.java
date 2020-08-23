@@ -51,7 +51,6 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
     try {
       String request = dnsRequest(ip);
       GoogleDNS res = new Gson().fromJson(request, GoogleDNS.class);
-
       String data;
       DNSRecord rdns = new DNSRecord();
       if (res.Answer != null) {
@@ -62,6 +61,11 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
         rdns.setAuthority(true);
       } else {
         throw new Error("invalid dns request");
+        //large PCAP file produced this error
+        //Output of added print statements at time of error
+        //ip: 70.37.129.34
+        //res: {"Status": 2,"TC": false,"RD": true,"RA": true,"AD": false,"CD": false,"Question":[ {"name": "34.129.37.70.in-addr.arpa.","type": 12}],
+        // "Comment": "Unable to resolve query within internal deadline."}
       }
 
       Matcher m = dnsPattern.matcher(data);

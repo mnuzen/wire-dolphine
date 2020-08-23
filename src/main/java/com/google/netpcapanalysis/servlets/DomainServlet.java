@@ -8,6 +8,9 @@ import com.google.netpcapanalysis.interfaces.dao.ReverseDNSLookupDao;
 import com.google.netpcapanalysis.models.PCAPdata;
 import com.google.netpcapanalysis.models.DNSRecord;
 import com.google.netpcapanalysis.utils.NetUtils;
+import com.google.netpcapanalysis.utils.SessionManager;
+import com.google.netpcapanalysis.models.FileAttribute;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -38,8 +41,10 @@ public class DomainServlet extends HttpServlet {
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String id = NetUtils.getParameter(request, "PCAPId", "");
+    //String id = NetUtils.getParameter(request, "PCAPId", "");
+    String id = SessionManager.getSessionEntity(request);
     List<PCAPdata> analysis = this.pcapDao.getPCAPObjects(id);
+    FileAttribute entity = this.pcapDao.getFileAttribute(id);
 
     if (analysis == null) {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -50,7 +55,17 @@ public class DomainServlet extends HttpServlet {
     Map<String, Integer> cdnCount = new HashMap<>();
 
     for (PCAPdata pcap: analysis) {
-      DNSRecord record = this.reverseDNSLookupDao.lookup(pcap.destination);
+
+      String searchIP;
+      if(pcap.source.equals(entity.myIP))
+      {
+          searchIP = pcap.destination;
+      }
+      else{
+          searchIP = pcap.source;
+      }
+
+      DNSRecord record = this.reverseDNSLookupDao.lookup(searchIP);
       String hostname = record.getHostname();
       if (record.isServer()) {
         domainCount.put(hostname, domainCount.getOrDefault(hostname, 1));

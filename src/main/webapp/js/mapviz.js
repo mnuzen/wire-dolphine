@@ -22,7 +22,7 @@ async function getKey(key) {
   return await res.text();
 }
 
-async function loadMapVisualization(url = '/ipgeolocation?PCAPId=file_1') {
+async function loadMapVisualization(url = '/ipgeolocation') {
   const res = await fetch(url);
   const countryData = await res.json();
   const datatableHeader = [['Country', 'Requests Sent']];
