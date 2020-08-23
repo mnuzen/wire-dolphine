@@ -217,6 +217,69 @@
             </div>
           </div>
           <!-- End Bar Chart -->
+          <!-- Start Pie Charts -->  
+          <div class="row">
+            <!-- Donut Chart -->
+            <div class="col-xl-4 col-lg-5">
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Other Visualization</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                  <div class="chart-pie pt-4">
+                    <canvas id="OtherCharID"></canvas>
+                  </div>
+                  <hr>
+                  Lorem ipsum dolor sit, amet consectetur adipisicing elit. 
+                  Deserunt et iure laudantium enim! Dicta distinctio quia asperiores,
+                   omnis numquam expedita magnam sequi laborum.
+                </div>
+              </div>
+            </div>
+            
+          <!-- Donut Chart -->
+            <div class="col-xl-4 col-lg-5">
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">TCP Vs. UDP</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                  <div class="chart-pie pt-4">
+                    <canvas id="protocolPieChart"></canvas>
+                  </div>
+                  <hr>
+                 TCP and UDP are two fundamental protocols used to transmit data. 
+                 TCP packets retransmit themselves if a packet gets lost. 
+                 UDP packets don't retransmit themselves so they travel faster then TCP.
+                </div>
+              </div>
+            </div>
+
+            <!-- Donut Chart -->
+            <div class="col-xl-4 col-lg-5">
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Packet Traffic</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                  <div class="chart-pie pt-4">
+                    <canvas id="trafficPieChart"></canvas>
+                  </div>
+                  <hr>
+                  Most consumer network traffic is outgoing. This is because we often download
+                  files from the internet more often then we upload files. This is why ISP
+                  dedicate more bandwith to your download speed Vs. upload speed.
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End Pie Charts -->  
         </div>
         <!-- End of Main Content -->
         <!-- Footer -->
@@ -244,9 +307,9 @@
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
     <!-- Page level plugins -->
-    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
     <script src="vendor/chart.js/Chart.min.js"></script>
+    <script src="js/common.js"></script>
+    <script  src="js/charts/network.js"></script>
     <!-- PAGE LEVEL CUSTOM SCRIPTS -->
     <script src="js/bucket.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>

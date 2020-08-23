@@ -187,6 +187,64 @@
         <!-- Page Heading -->
         <h1 class="h3 mb-2 text-gray-800">View your packets</h1>
 
+        <div class="row">
+
+          <!-- Donut Chart -->
+          <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+              <!-- Card Header - Dropdown -->
+              <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Malicious IP's</h6>
+              </div>
+              <!-- Card Body -->
+              <div class="card-body">
+                <div class="chart-pie pt-4">
+                  <canvas id="maliciousPieChart"></canvas>
+                </div>
+                <hr>
+                What portion of Unique IP are Malicious 
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+              <!-- Card Header - Dropdown -->
+              <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Location</h6>
+              </div>
+              <!-- Card Body -->
+              <div class="card-body">
+                <div class="chart-pie pt-4">
+                  <canvas id="locationPieChart"></canvas>
+                </div>
+                <hr>
+                Most flagged IP's are comming from this location
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+              <!-- Card Header - Dropdown -->
+              <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Other graph
+                </h6>
+              </div>
+              <!-- Card Body -->
+              <div class="card-body">
+                <div class="chart-pie pt-4">
+                  <canvas id="otherPieChart"></canvas>
+                </div>
+                <hr>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                 Velit iure voluptatem itaque facere necessitatibus, dolore,
+              </div>
+            </div>
+          </div>
+        </div>
+
+
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
           <div class="card-header py-3">
@@ -197,10 +255,7 @@
               <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                   <tr>
-                    <th>Source</th>
-                    <th>Destination</th>
-                    <th>Protocol</th>
-                    <th>Size</th>
+                    <th>IP</th>
                     <th>Domain</th>
                     <th>Location</th>
                     <th>Flagged</th>
@@ -208,10 +263,7 @@
                 </thead>
                 <tfoot>
                   <tr>
-                    <th>Source</th>
-                    <th>Destination</th>
-                    <th>Protocol</th>
-                    <th>Size</th>
+                    <th>IP</th>
                     <th>Domain</th>
                     <th>Location</th>
                     <th>Flagged</th>
@@ -267,7 +319,7 @@
   <script src="js/common.js"></script>
   <script src="vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-  <script src="js/table.js"></script>
+  <script src="js/malicious.js"></script>
   <script src="vendor/chart.js/Chart.min.js"></script>
 
   <!-- Page level custom scripts -->

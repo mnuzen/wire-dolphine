@@ -5,22 +5,15 @@ $(document).ready(async function () {
 async function loadCharts() {
   let data = await loadData();
 
-  const maliciousCount = data[0];
-  const trafficCount = data[1];
-  const protocolCount = data[2];
+  const trafficCount = data[0];
+  const protocolCount = data[1];
 
   loadChart("protocolPieChart", Object.keys(protocolCount), Object.values(protocolCount),
-    ['#f6c23e', '#1cc88a', '#e74a3b', '#36b9cc', '#4e73df', '#858796'],
-    ['#DDA925', '#03AF71', '#CE3122', '#1DA0B3', '#355AC6', '#6C6E7D']);
+    ['#36b9cc','#f6c23e','#858796'],
+    ['#1DA0B3','#DDA925','#6C6E7D']);
 
   loadChart("trafficPieChart", Object.keys(trafficCount), Object.values(trafficCount),
     ['#4e73df', '#1cc88a'], ['#355AC6', '#03AF71']);
-
-
-  loadChart("maliciousPieChart", Object.keys(maliciousCount), Object.values(maliciousCount),
-    ['#e74a3b', '#1cc88a', '#36b9cc'],
-    ['#CE3122', '#03AF71', '#1DA0B3'], );
-
 }
 
 async function loadMyIP() {
@@ -39,40 +32,22 @@ async function loadData() {
 
   let userIP = await loadMyIP()
 
-  maliciousCount = {
-    Bad: 0,
-    Good: 0,
-    Unknown: 0
-  };
-
   trafficCount = {
     Incoming: 0,
     Outgoing: 0
   };
 
   protocolCount = {
-    HTTP: 0,
-    HTTPS: 0,
-    UDP: 0,
     TCP: 0,
-    DNS: 0,
+    UDP: 0,
     OTHER: 0 //add others that might be needed/add dynamically?
   };
  
-  await fetch('/data-table')
+  await fetch('/data')
     .then(response => response.json())
     .then((data) => {
       for (i in data) {
         
-        //malicious counter
-        if (data[i].flagged.toLowerCase() === "true") {
-          maliciousCount.Bad++;
-        } else if (data[i].flagged.toLowerCase() === "false") {
-          maliciousCount.Good++;
-        } else {
-          maliciousCount.Unknown++;
-        }
-
         //traffic counter
         if (data[i].source === userIP) {
           trafficCount.Outgoing++;
@@ -83,24 +58,12 @@ async function loadData() {
 
         //protocol counter
         switch (data[i].protocol.toLowerCase()) {
-          case "http":
-            protocolCount.HTTP++;
-            break;
-
-          case "https":
-            protocolCount.HTTPS++;
-            break;
-
-          case "udp":
+          case "tcp":
             protocolCount.UDP++;
             break;
 
-          case "tcp":
+          case "udp":
             protocolCount.TCP++;
-            break;
-
-          case "dns":
-            protocolCount.DNS++;
             break;
 
           default:
@@ -109,7 +72,7 @@ async function loadData() {
       }
     });
 
-    return [maliciousCount, trafficCount, protocolCount]
+    return [trafficCount, protocolCount]
 }
 
 function loadChart(chartID, chartLables = [], chartData = [], chartBColor = [], chartHColor = []) {
