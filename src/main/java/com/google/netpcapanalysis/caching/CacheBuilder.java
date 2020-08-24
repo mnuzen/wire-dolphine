@@ -32,9 +32,11 @@ public class CacheBuilder<K, V extends Serializable> {
 
   private boolean enableStatistics;
 
-  public CacheBuilder() {}
+  public CacheBuilder() {
+  }
 
-  public CacheBuilder(String cacheName, CacheType type, Policy policy, int evictionPolicyArg, boolean enableStatistics) {
+  public CacheBuilder(String cacheName, CacheType type, Policy policy, int evictionPolicyArg,
+      boolean enableStatistics) {
     this.type = type;
     this.cacheName = cacheName;
     this.policy = policy;
@@ -104,7 +106,9 @@ public class CacheBuilder<K, V extends Serializable> {
   }
 
   private DatastoreCache<K, V> buildDatastoreCache() {
-    if (keyClass == null || valClass == null) throw new NullPointerException("kv classes needed for datastore cache");
+    if (keyClass == null || valClass == null) {
+      throw new NullPointerException("kv classes needed for datastore cache");
+    }
 
     return new DatastoreCache<>(
         cacheName,
