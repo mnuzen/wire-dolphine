@@ -66,6 +66,7 @@ public class DomainServlet extends HttpServlet {
         records.put(searchIP, record);
       }
 
+      if (record == null) continue;
       String hostname = record.getHostname();
       if (record.isServer()) {
         domainCount.put(hostname, domainCount.getOrDefault(hostname, 1));
