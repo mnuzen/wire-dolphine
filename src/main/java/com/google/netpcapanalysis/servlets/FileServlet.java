@@ -38,7 +38,7 @@ public class FileServlet extends HttpServlet {
 
       SessionManager.setSessionEntity(request, file);
 
-      response.sendRedirect("/");
+      response.sendRedirect("/mapviz.html");
     }
 
 }
