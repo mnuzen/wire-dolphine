@@ -13,7 +13,6 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.Transaction;
 import com.google.appengine.api.datastore.TransactionOptions;
-import com.google.apphosting.datastore.DatastoreV4.PropertyFilter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.netpcapanalysis.caching.policy.EvictionPolicy;
