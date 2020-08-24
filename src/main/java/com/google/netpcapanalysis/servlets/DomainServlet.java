@@ -11,10 +11,12 @@ import com.google.netpcapanalysis.utils.NetUtils;
 import com.google.netpcapanalysis.utils.SessionManager;
 import com.google.netpcapanalysis.models.FileAttribute;
 
+import com.google.netpcapanalysis.utils.UtilityPCAP;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.servlet.ServletConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -33,10 +35,9 @@ public class DomainServlet extends HttpServlet {
   }
 
   /**
-   * @param request Requires query string with param `PCAPId`
-   * @param response response is a JSON
-   *                 with a `cdn` and `domain` keys containing
-   *                 {[hostname: string]: integer} JSON relating hostname to packet #
+   * @param request  Requires query string with param `PCAPId`
+   * @param response response is a JSON with a `cdn` and `domain` keys containing {[hostname:
+   *                 string]: integer} JSON relating hostname to packet #
    * @throws IOException
    */
   @Override
@@ -53,19 +54,22 @@ public class DomainServlet extends HttpServlet {
 
     Map<String, Integer> domainCount = new HashMap<>();
     Map<String, Integer> cdnCount = new HashMap<>();
+    Map<String, DNSRecord> records = new HashMap<>();
 
-    for (PCAPdata pcap: analysis) {
-
+    for (PCAPdata pcap : analysis) {
       String searchIP;
-      if(pcap.source.equals(entity.myIP))
-      {
-          searchIP = pcap.destination;
-      }
-      else{
-          searchIP = pcap.source;
+      if (pcap.source.equals(entity.myIP)) {
+        searchIP = pcap.destination;
+      } else {
+        searchIP = pcap.source;
       }
 
-      DNSRecord record = this.reverseDNSLookupDao.lookup(searchIP);
+      DNSRecord record;
+      if ((record = records.get(searchIP)) == null) {
+        record = this.reverseDNSLookupDao.lookup(searchIP);
+        records.put(searchIP, record);
+      }
+
       String hostname = record.getHostname();
       if (record.isServer()) {
         domainCount.put(hostname, domainCount.getOrDefault(hostname, 1));

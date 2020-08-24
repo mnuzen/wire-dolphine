@@ -53,10 +53,10 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
     cache =
         new CacheBuilder<String, DNSRecord>()
             .setCacheName("reversedns")
-            .setCacheType(CacheType.DATASTORE)
+            .setCacheType(CacheType.MEMORY)
             .setKVClass(String.class, DNSRecord.class)
             .setPolicy(Policy.MAXIMUM_SIZE)
-            .setPolicyArgument(100000)
+            .setPolicyArgument(10000)
             .enableStatistics(true)
             .build();
   }
