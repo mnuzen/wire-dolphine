@@ -3,22 +3,16 @@ package com.google.netpcapanalysis.caching;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
-import com.google.appengine.api.datastore.Transaction;
-import com.google.appengine.api.datastore.TransactionOptions;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.google.netpcapanalysis.caching.policy.EvictionPolicy;
 import com.google.netpcapanalysis.interfaces.caching.Cache;
 import java.io.Serializable;
-import java.lang.reflect.Type;
 import java.util.List;
 
 public class DatastoreCache<K, V extends Serializable> implements Cache<K, V> {

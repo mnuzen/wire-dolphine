@@ -43,6 +43,11 @@ On GCP Shell:
 - averaged 121 ms for 1000 requests, 8241.76 rps
 - averaged cached 222 ms w/ datashell for 1000 requests, 4504.50 rps
 
+## ReverseDNS
+
+on 150mbps internet / i7-9750h single thread
+- averaged cached 135 ms for 1000 requests, 7425.74 rps
+
 ## API limitations: 
 1. [Auth0 Signal API](https://auth0.com/signals/docs/)
     - 40,000 requests per day

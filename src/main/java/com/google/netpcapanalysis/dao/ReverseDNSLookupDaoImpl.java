@@ -1,5 +1,6 @@
 package com.google.netpcapanalysis.dao;
 
+import com.google.common.util.concurrent.RateLimiter;
 import com.google.gson.Gson;
 import com.google.netpcapanalysis.caching.CacheBuilder;
 import com.google.netpcapanalysis.caching.CacheBuilder.CacheType;
@@ -9,6 +10,7 @@ import com.google.netpcapanalysis.interfaces.dao.ReverseDNSLookupDao;
 import com.google.netpcapanalysis.models.DNSRecord;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -19,13 +21,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
-  private class GoogleDNS {
-    private class GoogleDNSQuestion {
+  private static class GoogleDNS {
+    private static class GoogleDNSQuestion {
       public String name;
       public Integer type;
     }
 
-    private class GoogleDNSAnswer {
+    private static class GoogleDNSAnswer {
       public String name;
       public Integer type;
       public Integer TTL;
@@ -43,6 +45,9 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
     public GoogleDNSAnswer[] Authority;
   }
 
+  private static final RateLimiter rateLimiter = RateLimiter.create(10000.0);
+  private static boolean dnsSwitch;
+
   private static final String DNS_REGEX =
       "[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)(?=.\\s[0-9\\s]+)?";
   private Pattern dnsPattern;
@@ -57,7 +62,6 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
             .setKVClass(String.class, DNSRecord.class)
             .setPolicy(Policy.MAXIMUM_SIZE)
             .setPolicyArgument(10000)
-            .enableStatistics(true)
             .build();
   }
 
@@ -78,12 +82,7 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
         data = res.Authority[res.Authority.length - 1].data;
         rdns.setAuthority(true);
       } else {
-        throw new Error("invalid dns request");
-        //large PCAP file produced this error
-        //Output of added print statements at time of error
-        //ip: 70.37.129.34
-        //res: {"Status": 2,"TC": false,"RD": true,"RA": true,"AD": false,"CD": false,"Question":[ {"name": "34.129.37.70.in-addr.arpa.","type": 12}],
-        // "Comment": "Unable to resolve query within internal deadline."}
+        return new DNSRecord(ip, true, false);
       }
 
       Matcher m = dnsPattern.matcher(data);
@@ -107,16 +106,21 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
   }
 
   public String dnsRequest(String ip) throws Exception {
+    rateLimiter.acquire(1);
     List<String> reverseIP = Arrays.asList(ip.split("\\."));
     Collections.reverse(reverseIP);
     String reverseIPString = String.join(".", reverseIP);
 
     StringBuilder sb = new StringBuilder();
-    URL url = new URL(String.format("https://dns.google.com/resolve?name=%s.in-addr.arpa&type=PTR", reverseIPString));
-    if(reverseIPString.contains(":")) {
-      url = new URL(String.format("https://dns.google.com/resolve?name=%s&type=PTR", reverseIPString));
+
+    URL url;
+    if (dnsSwitch) {
+      url = getGoogleURL(ip);
+    } else {
+      url = getCloudflareURL(ip);
     }
     URLConnection uc = url.openConnection();
+    uc.setRequestProperty("Accept", "application/dns-json");
     BufferedReader in = new BufferedReader(
         new InputStreamReader(
             uc.getInputStream()));
@@ -127,5 +131,23 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
     }
     in.close();
     return sb.toString();
+  }
+
+  private URL getGoogleURL(String ip) throws MalformedURLException {
+    dnsSwitch = !dnsSwitch;
+    URL url = new URL(String.format("https://dns.google.com/resolve?name=%s.in-addr.arpa&type=PTR", ip));
+    if(ip.contains(":")) {
+      url = new URL(String.format("https://dns.google.com/resolve?name=%s&type=PTR", ip));
+    }
+    return url;
+  }
+
+  private URL getCloudflareURL(String ip) throws MalformedURLException {
+    dnsSwitch = !dnsSwitch;
+    URL url = new URL(String.format("https://cloudflare-dns.com/dns-query?name=%s.in-addr.arpa&type=PTR", ip));
+    if(ip.contains(":")) {
+      url = new URL(String.format("https://cloudflare-dns.com/dns-query?name=%s&type=PTR", ip));
+    }
+    return url;
   }
 }
