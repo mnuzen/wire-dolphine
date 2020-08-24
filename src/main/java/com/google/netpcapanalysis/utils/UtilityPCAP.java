@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class UtilityPCAP {
@@ -80,7 +81,7 @@ public class UtilityPCAP {
         finalMap.put(outip, tempPCAP);
       }
     }
-    return (List<PCAPdata>) finalMap.values();
+    return (new ArrayList<PCAPdata>(finalMap.values()));
   }
 
 }
