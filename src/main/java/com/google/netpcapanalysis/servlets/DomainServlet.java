@@ -1,22 +1,18 @@
 package com.google.netpcapanalysis.servlets;
 
+import com.google.gson.Gson;
+import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.dao.ReverseDNSLookupDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
-import com.google.netpcapanalysis.dao.PCAPDaoImpl;
-import com.google.gson.Gson;
 import com.google.netpcapanalysis.interfaces.dao.ReverseDNSLookupDao;
-import com.google.netpcapanalysis.models.PCAPdata;
 import com.google.netpcapanalysis.models.DNSRecord;
-import com.google.netpcapanalysis.utils.NetUtils;
-import com.google.netpcapanalysis.utils.SessionManager;
 import com.google.netpcapanalysis.models.FileAttribute;
-
-import com.google.netpcapanalysis.utils.UtilityPCAP;
+import com.google.netpcapanalysis.models.PCAPdata;
+import com.google.netpcapanalysis.utils.SessionManager;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.servlet.ServletConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;

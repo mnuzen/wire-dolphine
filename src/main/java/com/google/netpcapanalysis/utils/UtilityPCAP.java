@@ -1,15 +1,13 @@
 package com.google.netpcapanalysis.utils;
 
 import com.google.netpcapanalysis.models.PCAPdata;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class UtilityPCAP {
 
@@ -24,11 +22,11 @@ public class UtilityPCAP {
 
       BigInteger no = new BigInteger(1, messageDigest);
 
-      String hashtext = no.toString(16);
+      StringBuilder hashtext = new StringBuilder(no.toString(16));
       while (hashtext.length() < 32) {
-        hashtext = "0" + hashtext;
+        hashtext.insert(0, "0");
       }
-      return hashtext;
+      return hashtext.toString();
     }
 
     // For specifying wrong message digest algorithms
@@ -39,8 +37,8 @@ public class UtilityPCAP {
 
   //Gets most use IP in PCAPdata
   static public String findMyIP(List<PCAPdata> allData) {
-    String myip = "";
-    HashMap<String, Integer> hm = new HashMap<String, Integer>();
+    String myip;
+    HashMap<String, Integer> hm = new HashMap<>();
     for (PCAPdata packet : allData) {
       // source
       if (hm.containsKey(packet.source)) {
@@ -64,9 +62,9 @@ public class UtilityPCAP {
 
   //Finds all unique IPs and sets myip to source
   static public List<PCAPdata> getUniqueIPs(List<PCAPdata> allData) {
-    HashMap<String, PCAPdata> finalMap = new HashMap<String, PCAPdata>();
+    HashMap<String, PCAPdata> finalMap = new HashMap<>();
     String myip = findMyIP(allData);
-    String outip = "";
+    String outip;
 
     for (PCAPdata packet : allData) {
       //swaps packet order based on myip
@@ -82,7 +80,7 @@ public class UtilityPCAP {
         finalMap.put(outip, tempPCAP);
       }
     }
-    return (new ArrayList<PCAPdata>(finalMap.values()));
+    return (List<PCAPdata>) finalMap.values();
   }
 
 }
