@@ -3,6 +3,7 @@ package com.google.netpcapanalysis.interfaces.dao;
 import java.util.ArrayList;
 import com.google.netpcapanalysis.models.PCAPdata;
 import java.net.InetAddress;
+import java.util.List;
 
 public interface GeolocationDao {
 
@@ -12,5 +13,5 @@ public interface GeolocationDao {
    * @return Returns case-sensitive (ie capitalized), otherwise "unknown" if country unknown
    */
   public String getCountry(InetAddress ip);
-  public ArrayList<PCAPdata> getLocation(ArrayList<PCAPdata> data);
+  public List<PCAPdata> getLocation(List<PCAPdata> data);
 }

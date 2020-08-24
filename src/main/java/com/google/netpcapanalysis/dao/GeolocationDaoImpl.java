@@ -12,9 +12,10 @@ import com.maxmind.geoip2.record.Country;
 import java.io.File;
 import java.net.InetAddress;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.List;
 
 public class GeolocationDaoImpl implements GeolocationDao {
+
   private static final String GEO_DB_LOCATION = "GeoLite2-City.mmdb";
   private File database;
   private DatabaseReader reader;
@@ -38,7 +39,7 @@ public class GeolocationDaoImpl implements GeolocationDao {
     }
   }
 
-  
+
   public String getCountry(InetAddress ip) {
     String result = cache.get(ip);
     if (result != null) {
@@ -57,12 +58,10 @@ public class GeolocationDaoImpl implements GeolocationDao {
     }
   }
 
-  public ArrayList<PCAPdata> getLocation(ArrayList<PCAPdata> data)
-  {
-    for (PCAPdata pcap: data) {
+  public List<PCAPdata> getLocation(List<PCAPdata> data) {
+    for (PCAPdata pcap : data) {
       try {
-        String country = getCountry(InetAddress.getByName(pcap.destination));
-        pcap.location = country;
+        pcap.location = getCountry(InetAddress.getByName(pcap.destination));
       } catch (Exception e) {
         pcap.location = "Unknown";
       }

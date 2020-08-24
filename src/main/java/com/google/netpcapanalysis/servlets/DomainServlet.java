@@ -1,16 +1,14 @@
 package com.google.netpcapanalysis.servlets;
 
+import com.google.gson.Gson;
+import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.dao.ReverseDNSLookupDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
-import com.google.netpcapanalysis.dao.PCAPDaoImpl;
-import com.google.gson.Gson;
 import com.google.netpcapanalysis.interfaces.dao.ReverseDNSLookupDao;
-import com.google.netpcapanalysis.models.PCAPdata;
 import com.google.netpcapanalysis.models.DNSRecord;
-import com.google.netpcapanalysis.utils.NetUtils;
-import com.google.netpcapanalysis.utils.SessionManager;
 import com.google.netpcapanalysis.models.FileAttribute;
-
+import com.google.netpcapanalysis.models.PCAPdata;
+import com.google.netpcapanalysis.utils.SessionManager;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -33,10 +31,9 @@ public class DomainServlet extends HttpServlet {
   }
 
   /**
-   * @param request Requires query string with param `PCAPId`
-   * @param response response is a JSON
-   *                 with a `cdn` and `domain` keys containing
-   *                 {[hostname: string]: integer} JSON relating hostname to packet #
+   * @param request  Requires query string with param `PCAPId`
+   * @param response response is a JSON with a `cdn` and `domain` keys containing {[hostname:
+   *                 string]: integer} JSON relating hostname to packet #
    * @throws IOException
    */
   @Override
@@ -53,19 +50,22 @@ public class DomainServlet extends HttpServlet {
 
     Map<String, Integer> domainCount = new HashMap<>();
     Map<String, Integer> cdnCount = new HashMap<>();
+    Map<String, DNSRecord> records = new HashMap<>();
 
-    for (PCAPdata pcap: analysis) {
-
+    for (PCAPdata pcap : analysis) {
       String searchIP;
-      if(pcap.source.equals(entity.myIP))
-      {
-          searchIP = pcap.destination;
-      }
-      else{
-          searchIP = pcap.source;
+      if (pcap.source.equals(entity.myIP)) {
+        searchIP = pcap.destination;
+      } else {
+        searchIP = pcap.source;
       }
 
-      DNSRecord record = this.reverseDNSLookupDao.lookup(searchIP);
+      DNSRecord record;
+      if ((record = records.get(searchIP)) == null) {
+        record = this.reverseDNSLookupDao.lookup(searchIP);
+        records.put(searchIP, record);
+      }
+
       String hostname = record.getHostname();
       if (record.isServer()) {
         domainCount.put(hostname, domainCount.getOrDefault(hostname, 1));

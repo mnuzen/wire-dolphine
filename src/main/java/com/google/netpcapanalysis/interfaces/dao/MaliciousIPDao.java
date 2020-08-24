@@ -1,11 +1,11 @@
 package com.google.netpcapanalysis.interfaces.dao;
 
 import com.google.netpcapanalysis.models.PCAPdata;
-import java.util.ArrayList;
+import java.util.List;
 
 public interface MaliciousIPDao {
 
-  public ArrayList<PCAPdata> run(ArrayList<PCAPdata> allData, String myIP);
+  public List<PCAPdata> run(List<PCAPdata> allData, String myIP);
   public PCAPdata isMalicious(PCAPdata data);
     
 }
