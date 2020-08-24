@@ -59,11 +59,11 @@ async function loadData() {
         //protocol counter
         switch (data[i].protocol.toLowerCase()) {
           case "tcp":
-            protocolCount.UDP++;
+            protocolCount.TCP++;
             break;
 
           case "udp":
-            protocolCount.TCP++;
+            protocolCount.UDP++;
             break;
 
           default:
