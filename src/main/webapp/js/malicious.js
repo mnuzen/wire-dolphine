@@ -14,25 +14,31 @@ $(document).ready(async function () {
 
       let locationMap = new Map()
       let locationList = [];
+      let freqList = [];
+      let freqMap = new Map()
 
       for (i in data) {
 
         var table = document.getElementById("table");
         var row = document.createElement("tr");
-        
+
         if (data[i].flagged.toLowerCase() === "true") {
           row.setAttribute("id", "flagged");
           maliciousCount.Bad++;
-          
+
+          freqMap.set(data[i].destination, {
+            freq: data[i].frequency
+          }); //maybe set key to domain
+
           //Counts Location of IP's
           if (locationMap.has(data[i].location)) {
-          locationMap.get(data[i].location).val++;
+            locationMap.get(data[i].location).val++;
           } else {
-          locationMap.set(data[i].location, {
-            val: 1
-          });
+            locationMap.set(data[i].location, {
+              val: 1
+            });
           }
-        }else if (data[i].flagged.toLowerCase() === "false") {
+        } else if (data[i].flagged.toLowerCase() === "false") {
           maliciousCount.Good++;
         } else {
           maliciousCount.Unknown++;
@@ -60,13 +66,33 @@ $(document).ready(async function () {
         }
       }
 
+      //Sorts hashmap by key and Top 5 freq
+      freqMap[Symbol.iterator] = function* () {
+        yield*[...this.entries()].sort(function (a, b) {
+          return +b[1] - +a[1]
+        });
+      }
+
+     index = 0;
+      for (let [key, value] of freqMap) {
+        freqList[key] = value.freq;
+        index++;
+        if (index == 5) {
+          break;
+        }
+      }
+
       loadChart("maliciousPieChart", Object.keys(maliciousCount), Object.values(maliciousCount),
         ['#e74a3b', '#1cc88a', '#36b9cc'],
         ['#CE3122', '#03AF71', '#1DA0B3'], );
 
       loadChart("locationPieChart", Object.keys(locationList), Object.values(locationList),
-        ['#858796', '#f6c23e', '#36b9cc','#1cc88a','#e74a3b'],
-        ['#6C6E7D', '#DDA925', '#1DA0B3','#03AF71','#CE3122'] );
+        ['#858796', '#f6c23e', '#36b9cc', '#1cc88a', '#e74a3b'],
+        ['#6C6E7D', '#DDA925', '#1DA0B3', '#03AF71', '#CE3122']);
+
+      loadChart("freqPieChart", Object.keys(freqList), Object.values(freqList),
+        ['#858796', '#f6c23e', '#36b9cc', '#1cc88a', '#e74a3b'],
+        ['#6C6E7D', '#DDA925', '#1DA0B3', '#03AF71', '#CE3122']);
 
       $("#dataTable").DataTable();
     },

@@ -75,9 +75,13 @@ public class UtilityPCAP {
         outip = packet.source;
       }
 
-      //puts data into map if not already there
-      if (!finalMap.containsKey(outip)) {
+      if (finalMap.containsKey(outip)) {
+        PCAPdata tempPCAP = finalMap.get(outip);
+        tempPCAP.frequency++;
+        finalMap.put(outip, tempPCAP);
+      }else{
         PCAPdata tempPCAP = new PCAPdata(myip, outip, packet.protocol, packet.size);
+        tempPCAP.frequency = 1;
         finalMap.put(outip, tempPCAP);
       }
     }
