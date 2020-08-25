@@ -12,6 +12,7 @@ import com.google.netpcapanalysis.dao.GeolocationDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.GeolocationDao;
 
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +27,7 @@ public class MaliciousServlet extends HttpServlet {
   private PCAPDao datastore = new PCAPDaoImpl();
   private MaliciousIPDao maliciousLookup = new MaliciousIPDaoImpl();
   private GeolocationDao geolocationDao = new GeolocationDaoImpl();
-  private ArrayList<PCAPdata> dataTable;
+  private List<PCAPdata> dataTable;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

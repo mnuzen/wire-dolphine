@@ -2,6 +2,7 @@ package com.google.netpcapanalysis.utils;
 
 import java.util.ArrayList;
 
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import com.google.appengine.repackaged.com.google.gson.Gson;
@@ -21,13 +22,13 @@ public class NetUtils {
     return value;
   }
 
-  static public String convertPCAPdataToJson(ArrayList<PCAPdata> data) {
+  static public String convertPCAPdataToJson(List<PCAPdata> data) {
     Gson gson = new Gson();
     String json = gson.toJson(data);
     return json;
   }
 
-  static public String convertFileToJson(ArrayList<FileAttribute> data) {
+  static public String convertFileToJson(List<FileAttribute> data) {
     Gson gson = new Gson();
     String json = gson.toJson(data);
     return json;
