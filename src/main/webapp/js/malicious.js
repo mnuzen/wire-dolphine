@@ -72,9 +72,8 @@ $(document).ready(async function () {
       }
 
       // sorts and splits freq
-      freqList.sort(function (a, b) {
-        return b.value - a.value
-      }).slice(0, 5);
+      freqList.sort(function(a, b){return b.value - a.value});
+      freqList=freqList.slice(0,5);
 
       freqKey = freqList.map(function (obj) {
         return obj.key;
@@ -97,6 +96,8 @@ $(document).ready(async function () {
         ['#FF588C', '#f6c23e', '#36b9cc', '#1cc88a', '#e74a3b'],
         ['#f63e72', '#DDA925', '#1DA0B3', '#03AF71', '#CE3122']);
 
+        console.log(goodPackets);
+        console.log(badPackets);
       loadChart("packetPieChart", ["Good", "Bad"], [goodPackets, badPackets],
         ['#858796', '#f6c23e'],
         ['#6C6E7D', '#DDA925']);

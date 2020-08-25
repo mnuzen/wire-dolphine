@@ -33,8 +33,8 @@ async function loadData() {
   let userIP = await loadMyIP()
 
   trafficCount = {
-    Incoming: 0,
-    Outgoing: 0
+    Downstream: 0,
+    Upstream: 0
   };
 
   protocolCount = {
@@ -50,10 +50,10 @@ async function loadData() {
         
         //traffic counter
         if (data[i].source === userIP) {
-          trafficCount.Outgoing++;
+          trafficCount.Upstream++;
         }
         else {
-          trafficCount.Incoming++;
+          trafficCount.Downstream++;
         }
 
         //protocol counter
