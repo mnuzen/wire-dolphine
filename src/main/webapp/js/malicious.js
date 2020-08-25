@@ -49,13 +49,16 @@ $(document).ready(async function () {
 
         table.appendChild(row);
       }
+    
 
+        
       //Sorts hashmap by key and Top 5 locations
       locationMap[Symbol.iterator] = function* () {
         yield*[...this.entries()].sort(function (a, b) {
           return +b[1] - +a[1]
         });
       }
+      
 
       let index = 0;
       for (let [key, value] of locationMap) {
@@ -66,14 +69,15 @@ $(document).ready(async function () {
         }
       }
 
-      //Sorts hashmap by key and Top 5 freq
+
+      //Sorts hashmap by key and Top 5 locations
       freqMap[Symbol.iterator] = function* () {
         yield*[...this.entries()].sort(function (a, b) {
           return +b[1] - +a[1]
         });
       }
 
-     index = 0;
+      index = 0;
       for (let [key, value] of freqMap) {
         freqList[key] = value.freq;
         index++;
@@ -81,6 +85,7 @@ $(document).ready(async function () {
           break;
         }
       }
+
 
       loadChart("maliciousPieChart", Object.keys(maliciousCount), Object.values(maliciousCount),
         ['#e74a3b', '#1cc88a', '#36b9cc'],
@@ -90,7 +95,7 @@ $(document).ready(async function () {
         ['#858796', '#f6c23e', '#36b9cc', '#1cc88a', '#e74a3b'],
         ['#6C6E7D', '#DDA925', '#1DA0B3', '#03AF71', '#CE3122']);
 
-      loadChart("freqPieChart", Object.keys(freqList), Object.values(freqList),
+      loadChart("freqPieChart", Object.keys(freqList), Object.values(freqList), //doesnt seem to be sorting top 5 properly
         ['#858796', '#f6c23e', '#36b9cc', '#1cc88a', '#e74a3b'],
         ['#6C6E7D', '#DDA925', '#1DA0B3', '#03AF71', '#CE3122']);
 
