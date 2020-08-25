@@ -99,8 +99,8 @@ $(document).ready(async function () {
         console.log(goodPackets);
         console.log(badPackets);
       loadChart("packetPieChart", ["Good", "Bad"], [goodPackets, badPackets],
-        ['#858796', '#f6c23e'],
-        ['#6C6E7D', '#DDA925']);
+        ['#1cc88a', '#e74a3b'],
+        ['#03AF71', '#CE3122']);
 
       $("#dataTable").DataTable();
     },

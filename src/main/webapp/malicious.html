@@ -56,56 +56,56 @@
       <hr class="sidebar-divider my-0">
 
       <!-- Nav Item - Dashboard -->
-        <li class="nav-item">
+      <li class="nav-item">
         <a class="nav-link" href="index.html">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Home Page</span></a>
-        </li>
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Home Page</span></a>
+      </li>
 
-        <!-- Divider -->
-        <hr class="sidebar-divider">
+      <!-- Divider -->
+      <hr class="sidebar-divider">
 
-        <!-- Heading -->
-        <div class="sidebar-heading">
+      <!-- Heading -->
+      <div class="sidebar-heading">
         Explore Your Data
-        </div>
+      </div>
 
-        <!-- Nav Item - Load -->
-        <li class="nav-item">
+      <!-- Nav Item - Load -->
+      <li class="nav-item">
         <a class="nav-link" href="files.html">
-            <i class="fas fa-fw fa-file"></i>
-            <span>Load a File</span></a>
-        </li>
-        <!-- Nav Item - Map -->
-        <li class="nav-item">
+          <i class="fas fa-fw fa-file"></i>
+          <span>Load a File</span></a>
+      </li>
+      <!-- Nav Item - Map -->
+      <li class="nav-item">
         <a class="nav-link" href="/mapviz.html">
-            <i class="fas fa-fw fa-globe-americas"></i>
-            <span>Where are your requests going?</span></a>
-        </li>
-        <!-- Nav Item - Domain -->
-        <li class="nav-item">
+          <i class="fas fa-fw fa-globe-americas"></i>
+          <span>Where are your requests going?</span></a>
+      </li>
+      <!-- Nav Item - Domain -->
+      <li class="nav-item">
         <a class="nav-link" href="/domains.html">
-            <i class="fas fa-fw fa-satellite"></i>
-            <span>Who are you sending to?</span></a>
-        </li>
-        <!-- Nav Item - Table -->
-        <li class="nav-item">
-          <a class="nav-link" href="/malicious.html"> 
-              <i class="fas fa-fw fa-table"></i>
-              <span>What do your packets look like?</span></a>
-          </li>
-        <!-- Nav Item - Network -->
-        <li class="nav-item">
+          <i class="fas fa-fw fa-satellite"></i>
+          <span>Who are you sending to?</span></a>
+      </li>
+      <!-- Nav Item - Table -->
+      <li class="nav-item">
+        <a class="nav-link" href="/malicious.html">
+          <i class="fas fa-fw fa-table"></i>
+          <span>What do your packets look like?</span></a>
+      </li>
+      <!-- Nav Item - Network -->
+      <li class="nav-item">
         <a class="nav-link" href="/network.html">
-            <i class="fas fa-fw fa-project-diagram"></i>
-            <span>What does your network look like?</span></a>
-        </li>
-        <!-- Nav Item - bucket -->
-        <li class="nav-item">
+          <i class="fas fa-fw fa-project-diagram"></i>
+          <span>What does your network look like?</span></a>
+      </li>
+      <!-- Nav Item - bucket -->
+      <li class="nav-item">
         <a class="nav-link" href="/bucket.html">
-            <i class="fas fa-fw fa-chart-bar"></i>
-            <span>How are your packets distributed?</span></a>
-        </li>
+          <i class="fas fa-fw fa-chart-bar"></i>
+          <span>How are your packets distributed?</span></a>
+      </li>
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
 
@@ -155,21 +155,21 @@
 
           <!-- Nav Item - User Information -->
           <li class="nav-item dropdown no-arrow">
-              <a href="/domain.html" class="btn btn-primary btn-icon-split mr-2">
-                    <span class="icon text-white-50">
-                      <i class="fas fa-arrow-left"></i>
-                    </span>
-                <span class="text">Previous</span>
-              </a>
-              <a href="/network.html" class="btn btn-success btn-icon-split">
-                  <span class="text">Next</span>
+            <a href="/domain.html" class="btn btn-primary btn-icon-split mr-2">
+              <span class="icon text-white-50">
+                <i class="fas fa-arrow-left"></i>
+              </span>
+              <span class="text">Previous</span>
+            </a>
+            <a href="/network.html" class="btn btn-success btn-icon-split">
+              <span class="text">Next</span>
 
-                  <span class="icon text-white-50">
-                      <i class="fas fa-arrow-right"></i>
-                    </span>
-                </a>
-              </a>
-            </li>
+              <span class="icon text-white-50">
+                <i class="fas fa-arrow-right"></i>
+              </span>
+            </a>
+            </a>
+          </li>
         </ul>
       </nav>
       <!-- End of Topbar -->
@@ -184,7 +184,7 @@
         <div class="row">
 
           <!-- Donut Chart -->
-          <div class="col-xl-4 col-lg-5">
+          <div class="col-xl-6 col-lg-5">
             <div class="card shadow mb-4">
               <!-- Card Header - Dropdown -->
               <div class="card-header py-3">
@@ -196,16 +196,13 @@
                   <canvas id="maliciousPieChart"></canvas>
                 </div>
                 <hr>
-               There are several reason why an IP address may get flagged.
-               Such as for spam, denial of service attacks, and phishing. 
-               IP address in the Private Network range are also returned 
-               as flagged howevery these connects may not be malicious if
-               you are access information on from a device on your local network.
+                There are several reason why an IP address may get flagged.
+                Such as for spam, denial of service attacks, and phishing.
               </div>
             </div>
           </div>
 
-          <div class="col-xl-4 col-lg-5">
+          <div class="col-xl-6 col-lg-5">
             <div class="card shadow mb-4">
               <!-- Card Header - Dropdown -->
               <div class="card-header py-3">
@@ -218,13 +215,14 @@
                   <canvas id="packetPieChart"></canvas>
                 </div>
                 <hr>
-                What percentage of your total network traffic is made up of 
-                malicious packets?
+                What percentage of your total network traffic is made up of
+                malicious packets and is there a correlation with the number 
+                of flagged IPs?
               </div>
             </div>
           </div>
 
-          <div class="col-xl-4 col-lg-5">
+          <div class="col-xl-6 col-lg-5">
             <div class="card shadow mb-4">
               <!-- Card Header - Dropdown -->
               <div class="card-header py-3">
@@ -238,13 +236,13 @@
                 <hr>
                 Of the IP's that where found the be malicious,
                 a breakdown by location can be seen. This can give
-                you and idea of what locations are generating the 
+                you and idea of what locations are generating the
                 most malicious traffic for you.
               </div>
             </div>
           </div>
 
-          <div class="col-xl-4 col-lg-5">
+          <div class="col-xl-6 col-lg-5">
             <div class="card shadow mb-4">
               <!-- Card Header - Dropdown -->
               <div class="card-header py-3">
@@ -257,8 +255,9 @@
                   <canvas id="freqPieChart"></canvas>
                 </div>
                 <hr>
-                The number of packets a flagged IP is generating can illustrate
-                how much of your traffic is being taken up by malicious sources.
+                A breakdown of flagged IP packets can showes which IP are
+                gennerating the most malicious content. The domain names can
+                give you an idea of which services are being flagged.
               </div>
             </div>
           </div>
