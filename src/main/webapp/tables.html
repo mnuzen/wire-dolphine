@@ -82,6 +82,12 @@
             <i class="fas fa-fw fa-globe-americas"></i>
             <span>Where are your requests going?</span></a>
         </li>
+        <!-- Nav Item - Domain -->
+        <li class="nav-item">
+        <a class="nav-link" href="/domains.html">
+            <i class="fas fa-fw fa-satellite"></i>
+            <span>Who are you sending to?</span></a>
+        </li>
         <!-- Nav Item - Network -->
         <li class="nav-item">
         <a class="nav-link" href="/network.html">
@@ -99,12 +105,6 @@
         <a class="nav-link" href="/bucket.html">
             <i class="fas fa-fw fa-chart-bar"></i>
             <span>How are your packets distributed?</span></a>
-        </li>
-        <!-- Nav Item - Domain -->
-        <li class="nav-item">
-        <a class="nav-link" href="/domains.html">
-            <i class="fas fa-fw fa-satellite"></i>
-            <span>Who are you sending to?</span></a>
         </li>
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
@@ -196,7 +196,11 @@
                   <canvas id="maliciousPieChart"></canvas>
                 </div>
                 <hr>
-                What portion of Unique IP are Malicious 
+               There are several reason why an IP address may get flagged.
+               Such as for spam, denial of service attacks, and phishing. 
+               IP address in the Private Network range are also returned 
+               as flagged howevery these connects may not be malicious if
+               you are access information on from a device on your local network.
               </div>
             </div>
           </div>
@@ -213,7 +217,10 @@
                   <canvas id="locationPieChart"></canvas>
                 </div>
                 <hr>
-                Most flagged IP's are comming from this location
+                Of the IP's that where found the be malicious,
+                a breakdown by location can be seen. This can give
+                you and idea of what locations are generating the 
+                most malicious traffic for you.
               </div>
             </div>
           </div>
@@ -222,20 +229,21 @@
             <div class="card shadow mb-4">
               <!-- Card Header - Dropdown -->
               <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Other graph
+                <h6 class="m-0 font-weight-bold text-primary"># of Packets per Flagged IP
                 </h6>
               </div>
               <!-- Card Body -->
               <div class="card-body">
                 <div class="chart-pie pt-4">
-                  <canvas id="otherPieChart"></canvas>
+                  <canvas id="freqPieChart"></canvas>
                 </div>
                 <hr>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                 Velit iure voluptatem itaque facere necessitatibus, dolore,
+                The number of packets a flagged IP is generating can illustrate
+                how much of your traffic is being taken up by malicious sources.
               </div>
             </div>
           </div>
+
         </div>
 
 

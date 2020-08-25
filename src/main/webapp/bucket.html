@@ -1,291 +1,301 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>IP Visualization</title>
-    <!-- Custom fonts for this template-->
-    <link href="js/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-    <!-- Custom styles for this template-->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="css/bucket.css" rel="stylesheet">
-  </head>
-  <body id="page-top">
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-      <!-- Sidebar -->
-      <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-        <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-          <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
-          </div>
-          <div class="sidebar-brand-text mx-3">PCAP Analyzer</div>
-        </a>
-        <!-- Divider -->
-        <hr class="sidebar-divider my-0">
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item">
-          <a class="nav-link" href="index.html">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>IP Visualization</title>
+  <!-- Custom fonts for this template-->
+  <link href="js/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
+  <!-- Custom styles for this template-->
+  <link href="css/sb-admin-2.min.css" rel="stylesheet">
+  <link href="css/bucket.css" rel="stylesheet">
+</head>
+
+<body id="page-top">
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <div class="sidebar-brand-icon rotate-n-15">
+          <i class="fas fa-laugh-wink"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">PCAP Analyzer</div>
+      </a>
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item">
+        <a class="nav-link" href="index.html">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Home Page</span></a>
-        </li>
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-        <!-- Heading -->
-        <div class="sidebar-heading">
-          Explore Your Data
-        </div>
-        <!-- Nav Item - Load -->
-        <li class="nav-item">
-          <a class="nav-link" href="files.html">
+      </li>
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Explore Your Data
+      </div>
+      <!-- Nav Item - Load -->
+      <li class="nav-item">
+        <a class="nav-link" href="files.html">
           <i class="fas fa-fw fa-file"></i>
           <span>Load a File</span></a>
-        </li>
-        <!-- Nav Item - Map -->
-        <li class="nav-item">
-          <a class="nav-link" href="/mapviz.html">
+      </li>
+      <!-- Nav Item - Map -->
+      <li class="nav-item">
+        <a class="nav-link" href="/mapviz.html">
           <i class="fas fa-fw fa-globe-americas"></i>
           <span>Where are your requests going?</span></a>
-        </li>
-        <!-- Nav Item - Network -->
-        <li class="nav-item">
-          <a class="nav-link" href="/network.html">
-          <i class="fas fa-fw fa-project-diagram"></i>
-          <span>What does your network look like?</span></a>
-        </li>
-        <!-- Nav Item - Table -->
-        <li class="nav-item">
-          <a class="nav-link" href="/tables.html">
-          <i class="fas fa-fw fa-table"></i>
-          <span>What do your packets look like?</span></a>
-        </li>
-        <!-- Nav Item - bucket -->
-        <li class="nav-item active">
-          <a class="nav-link" href="/bucket.html">
-          <i class="fas fa-fw fa-chart-bar"></i>
-          <span>How are your packets distributed?</span></a>
-        <!-- Nav Item - Domain -->
-        <li class="nav-item">
-          <a class="nav-link" href="/domains.html">
+      </li>
+      <!-- Nav Item - Domain -->
+      <li class="nav-item">
+        <a class="nav-link" href="/domains.html">
           <i class="fas fa-fw fa-satellite"></i>
           <span>Who are you sending to?</span></a>
-        </li>
+      </li>
+      <!-- Nav Item - Network -->
+      <li class="nav-item">
+        <a class="nav-link" href="/network.html">
+          <i class="fas fa-fw fa-project-diagram"></i>
+          <span>What does your network look like?</span></a>
+      </li>
+      <!-- Nav Item - Table -->
+      <li class="nav-item">
+        <a class="nav-link" href="/tables.html">
+          <i class="fas fa-fw fa-table"></i>
+          <span>What do your packets look like?</span></a>
+      </li>
+      <!-- Nav Item - bucket -->
+      <li class="nav-item active">
+        <a class="nav-link" href="/bucket.html">
+          <i class="fas fa-fw fa-chart-bar"></i>
+          <span>How are your packets distributed?</span></a>
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
         <!-- Sidebar Toggler (Sidebar) -->
         <div class="text-center d-none d-md-inline">
           <button class="rounded-circle border-0" id="sidebarToggle"></button>
         </div>
-      </ul>
-      <!-- End of Sidebar -->
-      <!-- Content Wrapper -->
-      <div id="content-wrapper" class="d-flex flex-column">
-        <!-- Topbar -->
-        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-          <!-- Sidebar Toggle (Topbar) -->
-          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+    </ul>
+    <!-- End of Sidebar -->
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+      <!-- Topbar -->
+      <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+        <!-- Sidebar Toggle (Topbar) -->
+        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
           <i class="fa fa-bars"></i>
-          </button>
-          <!-- Topbar Navbar -->
-          <ul class="navbar-nav ml-auto">
-            <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-            <li class="nav-item dropdown no-arrow d-sm-none">
-              <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        </button>
+        <!-- Topbar Navbar -->
+        <ul class="navbar-nav ml-auto">
+          <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+          <li class="nav-item dropdown no-arrow d-sm-none">
+            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
               <i class="fas fa-search fa-fw"></i>
-              </a>
-              <!-- Dropdown - Messages -->
-              <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
-                <form class="form-inline mr-auto w-100 navbar-search">
-                  <div class="input-group">
-                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                      <button class="btn btn-primary" type="button">
+            </a>
+            <!-- Dropdown - Messages -->
+            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+              aria-labelledby="searchDropdown">
+              <form class="form-inline mr-auto w-100 navbar-search">
+                <div class="input-group">
+                  <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                    aria-label="Search" aria-describedby="basic-addon2">
+                  <div class="input-group-append">
+                    <button class="btn btn-primary" type="button">
                       <i class="fas fa-search fa-sm"></i>
-                      </button>
-                    </div>
+                    </button>
                   </div>
-                </form>
-              </div>
-            </li>
-            <!-- Nav Item - User Information -->
-            <li class="nav-item dropdown no-arrow">
-              <a href="/tables.html" class="btn btn-primary btn-icon-split mr-2">
+                </div>
+              </form>
+            </div>
+          </li>
+          <!-- Nav Item - User Information -->
+          <li class="nav-item dropdown no-arrow">
+            <a href="/tables.html" class="btn btn-primary btn-icon-split mr-2">
               <span class="icon text-white-50">
-              <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-left"></i>
               </span>
               <span class="text">Previous</span>
-              </a>
-              <a href="/domains.html" class="btn btn-success btn-icon-split">
-              <span class="text">Next</span>
-              <span class="icon text-white-50">
-              <i class="fas fa-arrow-right"></i>
-              </span>
-              </a>
-            </li>
-          </ul>
-        </nav>
-        <!-- End of Topbar -->
-        <!-- Main Content -->
-        <div class="container-fluid">
-          <!-- Page Heading -->
-          <h1>Bucket Visualizations</h1>
-          <div class="row">
-            <!--start ip row-->
-            <div class="col-xl-8 col-lg-7">
-              <!-- start info card-->
-              <div class="card mb-4">
-                <div class="card-header">
-                  <b>IP Addresses</b>
-                </div>
-                <div class="card-body">
-                  An Internet Protocol address (or IP address) is the name associated with a device that's connected to a network. 
-                  Think of IP addresses as a sort of network ID; packets are sent and received from IP addresses in the same way 
-                  mail is sent and received from different home addresses. IPv4 addresses, which consist of four bytes of numbers, 
-                  are sorted into one of five classes: Class A, Class B, Class C, Class D, and Class E. 
-                  </br></br>
-                  <center><img style="width: 25rem; float:center" src="img/workspace.svg" alt=""> </center>
-                </div>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- End of Topbar -->
+      <!-- Main Content -->
+      <div class="container-fluid">
+        <!-- Page Heading -->
+        <h1>Bucket Visualizations</h1>
+        <div class="row">
+          <!--start ip row-->
+          <div class="col-xl-8 col-lg-7">
+            <!-- start info card-->
+            <div class="card mb-4">
+              <div class="card-header">
+                <b>IP Addresses</b>
               </div>
-            </div>
-            <!-- end info card-->
-            <div class="col-xl-4 col-lg-5">
-              <!--start layers-->
-              <div class="card bg-primary text-white shadow">
-                <div class="card-body">
-                  Class A
-                  <div class="text-white small">1.0.0.0 to 126.255.255.255</div>
-                </div>
-              </div>
-              <div class="card bg-info text-white shadow">
-                <div class="card-body">
-                  Class B
-                  <div class="text-white small">128.0.0.0 to 191.255.255.255</div>
-                </div>
-              </div>
-              <div class="card bg-success text-white shadow">
-                <div class="card-body">
-                  Class C
-                  <div class="text-white small">192.0.0.0 to 223.255.255.255</div>
-                </div>
-              </div>
-              <div class="card bg-secondary text-white shadow">
-                <div class="card-body">
-                  Class D
-                  <div class="text-white small">224.0.0.0 to 239.255.255.255</div>
-                </div>
-              </div>
-              <div class="card bg-dark text-white shadow">
-                <div class="card-body">
-                  Class E
-                  <div class="text-white small">240.0.0.0 to 254.255.255.255</div>
-                </div>
-              </div>
-            </div>
-            <!--end layers-->
-          </div>
-          <!--end ip row-->
-          </br></br>
-          <p class="mb-4">
-            Different classes are assigned to different types of users. Class A typically serves 
-            large companies and organizations, while Class B serves smaller ones. Class C is typically 
-            used by private, individual users. Class D is reserved for mutlicasting while Class E is reserved for special future
-            purposes.Take a look at your file data and see how the addresses you connect to are distributed across the classes and addresses.
-          </p>
-          <center><button onclick="drawVisualization()">Visualize Packet Class and Distribution</button></center>
-          <br/><br/>
-          <!-- Bar Chart -->
-          <div class="card shadow mb-4">
-            <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">IP Prefixes and their Packets</h6>
-            </div>
-            <div class="card-body">
-              <div class="chart-bar">
-                <canvas id="IPVis"></canvas>
+              <div class="card-body">
+                An Internet Protocol address (or IP address) is the name associated with a device that's connected to a
+                network.
+                Think of IP addresses as a sort of network ID; packets are sent and received from IP addresses in the
+                same way
+                mail is sent and received from different home addresses. IPv4 addresses, which consist of four bytes of
+                numbers,
+                are sorted into one of five classes: Class A, Class B, Class C, Class D, and Class E.
+                </br></br>
+                <img style="width: 25rem; display: block; margin-left: auto; margin-right: auto" src="img/workspace.svg"
+                  alt="">
               </div>
             </div>
           </div>
-          <!-- End Bar Chart -->
-          
-          <!-- Start Pie Charts -->  
-          <div class="row">
-          <!-- Donut Chart -->
-            <div class="col-lg-6 mb-4">
-              <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">TCP Vs. UDP</h6>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
-                  <div class="chart-pie pt-4">
-                    <canvas id="protocolPieChart"></canvas>
-                  </div>
-                  <hr>
-                 TCP and UDP are two fundamental protocols used to transmit data. 
-                 TCP packets retransmit themselves if a packet gets lost. 
-                 UDP packets don't retransmit themselves so they travel faster then TCP.
-                </div>
+          <!-- end info card-->
+          <div class="col-xl-4 col-lg-5">
+            <!--start layers-->
+            <div class="card bg-primary text-white shadow">
+              <div class="card-body">
+                Class A
+                <div class="text-white small">1.0.0.0 to 126.255.255.255</div>
               </div>
             </div>
-
-            <!-- Donut Chart -->
-            <div class="col-lg-6 mb-4">
-              <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Packet Traffic</h6>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
-                  <div class="chart-pie pt-4">
-                    <canvas id="trafficPieChart"></canvas>
-                  </div>
-                  <hr>
-                  Most consumer network traffic is outgoing. This is because we often download
-                  files from the internet more often then we upload files. This is why ISP
-                  dedicate more bandwith to your download speed Vs. upload speed.
-                </div>
+            <div class="card bg-info text-white shadow">
+              <div class="card-body">
+                Class B
+                <div class="text-white small">128.0.0.0 to 191.255.255.255</div>
+              </div>
+            </div>
+            <div class="card bg-success text-white shadow">
+              <div class="card-body">
+                Class C
+                <div class="text-white small">192.0.0.0 to 223.255.255.255</div>
+              </div>
+            </div>
+            <div class="card bg-secondary text-white shadow">
+              <div class="card-body">
+                Class D
+                <div class="text-white small">224.0.0.0 to 239.255.255.255</div>
+              </div>
+            </div>
+            <div class="card bg-dark text-white shadow">
+              <div class="card-body">
+                Class E
+                <div class="text-white small">240.0.0.0 to 254.255.255.255</div>
               </div>
             </div>
           </div>
-          <!-- End Pie Charts -->  
+          <!--end layers-->
         </div>
-        <!-- End of Main Content -->
-        <!-- Footer -->
-        <footer class="sticky-footer bg-white">
-          <div class="container my-auto">
-            <div class="copyright text-center my-auto">
-              <span>Made with <i class="fa fa-heart" aria-hidden="true"></i> in America</span>
+        <!--end ip row-->
+        </br></br>
+        <p class="mb-4">
+          Different classes are assigned to different types of users. Class A typically serves
+          large companies and organizations, while Class B serves smaller ones. Class C is typically
+          used by private, individual users. Class D is reserved for mutlicasting while Class E is reserved for
+          special future
+          purposes.Take a look at your file data and see how the addresses you connect to are distributed across the
+          classes and addresses.
+        </p>
+        <div style="text-align:center;">
+          <button class="" onclick="drawVisualization()">Visualize Packet Class and Distribution</button>
+          <br /><br />
+        </div>
+        <!-- Bar Chart -->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">IP Prefixes and their Packets</h6>
+          </div>
+          <div class="card-body">
+            <div class="chart-bar">
+              <canvas id="IPVis"></canvas>
             </div>
           </div>
-        </footer>
-        <!-- End of Footer -->
+        </div>
+        <!-- End Bar Chart -->
+
+        <!-- Start Pie Charts -->
+        <div class="row">
+          <!-- Donut Chart -->
+          <div class="col-lg-6 mb-4">
+            <div class="card shadow mb-4">
+              <!-- Card Header - Dropdown -->
+              <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">TCP Vs. UDP</h6>
+              </div>
+              <!-- Card Body -->
+              <div class="card-body">
+                <div class="chart-pie pt-4">
+                  <canvas id="protocolPieChart"></canvas>
+                </div>
+                <hr>
+                TCP and UDP are two fundamental protocols used to transmit data.
+                TCP packets provide reliable delivery and transmission (HTTP, FTP).
+                UDP packets are used where latency is more imporant than reliablity (VoIP, Music Streaming).
+              </div>
+            </div>
+          </div>
+
+          <!-- Donut Chart -->
+          <div class="col-lg-6 mb-4">
+            <div class="card shadow mb-4">
+              <!-- Card Header - Dropdown -->
+              <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Up Vs. Downsteam Packet Traffic</h6>
+              </div>
+              <!-- Card Body -->
+              <div class="card-body">
+                <div class="chart-pie pt-4">
+                  <canvas id="trafficPieChart"></canvas>
+                </div>
+                <hr>
+                Most consumer network traffic is downstream. This is because we often download
+                files from the internet more often then we upload files. This is why ISP
+                dedicate more bandwith to your downstream traffic Vs. upstream traffic.
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Pie Charts -->
       </div>
-      <!-- End of Content Wrapper -->
+      <!-- End of Main Content -->
+      <!-- Footer -->
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Made with <i class="fa fa-heart" aria-hidden="true"></i> in America</span>
+          </div>
+        </div>
+      </footer>
+      <!-- End of Footer -->
     </div>
-    <!-- End of Page Wrapper -->
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
+    <!-- End of Content Wrapper -->
+  </div>
+  <!-- End of Page Wrapper -->
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
-    </a>
-    <!-- Bootstrap core JavaScript-->
-    <script src="js/vendor/jquery/jquery.min.js"></script>
-    <script src="js/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- Core plugin JavaScript-->
-    <script src="js/vendor/jquery-easing/jquery.easing.min.js"></script>
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
-    <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
-    <script src="js/common.js"></script>
-    <script  src="js/charts/network.js"></script>
-    <!-- PAGE LEVEL CUSTOM SCRIPTS -->
-    <script src="js/bucket.js"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  </body>
+  </a>
+  <!-- Bootstrap core JavaScript-->
+  <script src="js/vendor/jquery/jquery.min.js"></script>
+  <script src="js/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Core plugin JavaScript-->
+  <script src="js/vendor/jquery-easing/jquery.easing.min.js"></script>
+  <!-- Custom scripts for all pages-->
+  <script src="js/sb-admin-2.min.js"></script>
+  <!-- Page level plugins -->
+  <script src="vendor/chart.js/Chart.min.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/charts/network.js"></script>
+  <!-- PAGE LEVEL CUSTOM SCRIPTS -->
+  <script src="js/bucket.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</body>
+
 </html>
