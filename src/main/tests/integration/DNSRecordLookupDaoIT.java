@@ -1,4 +1,4 @@
-package integration;
+package dao;
 
 import static org.junit.Assert.assertEquals;
 
@@ -10,7 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class DNSRecordLookupDaoIT {
+public class DNSRecordLookupDaoImplTest {
   public static ReverseDNSLookupDao dns;
 
   private final LocalServiceTestHelper helper =
@@ -35,54 +35,54 @@ public class DNSRecordLookupDaoIT {
 
   @Test
   public void testGoogle() {
-    checkDns("172.217.14.206", "1e100.net");
+    checkDns("172.217.14.206", "sea30s01-in-f14.1e100.net");
   }
 
   @Test
   public void testReddit() {
-    checkDns("72.247.244.88", "akamaitechnologies.com");
+    checkDns("72.247.244.88", "a72-247-244-88.deploy.static.akamaitechnologies.com");
   }
 
   @Test
   public void testImgur() {
-    checkDns("173.231.140.219", "voxel.net");
+    checkDns("173.231.140.219", "hostmaster.voxel.net");
   }
 
   @Test
   public void testYoutube() {
-    checkDns("74.125.65.91", "googleusercontent.com");
+    checkDns("74.125.65.91", "91.65.125.74.bc.googleusercontent.com");
   }
 
   @Test
   public void testFacebook() {
-    checkDns("157.240.11.35", "facebook.com");
+    checkDns("157.240.11.35", "edge-star-mini-shv-02-lax3.facebook.com");
   }
 
   @Test
   public void testYahoo() {
-    checkDns("98.137.149.56", "yahoo.com");
+    checkDns("98.137.149.56", "UNKNOWN-98-137-149-X.yahoo.com");
   }
 
   @Test
   public void testWikipedia() {
-    checkDns("198.35.26.96", "wikimedia.org");
+    checkDns("198.35.26.96", "text-lb.ulsfo.wikimedia.org");
   }
   @Test
   public void testNYTimes() {
-    checkDns("151.101.65.164", "ripe.net");
+    checkDns("151.101.65.164", "dns.ripe.net");
   }
   @Test
   public void testHackerNews() {
-    checkDns("205.251.192.225", "awsdns-28.com");
+    checkDns("205.251.192.225", "ns-225.awsdns-28.com");
   }
 
   @Test
   public void testYCombinator() {
-    checkDns("13.224.29.89", "cloudfront.net");
+    checkDns("13.224.29.89", "server-13-224-29-89.sea19.r.cloudfront.net");
   }
 
   @Test
   public void ipv6Google() {
-    checkDns("2607:f8b0:4005:80a::200e", "verisign-grs.com");
+    checkDns("2607:f8b0:4005:80a::200e", "nstld.verisign-grs.com");
   }
 }
