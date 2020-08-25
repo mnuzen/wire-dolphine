@@ -1,5 +1,5 @@
-google.charts.load('current', {'packages':['corechart']});
-var NUM_CLASSES = 4;
+//google.charts.load('current', {'packages':['corechart']});
+//var NUM_CLASSES = 4;
 
 // Set new default font family and font color to mimic Bootstrap's default styling
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
@@ -8,34 +8,13 @@ Chart.defaults.global.defaultFontColor = '#858796';
 var addrs = [];
 var freqs = [];
 
-function drawVisualization(){
+function drawVisualization() {
     drawIPVisualization();
-    drawClassVisualization();
+    drawIPVisualization();
 }
 
 function drawIPVisualization() {
     setup();
-
-    var classes = ["65.0.0.0/8"];
-    var name = ["Class A"];
-    // populate 'annotations' array dynamically based on 'classes'
-    var annotations = classes.map(function(cl, index) {
-    return {
-        type: 'line',
-        id: 'vline' + index,
-        mode: 'vertical',
-        scaleID: 'x-axis-0',
-        value: cl,
-        borderColor: 'green',
-        borderWidth: 1,
-        label: {
-            enabled: true,
-            position: "center",
-            content: name[index]
-        }
-    }
-    });
-    console.log(annotations);
 
     var ctx = document.getElementById("IPVis");
     var IPVis = new Chart(ctx, {
@@ -120,7 +99,7 @@ function setup() {
   });
 } // end setup
 
-function drawClassVisualization() {
+/*function drawClassVisualization() {
   fetch('/PCAP-bucket')
   .then(response => response.json())
   .then((classData) => {
@@ -158,7 +137,6 @@ function drawClassVisualization() {
     var chart = new google.visualization.ComboChart(document.getElementById('chart_class_div'));
     chart.draw(data, tableOptions);
 
-    /** Functions */
     function parseProtocols() {
       // Loop through all four classes
       Object.keys(classData).forEach(className =>  {
@@ -191,4 +169,4 @@ function drawClassVisualization() {
       });
     }
   });
-} // end class visualization
+}*/ // end class visualization

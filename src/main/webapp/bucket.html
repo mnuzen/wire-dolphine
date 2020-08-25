@@ -18,7 +18,7 @@
   <link href="css/bucket.css" rel="stylesheet">
 </head>
 
-<body id="page-top">
+<body id="page-top" onload="drawClassVisualization()">
   <!-- Page Wrapper -->
   <div id="wrapper">
     <!-- Sidebar -->
@@ -202,11 +202,13 @@
           connect to are distributed across the classes and addresses.
         </p>
         <div style="text-align:center;">
-          <button class="" onclick="drawVisualization()">Visualize Packet Class and Distribution</button>
+          <button class="" onclick="drawIPVisualization()">Visualize Packet Class and Distribution</button>
           <br /><br />
         </div>
 
+        <div class="row">
         <!-- Bar Chart -->
+        <div class="col-lg-6 mb-4">
         <div class="card shadow mb-4">
           <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">IP Prefixes and their Packets</h6>
@@ -219,7 +221,7 @@
         </div>
         <!-- End Bar Chart -->
 
-        <!-- Classes Chart
+        <!-- Classes Chart -->
         <div class="card shadow mb-4">
           <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">IP Classes Distribution</h6>
@@ -228,7 +230,8 @@
             <div style="height: 80vh", id="chart_class_div"></div>
           </div>
         </div>
-        End Classes Chart -->
+        <!-- End Classes Chart -->
+        </div>
 
         <!-- Start Pie Charts -->
         <div class="row">
@@ -251,6 +254,7 @@
               </div>
             </div>
           </div>
+        
 
           <!-- Donut Chart -->
           <div class="col-lg-6 mb-4">
@@ -305,6 +309,7 @@
   <script src="js/charts/network.js"></script>
   <!-- PAGE LEVEL CUSTOM SCRIPTS -->
   <script src="js/bucket.js"></script>
+  <script src="js/class.js"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </body>
 
