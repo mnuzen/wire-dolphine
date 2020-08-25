@@ -42,7 +42,7 @@ public class MaximumItemPolicy<K, V extends Serializable> extends EvictionPolicy
 
     // this means that theoretically even if there are multiple datastore cache workers running
     // on the same model, maxItems limit will approximately be followed
-    boolean gc = cacheInsertions >= 100;
+    boolean gc = cacheInsertions >= 250;
     cacheInsertions = 0;
     return gc;
   }

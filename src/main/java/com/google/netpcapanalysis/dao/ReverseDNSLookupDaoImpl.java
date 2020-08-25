@@ -50,12 +50,15 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
 
   public ReverseDNSLookupDaoImpl() {
     dnsPattern = Pattern.compile(DNS_REGEX);
-    cache = new CacheBuilder<String, DNSRecord>()
-        .setCacheName("reversedns")
-        .setPolicy(Policy.MAXIMUM_SIZE)
-        .setPolicyArgument(5000)
-        .setCacheType(CacheType.MEMORY)
-        .build();
+    cache =
+        new CacheBuilder<String, DNSRecord>()
+            .setCacheName("reversedns")
+            .setCacheType(CacheType.DATASTORE)
+            .setKVClass(String.class, DNSRecord.class)
+            .setPolicy(Policy.MAXIMUM_SIZE)
+            .setPolicyArgument(100000)
+            .enableStatistics(true)
+            .build();
   }
 
   public DNSRecord lookup(String ip) {
