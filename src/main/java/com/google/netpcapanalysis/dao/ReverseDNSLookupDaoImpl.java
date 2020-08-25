@@ -64,15 +64,11 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
   public Cache<String, DNSRecord> cache;
 
   public ReverseDNSLookupDaoImpl() {
-    this(true);
-  }
-
-  public ReverseDNSLookupDaoImpl(boolean memory) {
     dnsPattern = Pattern.compile(DNS_REGEX);
     cache =
         new CacheBuilder<String, DNSRecord>()
             .setCacheName("reversedns")
-            .setCacheType(memory ? CacheType.MEMORY : CacheType.DATASTORE)
+            .setCacheType(CacheType.MEMORY)
             .setKVClass(String.class, DNSRecord.class)
             .setPolicy(Policy.MAXIMUM_SIZE)
             .setPolicyArgument(10000)

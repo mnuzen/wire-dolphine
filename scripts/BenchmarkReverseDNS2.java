@@ -58,7 +58,7 @@ public class BenchmarkReverseDNS2 {
   }
 
   public static long benchmark() {
-    dao = new ReverseDNSLookupDaoImpl(true);
+    dao = new ReverseDNSLookupDaoImpl();
     long start = System.currentTimeMillis();
     System.out.println("Starting benchmark");
 

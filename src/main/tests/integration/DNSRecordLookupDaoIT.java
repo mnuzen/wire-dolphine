@@ -34,7 +34,7 @@ public class DNSRecordLookupDaoIT {
   @Before
   public void setup() {
     helper.setUp();
-    dns = new ReverseDNSLookupDaoImpl(true);
+    dns = new ReverseDNSLookupDaoImpl();
   }
 
   @Test
