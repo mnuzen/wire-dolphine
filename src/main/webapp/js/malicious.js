@@ -15,7 +15,6 @@ $(document).ready(async function () {
       let locationMap = new Map()
       let locationList = [];
       let freqList = [];
-      let freqMap = new Map()
 
       for (i in data) {
 
@@ -26,9 +25,7 @@ $(document).ready(async function () {
           row.setAttribute("id", "flagged");
           maliciousCount.Bad++;
 
-          freqMap.set(data[i].destination, {
-            freq: data[i].frequency
-          }); //maybe set key to domain
+          freqList.push({key: data[i].destination, value: data[i].frequency})
 
           //Counts Location of IP's
           if (locationMap.has(data[i].location)) {
@@ -49,8 +46,6 @@ $(document).ready(async function () {
 
         table.appendChild(row);
       }
-    
-
         
       //Sorts hashmap by key and Top 5 locations
       locationMap[Symbol.iterator] = function* () {
@@ -58,7 +53,6 @@ $(document).ready(async function () {
           return +b[1] - +a[1]
         });
       }
-      
 
       let index = 0;
       for (let [key, value] of locationMap) {
@@ -68,23 +62,17 @@ $(document).ready(async function () {
           break;
         }
       }
+      
+      // sorts and splits freq
+      freqList.sort(function(a, b){return b.value - a.value}).slice(0,5);
 
+      freqKey = freqList.map(function (obj) {
+        return obj.key;
+      });
 
-      //Sorts hashmap by key and Top 5 locations
-      freqMap[Symbol.iterator] = function* () {
-        yield*[...this.entries()].sort(function (a, b) {
-          return +b[1] - +a[1]
-        });
-      }
-
-      index = 0;
-      for (let [key, value] of freqMap) {
-        freqList[key] = value.freq;
-        index++;
-        if (index == 5) {
-          break;
-        }
-      }
+      freqValues = freqList.map(function (obj) {
+        return obj.value;
+      });
 
 
       loadChart("maliciousPieChart", Object.keys(maliciousCount), Object.values(maliciousCount),
@@ -95,9 +83,9 @@ $(document).ready(async function () {
         ['#858796', '#f6c23e', '#36b9cc', '#1cc88a', '#e74a3b'],
         ['#6C6E7D', '#DDA925', '#1DA0B3', '#03AF71', '#CE3122']);
 
-      loadChart("freqPieChart", Object.keys(freqList), Object.values(freqList), //doesnt seem to be sorting top 5 properly
-        ['#858796', '#f6c23e', '#36b9cc', '#1cc88a', '#e74a3b'],
-        ['#6C6E7D', '#DDA925', '#1DA0B3', '#03AF71', '#CE3122']);
+      loadChart("freqPieChart", freqKey, freqValues,
+        ['#FF588C', '#f6c23e', '#36b9cc', '#1cc88a', '#e74a3b'],
+        ['#f63e72', '#DDA925', '#1DA0B3', '#03AF71', '#CE3122']);
 
       $("#dataTable").DataTable();
     },
