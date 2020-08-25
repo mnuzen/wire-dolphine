@@ -15,9 +15,9 @@ $(document).ready(async function () {
       let locationMap = new Map()
       let locationList = [];
       let freqList = [];
-      let totalPackets;
-      let badPackets;
-      let goodPackets;
+      let totalPackets =0;
+      let badPackets =0;
+      let goodPackets =0;
 
       for (i in data) {
 
