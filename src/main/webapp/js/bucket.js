@@ -10,6 +10,28 @@ function drawVisualization(){
 
 function drawIPVisualization() {
     setup();
+
+    var classes = ["65.0.0.0/8"];
+    var name = ["Class A"];
+    // populate 'annotations' array dynamically based on 'classes'
+    var annotations = classes.map(function(cl, index) {
+    return {
+        type: 'line',
+        id: 'vline' + index,
+        mode: 'vertical',
+        scaleID: 'x-axis-0',
+        value: cl,
+        borderColor: 'green',
+        borderWidth: 1,
+        label: {
+            enabled: true,
+            position: "center",
+            content: name[index]
+        }
+    }
+    });
+    console.log(annotations);
+
     var ctx = document.getElementById("IPVis");
     var IPVis = new Chart(ctx, {
     type: 'bar',
@@ -72,8 +94,34 @@ function drawIPVisualization() {
         displayColors: false,
         caretPadding: 10,
         },
-    }
+        annotation: {
+         drawTime: 'afterDatasetsDraw',
+         annotations: annotations
+        },
+    } //end options
     });
+
+    /*function drawVerticalLine(value, color) {
+    let d = [];
+    for (let i = 0; i < IPVis.data.labels.height; i++) {
+        d.push(i)
+    }
+    IPVis.data.datasets.push({
+        data: d,
+        pointRadius: 0,
+        type: 'line',
+        borderColor: color,
+        borderWidth: 1,
+        fill: false,
+    });
+    IPVis.update();
+    }
+
+    drawVerticalLine(76, 'rgba(175,40,50,0.6)');
+    drawVerticalLine(44, 'rgba(175,40,50,0.6)');
+    drawVerticalLine(21, 'rgba(175,40,50,0.6)');
+    drawVerticalLine(12, 'rgba(175,40,50,0.6)');
+    drawVerticalLine(3, 'rgba(175,40,50,0.6)');*/
 }
 
 function setup() {
