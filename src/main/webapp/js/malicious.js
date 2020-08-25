@@ -25,7 +25,7 @@ $(document).ready(async function () {
           row.setAttribute("id", "flagged");
           maliciousCount.Bad++;
 
-          freqList.push({key: data[i].destination, value: data[i].frequency})
+          freqList.push({key: data[i].domain, value: data[i].frequency})
 
           //Counts Location of IP's
           if (locationMap.has(data[i].location)) {
