@@ -6,6 +6,12 @@ import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestC
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.netpcapanalysis.dao.ReverseDNSLookupDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.ReverseDNSLookupDao;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,8 +21,6 @@ public class DNSRecordLookupDaoIT {
 
   private final LocalServiceTestHelper helper =
       new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
-
-
 
   @After
   public void tearDown() {
@@ -30,12 +34,44 @@ public class DNSRecordLookupDaoIT {
   @Before
   public void setup() {
     helper.setUp();
-    dns = new ReverseDNSLookupDaoImpl();
+    dns = new ReverseDNSLookupDaoImpl(true);
+  }
+
+  @Test
+  public void parallelTest() throws Exception {
+    String location = getClass().getClassLoader().getResource("ips_test.txt").getFile();
+    File ips = new File(location);
+    BufferedReader br = new BufferedReader(new FileReader(ips));
+
+    List<String> l = new ArrayList<>();
+    int uniq = 0;
+    String line;
+    while ((line = br.readLine()) != null) {
+      uniq++;
+      String[] split = line.split("\\s");
+      String ip = split[0];
+      int num = Integer.parseInt(split[1]);
+      for (int i = 0; i < num; i++) {
+        l.add(ip);
+      }
+    }
+
+    System.out.println("uniqs:" + uniq);
+    Collections.shuffle(l);
+    System.out.println("size of randomized ip list");
+    System.out.println(l.size());
+
+    dns.lookup(l);
   }
 
   @Test
   public void testGoogle() {
     checkDns("172.217.14.206", "1e100.net");
+  }
+
+  @Test
+  public void testInvalid() {
+    checkDns("194.171.12.150", "194.171.12.150");
   }
 
   @Test

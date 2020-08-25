@@ -25,7 +25,7 @@ public class BenchmarkReverseDNS {
   public static void main(String[] args) throws Exception {
     List<String> l = new ArrayList<>();
 
-    File ips = new File("./resources/files/ips.txt");
+    File ips = new File("./resources/ips.txt");
     BufferedReader br = new BufferedReader(new FileReader(ips));
 
     String line;

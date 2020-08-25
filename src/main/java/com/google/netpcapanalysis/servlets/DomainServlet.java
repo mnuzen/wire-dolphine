@@ -10,6 +10,7 @@ import com.google.netpcapanalysis.models.FileAttribute;
 import com.google.netpcapanalysis.models.PCAPdata;
 import com.google.netpcapanalysis.utils.SessionManager;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +51,7 @@ public class DomainServlet extends HttpServlet {
 
     Map<String, Integer> domainCount = new HashMap<>();
     Map<String, Integer> cdnCount = new HashMap<>();
-    Map<String, DNSRecord> records = new HashMap<>();
+    List<String> ips = new ArrayList<>();
 
     for (PCAPdata pcap : analysis) {
       String searchIP;
@@ -60,15 +61,12 @@ public class DomainServlet extends HttpServlet {
         searchIP = pcap.source;
       }
 
-      DNSRecord record;
-      if ((record = records.get(searchIP)) == null) {
-        record = this.reverseDNSLookupDao.lookup(searchIP);
-        records.put(searchIP, record);
-      }
+      ips.add(searchIP);
+    }
 
-      if (record == null) {
-        continue;
-      }
+    List<DNSRecord> records = reverseDNSLookupDao.lookup(ips);
+
+    for (DNSRecord record : records) {
       String hostname = record.getDomain();
       if (record.isAuthority()) {
         cdnCount.put(hostname, cdnCount.getOrDefault(hostname, 0) + 1);

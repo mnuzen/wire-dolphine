@@ -24,8 +24,8 @@ public class DatastoreCache<K, V extends Serializable> implements Cache<K, V> {
   private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   private final Gson gson;
   private final String objectName;
-  private Class<K> keyClass;
-  private Class<V> valClass;
+  private final Class<K> keyClass;
+  private final Class<V> valClass;
 
   private final EvictionPolicy<K, V> policy;
 
@@ -50,7 +50,7 @@ public class DatastoreCache<K, V extends Serializable> implements Cache<K, V> {
   }
 
   @Override
-  public void put(K key, V value) {
+  public synchronized void put(K key, V value) {
     if (policy.checkGarbageCollect(this)) {
       garbageCollect();
     }
@@ -62,7 +62,7 @@ public class DatastoreCache<K, V extends Serializable> implements Cache<K, V> {
   }
 
   @Override
-  public V get(K key) {
+  public synchronized V get(K key) {
     if (key == null) {
       throw new IllegalArgumentException("null value provided");
     }
@@ -83,9 +83,9 @@ public class DatastoreCache<K, V extends Serializable> implements Cache<K, V> {
   }
 
   @Override
-  public long getSize() {
+  public synchronized long getSize() {
     Query query = new Query(objectName).setKeysOnly();
-    return (long) datastore.prepare(query).countEntities();
+    return datastore.prepare(query).countEntities();
   }
 
   /**
@@ -93,7 +93,7 @@ public class DatastoreCache<K, V extends Serializable> implements Cache<K, V> {
    * series of operations.
    */
   @Override
-  public void garbageCollect() {
+  public synchronized void garbageCollect() {
     Query query = new Query(objectName).addSort(EXPIRATION_PROP, SortDirection.ASCENDING);
     Iterable<Entity> pq;
 
@@ -113,7 +113,7 @@ public class DatastoreCache<K, V extends Serializable> implements Cache<K, V> {
   }
 
   @Override
-  public void clear() {
+  public synchronized void clear() {
     Query query = new Query(objectName);
     Iterable<Entity> pq = datastore.prepare(query).asIterable();
 
@@ -123,21 +123,21 @@ public class DatastoreCache<K, V extends Serializable> implements Cache<K, V> {
   }
 
   @Override
-  public boolean statisticsEnabled() {
+  public synchronized boolean statisticsEnabled() {
     return statistics;
   }
 
   @Override
-  public long hits() {
+  public synchronized long hits() {
     return hits;
   }
 
   @Override
-  public long misses() {
+  public synchronized long misses() {
     return misses;
   }
 
-  public void putDSObject(DSCacheObject<V> data) {
+  public synchronized void putDSObject(DSCacheObject<V> data) {
     if (data.key == null || data.value == null) {
       throw new IllegalArgumentException("null value provided");
     }
@@ -146,7 +146,7 @@ public class DatastoreCache<K, V extends Serializable> implements Cache<K, V> {
     datastore.put(entity);
   }
 
-  public DSCacheObject<V> getDSObject(K key) {
+  public synchronized DSCacheObject<V> getDSObject(K key) {
     try {
       Query query = new Query(objectName).addSort(EXPIRATION_PROP, SortDirection.DESCENDING);
       Filter keyFilter = new FilterPredicate(KEY_PROP, FilterOperator.EQUAL, key.toString());
@@ -159,7 +159,7 @@ public class DatastoreCache<K, V extends Serializable> implements Cache<K, V> {
     }
   }
 
-  public void enableStatistics(boolean b) {
+  public synchronized void enableStatistics(boolean b) {
     this.statistics = b;
   }
 

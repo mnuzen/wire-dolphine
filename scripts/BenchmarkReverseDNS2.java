@@ -17,7 +17,7 @@ public class BenchmarkReverseDNS2 {
   public static List<String> l = new ArrayList<>();
 
   public static void main(String[] args) throws Exception {
-    File ips = new File("./resources/files/ips.txt");
+    File ips = new File("./resources/ips.txt");
     BufferedReader br = new BufferedReader(new FileReader(ips));
 
     int uniq = 0;
@@ -33,24 +33,22 @@ public class BenchmarkReverseDNS2 {
     }
 
     System.out.println("uniqs:" + uniq);
-    Collections.shuffle(l);
-    System.out.println("size of randomized ip list");
-    System.out.println(l.size());
+    reqs = uniq;
 
     int trials = 3;
-    double result = averagedBenchmark(reqs, trials);
+    double result = averagedBenchmark(trials);
     System.out
         .printf("averaged %.0f ms for %d requests, %.2f rps", result, reqs, reqs / result * 1000);
   }
 
-  public static double averagedBenchmark(int requests, int trials)
+  public static double averagedBenchmark(int trials)
       throws Exception {
     // throw out 1st trial to allow for jit
-    benchmark(requests);
+    benchmark();
     System.out.println("Finished JIT");
     List<Long> results = new ArrayList<>();
     for (int i = 0; i < trials; i++) {
-      results.add(benchmark(requests));
+      results.add(benchmark());
     }
     double avg = 0;
     for (long result : results) {
@@ -59,19 +57,12 @@ public class BenchmarkReverseDNS2 {
     return avg / trials;
   }
 
-  public static long benchmark(int requests) {
-    dao = new ReverseDNSLookupDaoImpl();
+  public static long benchmark() {
+    dao = new ReverseDNSLookupDaoImpl(true);
     long start = System.currentTimeMillis();
     System.out.println("Starting benchmark");
 
-    List<DNSRecord> results = l.parallelStream().map(ip -> {
-      try {
-        return dao.lookup(ip);
-      } catch (Exception e) {
-        e.printStackTrace();
-        return null;
-      }
-    }).collect(Collectors.toList());
+    List<DNSRecord> results = dao.lookup(l);
     long end = System.currentTimeMillis() - start;
     System.out.format("finished %d requests in %d ms\n", reqs, end);
     System.out.println("hits: " + dao.cache.hits());
