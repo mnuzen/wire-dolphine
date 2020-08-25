@@ -142,6 +142,7 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
       cache.put(ip, record);
       return record;
     } catch (Exception e) {
+      e.printStackTrace();
       return null;
     }
   }
