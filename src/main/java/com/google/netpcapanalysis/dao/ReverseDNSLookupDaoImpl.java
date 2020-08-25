@@ -64,7 +64,7 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
   public Cache<String, DNSRecord> cache;
 
   public ReverseDNSLookupDaoImpl() {
-    this(false);
+    this(true);
   }
 
   public ReverseDNSLookupDaoImpl(boolean memory) {
@@ -129,7 +129,6 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
     }
   }
 
-
   public DNSRecord lookup(String ip) {
     DNSRecord cached;
     if ((cached = cache.get(ip)) != null) {
@@ -142,8 +141,7 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
       cache.put(ip, record);
       return record;
     } catch (Exception e) {
-      e.printStackTrace();
-      return null;
+      return new DNSRecord(ip, false, false);
     }
   }
 
