@@ -1,6 +1,7 @@
 package com.google.netpcapanalysis.interfaces.dao;
 
 import com.google.netpcapanalysis.models.DNSRecord;
+import com.google.netpcapanalysis.models.PCAPdata;
 import java.util.List;
 
 public interface ReverseDNSLookupDao {
@@ -13,4 +14,5 @@ public interface ReverseDNSLookupDao {
    */
   public DNSRecord lookup(String ip);
   public List<DNSRecord> lookup(List<String> ip);
+  public List<PCAPdata> dnsLookup(List<PCAPdata> data);
 }

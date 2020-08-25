@@ -8,6 +8,8 @@ import com.google.netpcapanalysis.caching.CacheBuilder.Policy;
 import com.google.netpcapanalysis.interfaces.caching.Cache;
 import com.google.netpcapanalysis.interfaces.dao.ReverseDNSLookupDao;
 import com.google.netpcapanalysis.models.DNSRecord;
+import com.google.netpcapanalysis.models.PCAPdata;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -221,4 +223,15 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
     String[] parts = host.split("\\.");
     return parts[parts.length - 2] + "." + parts[parts.length - 1];
   }
+
+  public List<PCAPdata> dnsLookup(List<PCAPdata> data) {
+    DNSRecord temp;
+    for(PCAPdata packet : data){
+      temp = lookup(packet.destination);
+      packet.domain = temp.getDomain();
+    }
+    return data;
+  }
+
+  
 }
