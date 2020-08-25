@@ -1,11 +1,16 @@
+google.charts.load('current', {'packages':['corechart']});
+var NUM_CLASSES = 4;
+
 // Set new default font family and font color to mimic Bootstrap's default styling
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
+
 var addrs = [];
 var freqs = [];
 
 function drawVisualization(){
     drawIPVisualization();
+    drawClassVisualization();
 }
 
 function drawIPVisualization() {
@@ -94,34 +99,12 @@ function drawIPVisualization() {
         displayColors: false,
         caretPadding: 10,
         },
-        annotation: {
+        /*annotation: {
          drawTime: 'afterDatasetsDraw',
          annotations: annotations
-        },
+        },*/
     } //end options
     });
-
-    /*function drawVerticalLine(value, color) {
-    let d = [];
-    for (let i = 0; i < IPVis.data.labels.height; i++) {
-        d.push(i)
-    }
-    IPVis.data.datasets.push({
-        data: d,
-        pointRadius: 0,
-        type: 'line',
-        borderColor: color,
-        borderWidth: 1,
-        fill: false,
-    });
-    IPVis.update();
-    }
-
-    drawVerticalLine(76, 'rgba(175,40,50,0.6)');
-    drawVerticalLine(44, 'rgba(175,40,50,0.6)');
-    drawVerticalLine(21, 'rgba(175,40,50,0.6)');
-    drawVerticalLine(12, 'rgba(175,40,50,0.6)');
-    drawVerticalLine(3, 'rgba(175,40,50,0.6)');*/
 }
 
 function setup() {
@@ -140,7 +123,7 @@ function setup() {
 function drawClassVisualization() {
   fetch('/PCAP-bucket')
   .then(response => response.json())
-  .then((bucketData) => {
+  .then((classData) => {
 
     google.charts.load('current', {'packages':['corechart']});
     var data = new google.visualization.DataTable();
@@ -168,7 +151,7 @@ function drawClassVisualization() {
       vAxis: {title: 'Number of Packets'},
       hAxis: {title: 'IP Class'},
       seriesType: 'bars',
-      series: {graphSize: {type: 'line'}}        
+      series: {3: {type: 'line'}}        
     };
 
     // Draw chart
@@ -178,8 +161,8 @@ function drawClassVisualization() {
     /** Functions */
     function parseProtocols() {
       // Loop through all four classes
-      Object.keys(bucketData).forEach(className =>  {
-        Object.keys(bucketData[className]).forEach(key => {
+      Object.keys(classData).forEach(className =>  {
+        Object.keys(classData[className]).forEach(key => {
           protocols.add(key); // add all possible protocols
         });
       });
@@ -187,16 +170,16 @@ function drawClassVisualization() {
 
     // Iterate through all Classes and parser protocol frequencies
     function addRows() {
-      Object.keys(bucketData).forEach(className => {
+      Object.keys(classData).forEach(className => {
         var row = [];
         var total = 0;
         row.push(className); // add Class
 
         // add protocols in correct order
         protocols.forEach(protocol => {
-          if (protocol in bucketData[className]) {
-            row.push(bucketData[className][protocol]);
-            total += bucketData[className][protocol]; 
+          if (protocol in classData[className]) {
+            row.push(classData[className][protocol]);
+            total += classData[className][protocol]; 
           }
           else {
             row.push(0);
