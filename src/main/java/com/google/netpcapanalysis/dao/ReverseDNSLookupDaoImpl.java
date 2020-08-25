@@ -105,7 +105,7 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
       data = data.substring(0, data.length() - 1);
     }
 
-    rdns.setDomain(data);
+    rdns.setDomain(getFQDN(data));
     return rdns;
   }
 
@@ -146,5 +146,10 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
       url = new URL(String.format("https://cloudflare-dns.com/dns-query?name=%s&type=PTR", reverseIPString));
     }
     return url;
+  }
+
+  private String getFQDN(String host) {
+    String[] parts = host.split("\\.");
+    return parts[parts.length - 2] + "." + parts[parts.length - 1];
   }
 }

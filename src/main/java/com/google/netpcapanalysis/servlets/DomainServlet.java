@@ -66,12 +66,14 @@ public class DomainServlet extends HttpServlet {
         records.put(searchIP, record);
       }
 
-      if (record == null) continue;
-      String hostname = record.getHostname();
+      if (record == null) {
+        continue;
+      }
+      String hostname = record.getDomain();
       if (record.isServer()) {
-        domainCount.put(hostname, domainCount.getOrDefault(hostname, 1));
+        domainCount.put(hostname, domainCount.getOrDefault(hostname, 1) + 1);
       } else {
-        cdnCount.put(hostname, cdnCount.getOrDefault(hostname, 1));
+        cdnCount.put(hostname, cdnCount.getOrDefault(hostname, 1) + 1);
       }
     }
 

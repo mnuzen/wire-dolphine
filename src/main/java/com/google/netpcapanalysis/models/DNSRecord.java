@@ -40,9 +40,4 @@ public class DNSRecord implements Serializable {
   public void setDomain(String domain) {
     this.domain = domain;
   }
-
-  public String getHostname() {
-    String[] parts =  getDomain().split("\\.");
-    return parts[parts.length - 2] + "." + parts[parts.length - 1];
-  }
 }
