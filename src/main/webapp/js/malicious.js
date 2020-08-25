@@ -15,17 +15,24 @@ $(document).ready(async function () {
       let locationMap = new Map()
       let locationList = [];
       let freqList = [];
+      let totalPackets;
+      let badPackets;
+      let goodPackets;
 
       for (i in data) {
 
         var table = document.getElementById("table");
         var row = document.createElement("tr");
+        totalPackets += data[i].frequency;
 
         if (data[i].flagged.toLowerCase() === "true") {
           row.setAttribute("id", "flagged");
           maliciousCount.Bad++;
-
-          freqList.push({key: data[i].domain, value: data[i].frequency})
+          badPackets += data[i].frequency;
+          freqList.push({
+            key: data[i].domain,
+            value: data[i].frequency
+          })
 
           //Counts Location of IP's
           if (locationMap.has(data[i].location)) {
@@ -46,7 +53,8 @@ $(document).ready(async function () {
 
         table.appendChild(row);
       }
-        
+      goodPackets = totalPackets - badPackets;
+
       //Sorts hashmap by key and Top 5 locations
       locationMap[Symbol.iterator] = function* () {
         yield*[...this.entries()].sort(function (a, b) {
@@ -62,9 +70,11 @@ $(document).ready(async function () {
           break;
         }
       }
-      
+
       // sorts and splits freq
-      freqList.sort(function(a, b){return b.value - a.value}).slice(0,5);
+      freqList.sort(function (a, b) {
+        return b.value - a.value
+      }).slice(0, 5);
 
       freqKey = freqList.map(function (obj) {
         return obj.key;
@@ -86,6 +96,10 @@ $(document).ready(async function () {
       loadChart("freqPieChart", freqKey, freqValues,
         ['#FF588C', '#f6c23e', '#36b9cc', '#1cc88a', '#e74a3b'],
         ['#f63e72', '#DDA925', '#1DA0B3', '#03AF71', '#CE3122']);
+
+      loadChart("packetPieChart", ["Good", "Bad"], [goodPackets, badPackets],
+        ['#858796', '#f6c23e'],
+        ['#6C6E7D', '#DDA925']);
 
       $("#dataTable").DataTable();
     },

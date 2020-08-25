@@ -188,7 +188,7 @@
             <div class="card shadow mb-4">
               <!-- Card Header - Dropdown -->
               <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Malicious IP's</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Malicious IPs</h6>
               </div>
               <!-- Card Body -->
               <div class="card-body">
@@ -201,6 +201,25 @@
                IP address in the Private Network range are also returned 
                as flagged howevery these connects may not be malicious if
                you are access information on from a device on your local network.
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+              <!-- Card Header - Dropdown -->
+              <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Malicious Packets
+                </h6>
+              </div>
+              <!-- Card Body -->
+              <div class="card-body">
+                <div class="chart-pie pt-4">
+                  <canvas id="packetPieChart"></canvas>
+                </div>
+                <hr>
+                What percentage of your total network traffic is made up of 
+                malicious packets?
               </div>
             </div>
           </div>
