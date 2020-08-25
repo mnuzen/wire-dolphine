@@ -39,7 +39,7 @@ function loadChartsFromData(data) {
 function loadDescriptorsFromData(data) {
   const cdnPackets = Object.values(data.cdn).reduce((a, b) => a + b, 0);
   const domainPackets = Object.values(data.domain).reduce((a, b) => a + b, 0);
-  const percentCDN = (cdnPackets/domainPackets * 100).toFixed(1);
+  const percentCDN = ((cdnPackets/cdnPackets + domainPackets) * 100).toFixed(1);
   $("#cdnPackets").text(cdnPackets);
   $("#domainPackets").text(domainPackets);
   $("#percentCDN").text(percentCDN);

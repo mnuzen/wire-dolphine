@@ -70,10 +70,11 @@ public class DomainServlet extends HttpServlet {
         continue;
       }
       String hostname = record.getDomain();
-      if (record.isServer()) {
-        domainCount.put(hostname, domainCount.getOrDefault(hostname, 1) + 1);
+      if (record.isAuthority()) {
+        cdnCount.put(hostname, cdnCount.getOrDefault(hostname, 0) + 1);
       } else {
-        cdnCount.put(hostname, cdnCount.getOrDefault(hostname, 1) + 1);
+        // if both server and authority are false we also count as server b/c it's an ip
+        domainCount.put(hostname, domainCount.getOrDefault(hostname, 0) + 1);
       }
     }
 

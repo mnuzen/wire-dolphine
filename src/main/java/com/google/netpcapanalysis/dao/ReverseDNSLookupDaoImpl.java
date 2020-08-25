@@ -19,8 +19,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
-  private static class GoogleDNS {
-    private static class GoogleDNSQuestion {
+  public static class GoogleDNS {
+    public static class GoogleDNSQuestion {
       public String name;
       public Integer type;
     }
@@ -80,7 +80,7 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
     }
   }
 
-  private DNSRecord createRecordFromGoogleDNS(GoogleDNS res, String ip) {
+  public DNSRecord createRecordFromGoogleDNS(GoogleDNS res, String ip) {
     String data;
     DNSRecord rdns = new DNSRecord();
     if (res.Answer != null) {
