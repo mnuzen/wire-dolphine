@@ -8,11 +8,9 @@ import com.google.netpcapanalysis.caching.CacheBuilder.Policy;
 import com.google.netpcapanalysis.interfaces.caching.Cache;
 import com.google.netpcapanalysis.interfaces.dao.ReverseDNSLookupDao;
 import com.google.netpcapanalysis.models.DNSRecord;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import com.mashape.unirest.http.Unirest;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -51,17 +49,18 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
   private static final String DNS_REGEX =
       "[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)(?=.\\s[0-9\\s]+)?";
   private Pattern dnsPattern;
-  private Cache<String, DNSRecord> cache;
+  public Cache<String, DNSRecord> cache;
 
   public ReverseDNSLookupDaoImpl() {
     dnsPattern = Pattern.compile(DNS_REGEX);
     cache =
         new CacheBuilder<String, DNSRecord>()
             .setCacheName("reversedns")
-            .setCacheType(CacheType.MEMORY)
+            .setCacheType(CacheType.DATASTORE)
             .setKVClass(String.class, DNSRecord.class)
             .setPolicy(Policy.MAXIMUM_SIZE)
             .setPolicyArgument(10000)
+            .enableStatistics(true)
             .build();
   }
 
@@ -120,18 +119,9 @@ public class ReverseDNSLookupDaoImpl implements ReverseDNSLookupDao {
     } else {
       url = getCloudflareURL(ip);
     }
-    URLConnection uc = url.openConnection();
-    uc.setRequestProperty("Accept", "application/dns-json");
-    BufferedReader in = new BufferedReader(
-        new InputStreamReader(
-            uc.getInputStream()));
-    String inputLine;
-
-    while ((inputLine = in.readLine()) != null) {
-      sb.append(inputLine);
-    }
-    in.close();
-    return sb.toString();
+    return Unirest.get(url.toString())
+        .header("Accept", "application/dns-json")
+        .asString().getBody();
   }
 
   private URL getGoogleURL(String ip) throws MalformedURLException {
