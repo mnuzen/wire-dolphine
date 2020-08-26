@@ -1,6 +1,3 @@
-//google.charts.load('current', {'packages':['corechart']});
-//var NUM_CLASSES = 4;
-
 // Set new default font family and font color to mimic Bootstrap's default styling
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
@@ -78,10 +75,6 @@ async function drawIPVisualization() {
         displayColors: false,
         caretPadding: 10,
         },
-        /*annotation: {
-         drawTime: 'afterDatasetsDraw',
-         annotations: annotations
-        },*/
     } //end options
     });
 }
@@ -98,75 +91,3 @@ async function setup() {
     });
   });
 } // end setup
-
-/*function drawClassVisualization() {
-  fetch('/PCAP-bucket')
-  .then(response => response.json())
-  .then((classData) => {
-
-    google.charts.load('current', {'packages':['corechart']});
-    var data = new google.visualization.DataTable();
-    
-    // Declare protocols set
-    let protocols = new Set();
-    parseProtocols();
-
-     // Add columns
-    data.addColumn('string', 'IP Class');
-    protocols.forEach(protocol => {
-      data.addColumn('number', protocol);
-    });
-    data.addColumn('number', 'Total');
-
-    // Add rows
-    addRows();
-    
-    // Set up chart
-    var graphSize = parseInt(protocols.size-1);
-    console.log(graphSize);
-
-    var tableOptions = {
-      title : 'Number of Packets per Protocol by IP Class',
-      vAxis: {title: 'Number of Packets'},
-      hAxis: {title: 'IP Class'},
-      seriesType: 'bars',
-      series: {3: {type: 'line'}}        
-    };
-
-    // Draw chart
-    var chart = new google.visualization.ComboChart(document.getElementById('chart_class_div'));
-    chart.draw(data, tableOptions);
-
-    function parseProtocols() {
-      // Loop through all four classes
-      Object.keys(classData).forEach(className =>  {
-        Object.keys(classData[className]).forEach(key => {
-          protocols.add(key); // add all possible protocols
-        });
-      });
-    }
-
-    // Iterate through all Classes and parser protocol frequencies
-    function addRows() {
-      Object.keys(classData).forEach(className => {
-        var row = [];
-        var total = 0;
-        row.push(className); // add Class
-
-        // add protocols in correct order
-        protocols.forEach(protocol => {
-          if (protocol in classData[className]) {
-            row.push(classData[className][protocol]);
-            total += classData[className][protocol]; 
-          }
-          else {
-            row.push(0);
-          }
-        });
-
-        row.push(total);
-        data.addRow(row);
-      });
-    }
-  });
-}*/ // end class visualization
