@@ -18,7 +18,7 @@
   <link href="css/bucket.css" rel="stylesheet">
 </head>
 
-<body id="page-top">
+<body id="page-top" onload="drawClassVisualization()">
   <!-- Page Wrapper -->
   <div id="wrapper">
     <!-- Sidebar -->
@@ -198,14 +198,10 @@
           Different classes are assigned to different types of users. Class A typically serves
           large companies and organizations, while Class B serves smaller ones. Class C is typically
           used by private, individual users. Class D is reserved for mutlicasting while Class E is reserved for
-          special future
-          purposes.Take a look at your file data and see how the addresses you connect to are distributed across the
-          classes and addresses.
+          special future purposes.Take a look at your file data and see how the addresses you 
+          connect to are distributed across the classes and addresses.
         </p>
-        <div style="text-align:center;">
-          <button class="" onclick="drawVisualization()">Visualize Packet Class and Distribution</button>
-          <br /><br />
-        </div>
+
         <!-- Bar Chart -->
         <div class="card shadow mb-4">
           <div class="card-header py-3">
@@ -219,6 +215,17 @@
         </div>
         <!-- End Bar Chart -->
 
+        <!-- Classes Chart -->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">IP Classes Distribution</h6>
+          </div>
+          <div class="card-body">
+            <div style="height: 50vh", id="chart_class_div"></div>
+          </div>
+        </div>
+        <!-- End Classes Chart -->
+        </br></br>
         <!-- Start Pie Charts -->
         <div class="row">
           <!-- Donut Chart -->
@@ -240,6 +247,7 @@
               </div>
             </div>
           </div>
+        
 
           <!-- Donut Chart -->
           <div class="col-lg-6 mb-4">
@@ -294,6 +302,7 @@
   <script src="js/charts/network.js"></script>
   <!-- PAGE LEVEL CUSTOM SCRIPTS -->
   <script src="js/bucket.js"></script>
+  <script src="js/class.js"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </body>
 

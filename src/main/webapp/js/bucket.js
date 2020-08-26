@@ -1,36 +1,17 @@
 // Set new default font family and font color to mimic Bootstrap's default styling
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
+
 var addrs = [];
 var freqs = [];
 
-function drawVisualization(){
-    drawIPVisualization();
-}
+$(document).ready(async function () {
+  await drawIPVisualization();
+});
 
-function drawIPVisualization() {
-    setup();
 
-    var classes = ["65.0.0.0/8"];
-    var name = ["Class A"];
-    // populate 'annotations' array dynamically based on 'classes'
-    var annotations = classes.map(function(cl, index) {
-    return {
-        type: 'line',
-        id: 'vline' + index,
-        mode: 'vertical',
-        scaleID: 'x-axis-0',
-        value: cl,
-        borderColor: 'green',
-        borderWidth: 1,
-        label: {
-            enabled: true,
-            position: "center",
-            content: name[index]
-        }
-    }
-    });
-    console.log(annotations);
+async function drawIPVisualization() {
+    await setup();
 
     var ctx = document.getElementById("IPVis");
     var IPVis = new Chart(ctx, {
@@ -94,38 +75,12 @@ function drawIPVisualization() {
         displayColors: false,
         caretPadding: 10,
         },
-        annotation: {
-         drawTime: 'afterDatasetsDraw',
-         annotations: annotations
-        },
     } //end options
     });
-
-    /*function drawVerticalLine(value, color) {
-    let d = [];
-    for (let i = 0; i < IPVis.data.labels.height; i++) {
-        d.push(i)
-    }
-    IPVis.data.datasets.push({
-        data: d,
-        pointRadius: 0,
-        type: 'line',
-        borderColor: color,
-        borderWidth: 1,
-        fill: false,
-    });
-    IPVis.update();
-    }
-
-    drawVerticalLine(76, 'rgba(175,40,50,0.6)');
-    drawVerticalLine(44, 'rgba(175,40,50,0.6)');
-    drawVerticalLine(21, 'rgba(175,40,50,0.6)');
-    drawVerticalLine(12, 'rgba(175,40,50,0.6)');
-    drawVerticalLine(3, 'rgba(175,40,50,0.6)');*/
 }
 
-function setup() {
-  fetch('/PCAP-IP')
+async function setup() {
+  await fetch('/PCAP-IP')
   .then(response => response.json())
   .then((bucketData) => {
     // Iterate through all Classes and parser protocol frequencies
@@ -136,76 +91,3 @@ function setup() {
     });
   });
 } // end setup
-
-function drawClassVisualization() {
-  fetch('/PCAP-bucket')
-  .then(response => response.json())
-  .then((bucketData) => {
-
-    google.charts.load('current', {'packages':['corechart']});
-    var data = new google.visualization.DataTable();
-    
-    // Declare protocols set
-    let protocols = new Set();
-    parseProtocols();
-
-     // Add columns
-    data.addColumn('string', 'IP Class');
-    protocols.forEach(protocol => {
-      data.addColumn('number', protocol);
-    });
-    data.addColumn('number', 'Total');
-
-    // Add rows
-    addRows();
-    
-    // Set up chart
-    var graphSize = parseInt(protocols.size-1);
-    console.log(graphSize);
-
-    var tableOptions = {
-      title : 'Number of Packets per Protocol by IP Class',
-      vAxis: {title: 'Number of Packets'},
-      hAxis: {title: 'IP Class'},
-      seriesType: 'bars',
-      series: {graphSize: {type: 'line'}}        
-    };
-
-    // Draw chart
-    var chart = new google.visualization.ComboChart(document.getElementById('chart_class_div'));
-    chart.draw(data, tableOptions);
-
-    /** Functions */
-    function parseProtocols() {
-      // Loop through all four classes
-      Object.keys(bucketData).forEach(className =>  {
-        Object.keys(bucketData[className]).forEach(key => {
-          protocols.add(key); // add all possible protocols
-        });
-      });
-    }
-
-    // Iterate through all Classes and parser protocol frequencies
-    function addRows() {
-      Object.keys(bucketData).forEach(className => {
-        var row = [];
-        var total = 0;
-        row.push(className); // add Class
-
-        // add protocols in correct order
-        protocols.forEach(protocol => {
-          if (protocol in bucketData[className]) {
-            row.push(bucketData[className][protocol]);
-            total += bucketData[className][protocol]; 
-          }
-          else {
-            row.push(0);
-          }
-        });
-
-        row.push(total);
-        data.addRow(row);
-      });
-    }
-  });
-} // end class visualization
