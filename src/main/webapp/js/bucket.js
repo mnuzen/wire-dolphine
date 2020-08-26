@@ -8,13 +8,13 @@ Chart.defaults.global.defaultFontColor = '#858796';
 var addrs = [];
 var freqs = [];
 
-function drawVisualization() {
-    drawIPVisualization();
-    drawIPVisualization();
-}
+$(document).ready(async function () {
+  await drawIPVisualization();
+});
 
-function drawIPVisualization() {
-    setup();
+
+async function drawIPVisualization() {
+    await setup();
 
     var ctx = document.getElementById("IPVis");
     var IPVis = new Chart(ctx, {
@@ -86,8 +86,8 @@ function drawIPVisualization() {
     });
 }
 
-function setup() {
-  fetch('/PCAP-IP')
+async function setup() {
+  await fetch('/PCAP-IP')
   .then(response => response.json())
   .then((bucketData) => {
     // Iterate through all Classes and parser protocol frequencies
