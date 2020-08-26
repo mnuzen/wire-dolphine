@@ -100,9 +100,13 @@ function createIPNetwork(){
   });
 } // end IP network
 
+$(document).ready(async function () {
+  await drawObfusNetwork();
+});
+
 /** Create visualization network graph based on data in datastore without descriptive labels.*/
-function drawObfusNetwork(){
-  fetch('/PCAP-freq-loader') // retrieve all Datastore data that has proper label
+async function drawObfusNetwork(){
+  await fetch('/PCAP-freq-loader') // retrieve all Datastore data that has proper label
   .then(response => response.json())
   .then((data) => {
   
