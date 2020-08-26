@@ -7,7 +7,7 @@ import com.google.netpcapanalysis.interfaces.caching.Cache;
 import com.google.netpcapanalysis.interfaces.dao.GeolocationDao;
 import com.google.netpcapanalysis.models.PCAPdata;
 import com.maxmind.geoip2.DatabaseReader;
-import com.maxmind.geoip2.model.CityResponse;
+import com.maxmind.geoip2.model.CountryResponse;
 import com.maxmind.geoip2.record.Country;
 import java.io.File;
 import java.net.InetAddress;
@@ -48,7 +48,7 @@ public class GeolocationDaoImpl implements GeolocationDao {
 
     try {
       InetAddress ipAddress = InetAddress.getByName(ip.getHostAddress());
-      CityResponse response = reader.city(ipAddress);
+      CountryResponse response = reader.country(ipAddress);
 
       Country country = response.getCountry();
       cache.put(ip, country.getName());
