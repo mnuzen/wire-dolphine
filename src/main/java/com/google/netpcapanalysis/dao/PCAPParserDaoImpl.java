@@ -78,7 +78,7 @@ public class PCAPParserDaoImpl implements PCAPParserDao {
     * Checks for the following protocols — ICMP, IGMP, TCP, UDP, SCTP, SIP, SDP, ETHERNET_II, SLL, IPv4, RTP —
     * which are the only protocols supported by pkts library. */
   private String getProtocol(IPPacket packet) throws IOException {
-    String protocol = "IPv4";
+    String protocol = "Other";
     // If packet has UDP or TCP protocol, fetch the port numbers (source/destination).
     if (packet.hasProtocol(Protocol.UDP)) {
       protocol = "UDP";
