@@ -45,6 +45,12 @@ function loadDescriptorsFromData(data) {
   $("#domainPackets").text(domainPackets);
   $("#percentCDN").text(percentCDN);
   $("#unknownCount").text(unknown);
+
+  const cdnList = Object.keys(data.cdn).map((cdn) => `<li>${cdn}</li>`);
+  const domainList = Object.keys(data.domain).map((domain) => `<li>${domain}</li>`);
+
+  $("#cdnList").html(cdnList);
+  $("#domainList").html(domainList);
 }
 
 function loadChart(
