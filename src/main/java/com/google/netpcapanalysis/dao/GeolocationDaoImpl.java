@@ -16,7 +16,7 @@ import java.util.List;
 
 public class GeolocationDaoImpl implements GeolocationDao {
 
-  private static final String GEO_DB_LOCATION = "GeoLite2-City.mmdb";
+  private static final String GEO_DB_LOCATION = "GeoLite2-Country.mmdb";
   private File database;
   private DatabaseReader reader;
   private Cache<InetAddress, String> cache;

@@ -23,6 +23,23 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/reversedns")
 public class DomainServlet extends HttpServlet {
 
+  private static class DomainResponse {
+
+    public Map<String, Integer> domain;
+    public Map<String, Integer> cdn;
+    public int unknown;
+
+    public DomainResponse(
+        Map<String, Integer> domain,
+        Map<String, Integer> cdn,
+        int unknown
+    ) {
+      this.domain = domain;
+      this.cdn = cdn;
+      this.unknown = unknown;
+    }
+  }
+
   private ReverseDNSLookupDao reverseDNSLookupDao;
   private PCAPDao pcapDao;
 
@@ -51,6 +68,8 @@ public class DomainServlet extends HttpServlet {
 
     Map<String, Integer> domainCount = new HashMap<>();
     Map<String, Integer> cdnCount = new HashMap<>();
+    int unknownCount = 0;
+
     List<String> ips = new ArrayList<>();
 
     for (PCAPdata pcap : analysis) {
@@ -70,18 +89,17 @@ public class DomainServlet extends HttpServlet {
       String hostname = record.getDomain();
       if (record.isAuthority()) {
         cdnCount.put(hostname, cdnCount.getOrDefault(hostname, 0) + 1);
-      } else {
+      } else if (record.isServer()) {
         // if both server and authority are false we also count as server b/c it's an ip
         domainCount.put(hostname, domainCount.getOrDefault(hostname, 0) + 1);
+      } else {
+        unknownCount++;
       }
     }
 
-    Map<String, Map<String, Integer>> res = new HashMap<>();
-    res.put("domain", domainCount);
-    res.put("cdn", cdnCount);
-
     response.setContentType("application/json;");
     response.setCharacterEncoding("UTF-8");
-    response.getWriter().println(new Gson().toJson(res));
+    response.getWriter()
+        .println(new Gson().toJson(new DomainResponse(domainCount, cdnCount, unknownCount)));
   }
 }
