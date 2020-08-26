@@ -1,4 +1,5 @@
 var NUM_CLASSES = 4;
+drawClassVisualization();
 
 function drawClassVisualization() {
   fetch('/PCAP-bucket')
