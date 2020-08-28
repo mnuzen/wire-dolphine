@@ -40,9 +40,17 @@ function loadDescriptorsFromData(data) {
   const cdnPackets = Object.values(data.cdn).reduce((a, b) => a + b, 0);
   const domainPackets = Object.values(data.domain).reduce((a, b) => a + b, 0);
   const percentCDN = ((cdnPackets/(cdnPackets + domainPackets)) * 100).toFixed(1);
+  const unknown = data.unknown;
   $("#cdnPackets").text(cdnPackets);
   $("#domainPackets").text(domainPackets);
   $("#percentCDN").text(percentCDN);
+  $("#unknownCount").text(unknown);
+
+  const cdnList = Object.keys(data.cdn).map((cdn) => `<li>${cdn}</li>`);
+  const domainList = Object.keys(data.domain).map((domain) => `<li>${domain}</li>`);
+
+  $("#cdnList").html(cdnList);
+  $("#domainList").html(domainList);
 }
 
 function loadChart(

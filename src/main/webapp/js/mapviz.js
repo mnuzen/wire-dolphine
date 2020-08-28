@@ -43,7 +43,8 @@ async function loadMapVisualization(url = '/ipgeolocation') {
       backgroundColor: '#f8f9fc',
       datalessRegionColor: '#ffffff',
       colorAxis: {
-        minValue: 0
+        minValue: 0,
+        colors: ['#e7711c', '#4374e0']
       },
       explorer: {
         axis: 'horizontal',

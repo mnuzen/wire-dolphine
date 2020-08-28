@@ -180,6 +180,10 @@
                     <span class="font-weight-bold" id="percentCDN"></span>% of your packets were
                     sent from CDNs
                   </li>
+                  <li>
+                    <span class="font-weight-bold" id="unknownCount"></span> of your packets were
+                     unable to be looked up.
+                  </li>
                 </ul>
               </div>
             </div>
@@ -212,6 +216,37 @@
           </div>
         </div>
       </div>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="card shadow  ml-lg-4 mb-lg-4">
+            <span class="d-block card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">CDNs visited</h6>
+            </span>
+            <div class="show" style="">
+              <div class="card-body">
+                <div>
+                  <ul id="cdnList"></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card shadow mr-lg-4 mb-lg-4">
+          <span class="d-block card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Domains visited</h6>
+            </span>
+            <div class="show">
+              <div class="card-body">
+                <div>
+                  <ul id="domainList"></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- End of Main Content -->
 
       <!-- Footer -->
