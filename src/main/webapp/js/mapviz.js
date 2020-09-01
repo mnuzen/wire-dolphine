@@ -22,7 +22,7 @@ async function getKey(key) {
   return await res.text();
 }
 
-async function loadMapVisualization(url = '/ipgeolocation?PCAPId=file_1') {
+async function loadMapVisualization(url = '/ipgeolocation') {
   const res = await fetch(url);
   const countryData = await res.json();
   const datatableHeader = [['Country', 'Requests Sent']];
@@ -43,7 +43,8 @@ async function loadMapVisualization(url = '/ipgeolocation?PCAPId=file_1') {
       backgroundColor: '#f8f9fc',
       datalessRegionColor: '#ffffff',
       colorAxis: {
-        minValue: 0
+        minValue: 0,
+        colors: ['#e7711c', '#4374e0']
       },
       explorer: {
         axis: 'horizontal',
@@ -64,9 +65,16 @@ async function loadMapStatistics(data) {
   const byRequestNum = (a, b) => data[a] - data[b];
   const mostFreqCountry = Object.keys(data).sort(byRequestNum).pop();
   const mostFreqPercentage = (100.0 * data[mostFreqCountry] / totalRequests).toFixed(1);
+  const unknowns = data.unknown || 0;
+
   $('#request-num').text(totalRequests);
   $('#request-countries').text(totalCountries);
   $('#mostFreqCountry').text(mostFreqCountry);
   $('#mostFreqCountryNum').text(data[mostFreqCountry]);
   $('#mostFreqCountryPercentage').text(mostFreqPercentage);
+  if (unknowns > 0) {
+    $('#unknownPackets').text(unknowns);
+  } else {
+    $('#unknownPacketBullet').remove();
+  }
 }

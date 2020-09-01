@@ -1,16 +1,18 @@
 package com.google.netpcapanalysis.models;
 
-public class ReverseDNS {
+import java.io.Serializable;
+
+public class DNSRecord implements Serializable {
   public boolean authority;
   public boolean server;
-  public String record;
+  public String domain;
 
-  public ReverseDNS() {
+  public DNSRecord() {
     this("", false, false);
   }
 
-  public ReverseDNS(String record, boolean server, boolean authority) {
-    this.record = record;
+  public DNSRecord(String domain, boolean server, boolean authority) {
+    this.domain = domain;
     this.authority = authority;
     this.server = server;
   }
@@ -31,11 +33,11 @@ public class ReverseDNS {
     this.server = server;
   }
 
-  public String getRecord() {
-    return record;
+  public String getDomain() {
+    return domain;
   }
 
-  public void setRecord(String record) {
-    this.record = record;
+  public void setDomain(String domain) {
+    this.domain = domain;
   }
 }

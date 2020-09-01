@@ -1,13 +1,15 @@
 package com.google.netpcapanalysis.servlets;
 
-import com.google.netpcapanalysis.dao.KeystoreDaoImpl;
 import com.google.netpcapanalysis.interfaces.dao.GeolocationDao;
-import com.google.netpcapanalysis.interfaces.dao.KeystoreDao;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.dao.PCAPDaoImpl;
 import com.google.netpcapanalysis.dao.GeolocationDaoImpl;
 import com.google.gson.Gson;
+import com.google.netpcapanalysis.models.FileAttribute;
 import com.google.netpcapanalysis.models.PCAPdata;
+import com.google.netpcapanalysis.utils.NetUtils;
+import com.google.netpcapanalysis.utils.SessionManager;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.HashMap;
@@ -38,8 +40,10 @@ public class IPGeolocationServlet extends HttpServlet {
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String id = getParameter(request, "PCAPId", "");
+    //String id = NetUtils.getParameter(request, "PCAPId", "");
+    String id = SessionManager.getSessionEntity(request);
     List<PCAPdata> analysis = this.pcapDao.getPCAPObjects(id);
+    FileAttribute entity = this.pcapDao.getFileAttribute(id);
 
     if (analysis == null) {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -49,25 +53,22 @@ public class IPGeolocationServlet extends HttpServlet {
     Map<String, Integer> countryCount = new HashMap<>();
 
     for (PCAPdata pcap: analysis) {
-      String country = this.geolocationDao.getCountry(InetAddress.getByName(pcap.destination));
-      countryCount.put(country, countryCount.getOrDefault(country, 1));
+
+      String searchIP;
+      if(pcap.source.equals(entity.myIP))
+      {
+          searchIP = pcap.destination;
+      }
+      else{
+          searchIP = pcap.source;
+      }
+
+      String country = this.geolocationDao.getCountry(InetAddress.getByName(searchIP));
+      countryCount.put(country, countryCount.getOrDefault(country, 1) + 1);
     }
 
     response.setContentType("application/json;");
     response.setCharacterEncoding("UTF-8");
     response.getWriter().println(new Gson().toJson(countryCount));
-  }
-
-
-  /**
-   * @return the request parameter, or the default value if the parameter was not specified by the
-   * client
-   */
-  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
-    String value = request.getParameter(name);
-    if (value == null) {
-      return defaultValue;
-    }
-    return value;
   }
 }

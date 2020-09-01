@@ -8,11 +8,11 @@ public final class PCAPdata {
   public String location;
   public String protocol;
   public int size;
-  public boolean flagged;
+  public String flagged;
   public int frequency;
 
   public PCAPdata() {
-    this(null, null, null, null, null, 0, false, 0);
+    this(null, null, null, null, null, 0, null, 0);
   }
 
   public PCAPdata(
@@ -22,7 +22,7 @@ public final class PCAPdata {
       String location,
       String protocol,
       int size,
-      boolean flagged,
+      String flagged,
       int frequency
   ) {
     this.source = source;
@@ -35,12 +35,52 @@ public final class PCAPdata {
     this.frequency = frequency;
   }
 
+  public PCAPdata(
+    String source,
+    String destination,
+    String protocol,
+    int size
+) {
+  this.source = source;
+  this.destination = destination;
+  this.protocol = protocol;
+  this.size = size;
+}
+
   public int getFrequency() {
     return this.frequency;
   }
 
   public void incrementFrequency() {
     this.frequency++;
+  }
+
+  public boolean equals(PCAPdata other) {
+    if (!this.source.equals(other.source)) {
+      return false;
+    }
+    if (!this.destination.equals(other.destination)) {
+      return false;
+    }
+    if (!this.domain.equals(other.domain)) {
+      return false;
+    }
+    if (!this.location.equals(other.location)) {
+      return false;
+    }
+    if (!this.protocol.equals(other.protocol)) {
+      return false;
+    }
+    if (this.size != other.size) {
+      return false;
+    }
+    if (!this.flagged.equals(other.flagged)) {
+      return false;
+    }
+    if (this.frequency != other.frequency) {
+      return false;
+    }
+    return true;
   }
 
 }

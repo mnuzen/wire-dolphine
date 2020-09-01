@@ -1,9 +1,10 @@
 package com.google.netpcapanalysis.dao;
 
+import com.google.netpcapanalysis.models.Flagged;
 import com.google.netpcapanalysis.models.PCAPdata;
-import java.util.*; 
-import java.io.*;
-import java.lang.*;
+import java.util.ArrayList; 
+import java.io.IOException;
+import java.io.InputStream;
 
 import io.pkts.PacketHandler;
 import io.pkts.Pcap;
@@ -14,14 +15,11 @@ import io.pkts.packet.UDPPacket;
 import io.pkts.packet.IPPacket;
 import io.pkts.protocol.Protocol;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
 import com.google.netpcapanalysis.interfaces.dao.PCAPParserDao;
+
+import com.google.netpcapanalysis.utils.UtilityPCAP;
+import com.google.netpcapanalysis.models.FileAttribute;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,23 +34,20 @@ import java.nio.file.Paths;
    * Hard-coded the source IP address (myip) -- need to find a way to retrieve myip (look at first packet, ask user, use Whatsmyip?)
 */
 public class PCAPParserDaoImpl implements PCAPParserDao {
-  private final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+  private final PCAPDao datastore = new PCAPDaoImpl();
   private ArrayList<PCAPdata> allPCAP = new ArrayList<PCAPdata>(); 
-  private HashMap<String, PCAPdata> finalPCAP = new HashMap<String, PCAPdata>();
-
   private String filename;
-  private String myip = "";
-  private boolean first = true;
+  private String description;
 
-  public PCAPParserDaoImpl(String file) { 
+  public PCAPParserDaoImpl(String file, String descript) { 
       this.filename = file;
+      this.description = descript;
   }
 
    /* Reads PCAP file (from file name) as a stream and puts unique connections into allPCAP HashMap. */
   public void parseRaw() throws IOException {
     Path path = Paths.get(filename);
     InputStream stream = PCAPParserDaoImpl.class.getClassLoader().getResourceAsStream(path.toString());
-    //final InputStream stream = this.getClass().getResourceAsStream(filename);
     final Pcap pcap = Pcap.openStream(stream);
 
     pcap.loop(new PacketHandler() {
@@ -69,14 +64,8 @@ public class PCAPParserDaoImpl implements PCAPParserDao {
 
         String protocol = getProtocol(ip); 
 
-        // myip to be the IP address of the local machine used to capture PCAP file
-        if (first) {
-            myip = srcip;
-            first = false;
-        }
-        
         // PCAPdata takes in (source, destination, domain, location, protocol, size, flagged, frequency) 
-        PCAPdata rawPCAP = new PCAPdata(srcip, dstip, "", "", protocol, size, false, 1);
+        PCAPdata rawPCAP = new PCAPdata(srcip, dstip, "", "", protocol, size, Flagged.UNKNOWN, 1);
         allPCAP.add(rawPCAP);
       }
       return true;
@@ -89,7 +78,7 @@ public class PCAPParserDaoImpl implements PCAPParserDao {
     * Checks for the following protocols — ICMP, IGMP, TCP, UDP, SCTP, SIP, SDP, ETHERNET_II, SLL, IPv4, RTP —
     * which are the only protocols supported by pkts library. */
   private String getProtocol(IPPacket packet) throws IOException {
-    String protocol = "IPv4";
+    String protocol = "Other";
     // If packet has UDP or TCP protocol, fetch the port numbers (source/destination).
     if (packet.hasProtocol(Protocol.UDP)) {
       protocol = "UDP";
@@ -127,47 +116,18 @@ public class PCAPParserDaoImpl implements PCAPParserDao {
     return protocol;
   }
  
-  /* Removes duplicated data and increments corresponding frequencies */
-  public void processData(){
-    for (PCAPdata packet : allPCAP) {
-      String outip = "";
-      String srcip = packet.source;
-      String dstip = packet.destination;
-
-      if (srcip == myip) {
-        outip = dstip;
-      }
-      else {
-        outip = srcip;
-      }
-      
-      // PCAPdata takes in (source, destination, domain, location, protocol, size, flagged, frequency) 
-      if (finalPCAP.containsKey(outip)){
-        // retrieve current value with outip and increments frequency
-        PCAPdata currPCAP = finalPCAP.get(outip);
-        currPCAP.incrementFrequency();
-      }
-      else {
-        PCAPdata tempPCAP = new PCAPdata(myip, outip, "", "", packet.protocol, packet.size, packet.flagged, packet.frequency); 
-        finalPCAP.put(outip, packet);
-      }
-    }
-  }
-
-  /* Adds all processed packets to datastore through GenericPCAPDao*/
+  /* Retrieves hashed version of filename and adds all raw packets to datastore (under that name) through GenericPCAPDao*/
   public void putDatastore(){
-    for (PCAPdata packet : finalPCAP.values()) {
-      PCAPDao data = new PCAPDaoImpl();
-      data.setPCAPObjects(packet, filename);
-    }
+    String entityName = UtilityPCAP.hashText(filename);
+    datastore.setPCAPObjects(allPCAP, entityName);
+    String myip = UtilityPCAP.findMyIP(allPCAP);
+    FileAttribute data = new FileAttribute(entityName, filename, myip, description);
+    datastore.setFileAttribute(data);
   } 
 
   /* Access elements for testing. */
   public ArrayList<PCAPdata> getAllPCAP() {
     return allPCAP;
   }
-
-  public HashMap<String, PCAPdata> getFinalPCAP() {
-    return finalPCAP;
-  }
+  
 }

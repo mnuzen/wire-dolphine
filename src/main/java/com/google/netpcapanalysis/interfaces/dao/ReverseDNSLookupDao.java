@@ -1,7 +1,8 @@
 package com.google.netpcapanalysis.interfaces.dao;
 
-import com.google.netpcapanalysis.models.ReverseDNS;
-import java.net.InetAddress;
+import com.google.netpcapanalysis.models.DNSRecord;
+import com.google.netpcapanalysis.models.PCAPdata;
+import java.util.List;
 
 public interface ReverseDNSLookupDao {
 
@@ -11,5 +12,7 @@ public interface ReverseDNSLookupDao {
    * @return ReverseDNS record signalling server, authority, and host. Returns null if cannot be
    * determined
    */
-  public ReverseDNS lookup(String ip);
+  public DNSRecord lookup(String ip);
+  public List<DNSRecord> lookup(List<String> ip);
+  public List<PCAPdata> dnsLookup(List<PCAPdata> data);
 }

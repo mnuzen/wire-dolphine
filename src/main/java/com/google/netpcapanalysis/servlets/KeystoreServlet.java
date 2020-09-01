@@ -1,18 +1,9 @@
 package com.google.netpcapanalysis.servlets;
 
-import com.google.gson.Gson;
-import com.google.netpcapanalysis.dao.GeolocationDaoImpl;
 import com.google.netpcapanalysis.dao.KeystoreDaoImpl;
-import com.google.netpcapanalysis.dao.PCAPDaoImpl;
-import com.google.netpcapanalysis.interfaces.dao.GeolocationDao;
 import com.google.netpcapanalysis.interfaces.dao.KeystoreDao;
-import com.google.netpcapanalysis.interfaces.dao.PCAPDao;
-import com.google.netpcapanalysis.models.PCAPdata;
+import com.google.netpcapanalysis.utils.NetUtils;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import javax.servlet.ServletConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -36,7 +27,7 @@ public class KeystoreServlet extends HttpServlet {
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String id = getParameter(request, "key", "");
+    String id = NetUtils.getParameter(request, "key", "");
     String key = "";
 
     if (id.equals("mapsAPIKey")) {
@@ -49,18 +40,5 @@ public class KeystoreServlet extends HttpServlet {
     response.setContentType("text/html;");
     response.setCharacterEncoding("UTF-8");
     response.getWriter().println(key);
-  }
-
-
-  /**
-   * @return the request parameter, or the default value if the parameter was not specified by the
-   * client
-   */
-  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
-    String value = request.getParameter(name);
-    if (value == null) {
-      return defaultValue;
-    }
-    return value;
   }
 }
