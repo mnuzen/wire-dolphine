@@ -55,7 +55,8 @@ On GCP Shell:
 ## ReverseDNS
 
 on 150mbps internet / i7-9750h single thread
-- averaged cached 135 ms for 1000 requests, 7425.74 rps
+- averaged 46018 ms for 222 requests, 4.82 rps
+- averaged multithreaded 8572 ms for 222 requests, 25.90 rps (about 30 is the max because of rate-limits)
 
 ## API limitations: 
 1. [Auth0 Signal API](https://auth0.com/signals/docs/)
