@@ -92,7 +92,7 @@ The Entity Properties for the two data objects stored:
     |     |    | String  | String     | String   | Long |
 
 ## Demo
+[View on Youtube](https://youtu.be/0yPIX50UWB8)
 ![4x-compressed](https://user-images.githubusercontent.com/16601367/92042550-eb461400-ed26-11ea-8b7a-c6741a70ad11.gif)
 
-[View on Youtube](https://youtu.be/0yPIX50UWB8)
 
