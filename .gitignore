@@ -1,6 +1,5 @@
 target/
 .idea
-resources/
 .classpath
 .factorypath
 .project
