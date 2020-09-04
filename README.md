@@ -51,27 +51,16 @@ Reviewers: arunkaly@, promanov@
 
 ## Setup: 
 1. git clone git@github.com:mnuzen/step-capstone-2020.git
-2. download the Maxmind Geolite2 Country DB and put it into the resources folder. Any files you would like to have available by default should be uploaded to the `files/` subfolder of the resources folder.
-3. Setup your [GAE credentials](https://cloud.google.com/docs/authentication/production)
-4. `mvn package appengine:run -Dmaven.test.skip=true`
+2. Download `GeoLite2-Country.mmdb` from [Maxmind](https://dev.maxmind.com/geoip/geoip2/geolite2/) and place in repo under `resources/`.
+3. Add any PCAP files inside of the `resources/files` folder and update `pcap-uploader.html` to include the file path.
+4. Edit `resources/keystore.json` to include API keys for Google Maps and [Auth-0 Signal](https://auth0.com/signals/ip)
+5. Setup your [GAE credentials](https://cloud.google.com/docs/authentication/production)
+6. Run maven project using: `mvn package appengine:run`
 
 ### Adding PCAP files: 
 
 1. Place any files inside of the  `resources/files` folder
 2. Update `pcap-uploader.html` to include the path to any added PCAP files
-
-### To add IP information for PCAP parser testing:
-
-1. Download `file2.txt` from GDrive's PCAP Files folder.
-2. Put in repo under `resources/files/file2.txt`.
-
-### To use geolocation: 
-
-1. Download `GeoLite2-City.mmdb` from GDrive.
-2. Put in repo under `resources/GeoLite2-City.mmdb`.
-
-### Keystore
-API keys are handled by Keystore, You will need to modify `KeystoreDao` in order to run the project
 
 ## Contributing: 
 Before opening a PR, make sure to consult with us through email, or on Github. We have starter issues tagged
