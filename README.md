@@ -49,7 +49,16 @@ Reviewers: arunkaly@, promanov@
 *App Engine 
 
 ## Setup: 
-1. `gsutil cp -r gs://erik-jevin-melba-step-2020 resources/`
+1. git clone git@github.com:mnuzen/step-capstone-2020.git
+2. `gsutil cp -r gs://erik-jevin-melba-step-2020 resources/` if you have access to the Google bucket,
+or download the Maxmind Geolite2 Country DB and put it into the resources folder. Any files you would like
+to have available by default should be uploaded to the `files/` subfolder of the resources folder.
+3. Setup your [GAE credentials](https://cloud.google.com/docs/authentication/production)
+4. `mvn package appengine:run -Dmaven.test.skip=true`
+
+## Contributing: 
+Before opening a PR, make sure to consult with us through email, or on Github. We have starter issues tagged
+with `good first issue`.
 
 ### Adding PCAP files: 
 
@@ -104,7 +113,8 @@ On GCP Shell:
 ### ReverseDNS
 
 on 150mbps internet / i7-9750h single thread
-- averaged cached 135 ms for 1000 requests, 7425.74 rps
+- averaged 46018 ms for 222 requests, 4.82 rps
+- averaged multithreaded 8572 ms for 222 requests, 25.90 rps (about 30 is the max because of rate-limits)
 
  ### Malicious IP: 
  [Auth0 Signal API](https://auth0.com/signals/docs/)
