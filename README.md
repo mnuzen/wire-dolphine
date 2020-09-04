@@ -14,7 +14,7 @@ PCAP Analyzer is the culmination of the 12 week [STEP internship program](https:
 * [Benchmarks](#benchmarks)
 * [Contributing](#contributing)
 * [Demo](#demo)
-* [License](#license)
+* [License](https://github.com/mnuzen/step-capstone-2020/blob/mvp-2/LICENSE)
 
 ## About The Project
 ### Objective
