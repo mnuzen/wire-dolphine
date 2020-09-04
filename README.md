@@ -106,11 +106,20 @@ On GCP Shell:
 on 150mbps internet / i7-9750h single thread
 - averaged cached 135 ms for 1000 requests, 7425.74 rps
 
-### Malicious IP: 
+ ### Malicious IP: 
  [Auth0 Signal API](https://auth0.com/signals/docs/)
-    - 40,000 requests per day
-    - 10 requests per second
-    - Cache DB used to mitigate limitations
+  - 40,000 requests per day
+  - 10 requests per second
+  - Cache DB used to mitigate limitations
+  
+  Benchmark Cache with 210 Unique IP's
+  - Non-Cached
+       - Avg. lookup time: 73ms
+       - Total lookup time: 15,508ms
+   - Cached
+       - Avg. lookup time: 2ms
+       - Total lookup time: 562ms
+   - Cache reduces lookup time by ~95%
 
 ### Datastore
 Datastore retrieval Times:
