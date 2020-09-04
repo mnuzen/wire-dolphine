@@ -1,8 +1,8 @@
-# 2020 STEP Pod Capstone Project
+# PCAP Analyzer
 
-Welcome...
+PCAP Analyzer is the culmination of the 12 week [STEP internship program](https://buildyourfuture.withgoogle.com/programs/step/) at Google.
 
-<!-- TABLE OF CONTENTS -->
+
 ## Table of Contents
 
 * [About the Project](#about-the-project)
@@ -12,6 +12,7 @@ Welcome...
 * [Setup](#setup)
   * [Adding PCAP files](#adding-pcap-files)
 * [Benchmarks](#benchmarks)
+* [Contributing](#contributing)
 * [Demo](#demo)
 * [License](#license)
 
@@ -44,26 +45,20 @@ Authors: handeland@google.com, jevingu@google.com, mnuzen@google.com
 Reviewers: arunkaly@, promanov@
 
 ### Built With
-*Maven
-*Java
-*App Engine 
+- [Maven](https://maven.apache.org)
+- [Java](https://java.com/en/download/faq/java8.xml)
+- [App Engine](https://cloud.google.com/appengine/docs/standard/java)
 
 ## Setup: 
 1. git clone git@github.com:mnuzen/step-capstone-2020.git
-2. `gsutil cp -r gs://erik-jevin-melba-step-2020 resources/` if you have access to the Google bucket,
-or download the Maxmind Geolite2 Country DB and put it into the resources folder. Any files you would like
-to have available by default should be uploaded to the `files/` subfolder of the resources folder.
+2. download the Maxmind Geolite2 Country DB and put it into the resources folder. Any files you would like to have available by default should be uploaded to the `files/` subfolder of the resources folder.
 3. Setup your [GAE credentials](https://cloud.google.com/docs/authentication/production)
 4. `mvn package appengine:run -Dmaven.test.skip=true`
 
-## Contributing: 
-Before opening a PR, make sure to consult with us through email, or on Github. We have starter issues tagged
-with `good first issue`.
-
 ### Adding PCAP files: 
 
-1. Download `file1.pcap` and `file2.pcap` from GDrive's PCAP Files folder.
-2. Put in repo under `resources/files/file1.pcap` and `resources/files/file2.pcap`, respectively. 
+1. Place any files inside of the  `resources/files` folder
+2. Update `pcap-uploader.html` to include the path to any added PCAP files
 
 ### To add IP information for PCAP parser testing:
 
@@ -75,18 +70,12 @@ with `good first issue`.
 1. Download `GeoLite2-City.mmdb` from GDrive.
 2. Put in repo under `resources/GeoLite2-City.mmdb`.
 
-### Adding privileged information: 
-1. Add to resources folder
-2. To use in code, get the resource using resource loader like so:
-
-```$java
-      URL geoDBUrl = GeolocationDaoImpl.class.getClassLoader().getResource(GEO_DB_LOCATION);
-```
-3. Upload privileged resource to cloud bucket `erik-jevin-melba-step-2020`
-4. Add resource to 
-
 ### Keystore
-For privileged keys that need to be publicly accessible, use the KeystoreDao. 
+API keys are handled by Keystore, You will need to modify `KeystoreDao` in order to run the project
+
+## Contributing: 
+Before opening a PR, make sure to consult with us through email, or on Github. We have starter issues tagged
+with `good first issue`.
 
 ## Benchmarks
 
@@ -158,5 +147,4 @@ The Entity Properties for the two data objects stored:
 ## Demo
 [View on Youtube](https://youtu.be/0yPIX50UWB8)
 ![4x-compressed](https://user-images.githubusercontent.com/16601367/92042550-eb461400-ed26-11ea-8b7a-c6741a70ad11.gif)
-
 
