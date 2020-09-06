@@ -1,38 +1,74 @@
-# 2020 STEP Pod Capstone Project
+# PCAP Analyzer
 
-This repo contains our pod's 2020 STEP Capstone project.
+PCAP Analyzer is the culmination of the 12 week [STEP internship program](https://buildyourfuture.withgoogle.com/programs/step/) at Google.
 
+
+## Table of Contents
+
+* [About the Project](#about-the-project)
+  * [Background](#background)
+  * [Team](#team)
+  * [Built With](#built-with)
+* [Setup](#setup)
+  * [Adding PCAP files](#adding-pcap-files)
+* [Benchmarks](#benchmarks)
+* [Contributing](#contributing)
+* [Demo](#demo)
+* [License](https://github.com/mnuzen/step-capstone-2020/blob/mvp-2/LICENSE)
+
+## About The Project
+### Objective
+While most people use the internet in some kind of way, not everyone understands the basic fundamentals of how information can be transferred from one machine to another. The goal of this project is to provide causal users with a simple and intuitive way of visualising network communications. By explaining how computers communicate through packets and networks, we hope to educate users on the structure of the internet. 
+
+### Background
+While advanced solutions exist for high-level packet analysis, no current service focuses on casual users. Even to computer science students, the internet contains many interconnected components and protocols which can make it difficult to understand. Since 65% of people are visual learners, we hope to provide infographics and helpful depictions of the users’ input data. 
+
+### Overview
+Our goal is to help casual users understand and visualize where their computer packets are going and where they are coming from. We hope to have our website be both informative and interactive. 
+
+On the technical front, this means that to build out the PCAP analysis feature of our website, we will need to be able to do the following with our users’ files:
+
+1. File Upload / Data Collection ― since our main source of data are PCAP files, we can either enable PCAP file uploads or retrieve a PCAP file from a user-inputted URL.
+
+2. File Parsing / Data Processing ― we want to be able to extract key attributes from uploaded packets, including packet source, destination, protocol, and time. 
+
+3. File Storage / Data Retrieval ― in order to retrieve the above attributes, we need a way to store our packet information with easy access.
+
+4. File Analysis / Visualizations ― to present our users with their packet information and activity, we will put together a series of intuitive visualizations. These include:
+   * Geographical Map ― showing the country or region of packet source/destination
+   * Frequent Connections ― enumerating the most common connections made
+   * Website Security ― comparing protocols of websites visited by user
+
+
+### Team
 Authors: handeland@google.com, jevingu@google.com, mnuzen@google.com 
 Reviewers: arunkaly@, promanov@
 
+### Built With
+- [Maven](https://maven.apache.org)
+- [Java](https://java.com/en/download/faq/java8.xml)
+- [App Engine](https://cloud.google.com/appengine/docs/standard/java)
+
 ## Setup: 
 1. git clone git@github.com:mnuzen/step-capstone-2020.git
-2. `gsutil cp -r gs://erik-jevin-melba-step-2020 resources/` if you have access to the Google bucket,
-or download the Maxmind Geolite2 Country DB and put it into the resources folder. Any files you would like
-to have available by default should be uploaded to the `files/` subfolder of the resources folder.
-3. Setup your [GAE credentials](https://cloud.google.com/docs/authentication/production)
-4. `mvn package appengine:run -Dmaven.test.skip=true`
+2. Download `GeoLite2-Country.mmdb` from [Maxmind](https://dev.maxmind.com/geoip/geoip2/geolite2/) and place in repo under `resources/`.
+3. Add any PCAP files inside of the `resources/files` folder and update `pcap-uploader.html` to include the file path.
+4. Edit `resources/keystore.json` to include API keys for Google Maps and [Auth-0 Signal](https://auth0.com/signals/ip)
+5. Setup your [GAE credentials](https://cloud.google.com/docs/authentication/production)
+6. Run maven project using: `mvn package appengine:run`
+
+### Adding PCAP files: 
+
+1. Place any files inside of the  `resources/files` folder
+2. Update `pcap-uploader.html` to include the path to any added PCAP files
 
 ## Contributing: 
 Before opening a PR, make sure to consult with us through email, or on Github. We have starter issues tagged
 with `good first issue`.
 
-## To add sample PCAP files: 
+## Benchmarks
 
-1. Download `file1.pcap` and `file2.pcap` from GDrive's PCAP Files folder.
-2. Put in repo under `resources/files/file1.pcap` and `resources/files/file2.pcap`, respectively. 
-
-## To add IP information for PCAP parser testing:
-
-1. Download `file2.txt` from GDrive's PCAP Files folder.
-2. Put in repo under `resources/files/file2.txt`.
-
-## To use geolocation: 
-
-1. Download `GeoLite2-City.mmdb` from GDrive.
-2. Put in repo under `resources/GeoLite2-City.mmdb`.
-
-## MaxmindDB perf: 
+### MaxmindDB perf: 
 
 On random dataset:
 - Averaged 14572 ms for 1000000 requests, 68623.19 rps on i7-9750H single core.
@@ -52,33 +88,28 @@ On GCP Shell:
 - averaged 121 ms for 1000 requests, 8241.76 rps
 - averaged cached 222 ms w/ datashell for 1000 requests, 4504.50 rps
 
-## ReverseDNS
+### ReverseDNS
 
 on 150mbps internet / i7-9750h single thread
 - averaged 46018 ms for 222 requests, 4.82 rps
 - averaged multithreaded 8572 ms for 222 requests, 25.90 rps (about 30 is the max because of rate-limits)
 
-## API limitations: 
-1. [Auth0 Signal API](https://auth0.com/signals/docs/)
-    - 40,000 requests per day
-    - 10 requests per second
-    - Cache DB used to mitigate limitations
+ ### Malicious IP: 
+ [Auth0 Signal API](https://auth0.com/signals/docs/)
+  - 40,000 requests per day
+  - 10 requests per second
+  - Cache DB used to mitigate limitations
+  
+  Benchmark Cache with 210 Unique IP's
+  - Non-Cached
+       - Avg. lookup time: 73ms
+       - Total lookup time: 15,508ms
+   - Cached
+       - Avg. lookup time: 2ms
+       - Total lookup time: 562ms
+   - Cache reduces lookup time by ~95%
 
-
-## Adding privileged information: 
-1. Add to resources folder
-2. To use in code, get the resource using resource loader like so:
-
-```$java
-      URL geoDBUrl = GeolocationDaoImpl.class.getClassLoader().getResource(GEO_DB_LOCATION);
-```
-3. Upload privileged resource to cloud bucket `erik-jevin-melba-step-2020`
-4. Add resource to 
-
-## Keystore
-For privileged keys that need to be publicly accessible, use the KeystoreDao. 
-
-## Datastore
+### Datastore
 Datastore retrieval Times:
 | Packets | Time in s |
 |---------|-----------|
@@ -101,6 +132,8 @@ The Entity Properties for the two data objects stored:
     |-----|----|---------|------------|----------|------|
     |     |    | String  | String     | String   | Long |
 
+
 ## Demo
+[View on Youtube](https://youtu.be/0yPIX50UWB8)
 ![4x-compressed](https://user-images.githubusercontent.com/16601367/92042550-eb461400-ed26-11ea-8b7a-c6741a70ad11.gif)
 
